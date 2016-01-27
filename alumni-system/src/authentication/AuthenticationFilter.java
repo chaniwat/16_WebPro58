@@ -1,4 +1,4 @@
-package member;
+package authentication;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -28,8 +28,12 @@ public class AuthenticationFilter implements Filter {
         String uri = request.getRequestURI();
         HttpSession session = request.getSession();
 
-        if(session == null || session.getAttribute("user") == null || !(uri.equals("login"))) {
-            response.sendRedirect("login");
+        if((session == null || session.getAttribute("user") == null || (int)session.getAttribute("user") == 0) && !(uri.endsWith("login"))) {
+            response.sendRedirect("login?res_code=2");
+            return;
+        } else if(!(session == null || session.getAttribute("user") == null || (int)session.getAttribute("user") == 0) && uri.endsWith("login")) {
+            response.sendRedirect("./");
+            return;
         }
 
         chain.doFilter(req, resp);

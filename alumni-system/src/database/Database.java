@@ -1,11 +1,11 @@
-package net;
+package database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * Created by Meranote on 1/26/2016.
+ * Created by Meranote on 1/27/2016.
  */
 public class Database {
 
@@ -20,13 +20,13 @@ public class Database {
         try {
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
             connection = DriverManager.getConnection("jdbc:mysql://database.it.kmitl.ac.th/it_16", "it_16", "csQgCzmQ");
-        } catch (SQLException e) {
-
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return;
         }
     }
 
     public Connection getConnection() {
         return connection;
     }
-
 }

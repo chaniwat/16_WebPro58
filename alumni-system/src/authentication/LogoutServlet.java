@@ -1,4 +1,5 @@
-import javax.servlet.RequestDispatcher;
+package authentication;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,14 +10,18 @@ import java.io.IOException;
 /**
  * Created by Meranote on 1/27/2016.
  */
-@WebServlet(name = "AuthenticationServlet", urlPatterns = "/login")
-public class AuthenticationServlet extends HttpServlet {
+@WebServlet(name = "LogoutServlet", urlPatterns = "/logout")
+public class LogoutServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/loginform.jsp");
-        requestDispatcher.forward(request, response);
+        if(request.getSession().getAttribute("user") != null && (int)request.getSession().getAttribute("user") != 0) {
+            request.getSession().setAttribute("user", 0);
+            response.sendRedirect("./login");
+        } else {
+            response.sendRedirect("./login");
+        }
     }
 }
