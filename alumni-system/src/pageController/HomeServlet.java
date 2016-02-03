@@ -34,7 +34,7 @@ public class HomeServlet extends HttpServlet {
         }
         request.setAttribute("user_type", usertype);
 
-        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/WEB-INF/index.jsp");
+        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/WEB-INF/JSP/index.jsp");
         requestDispatcher.forward(request, response);
     }
 }

@@ -19,7 +19,7 @@ public class Database {
     private Database() {
         try {
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-            connection = DriverManager.getConnection("jdbc:mysql://database.it.kmitl.ac.th/it_16", "it_16", "csQgCzmQ");
+            connection = DriverManager.getConnection("jdbc:mysql://database.it.kmitl.ac.th/it_16?autoReconnect=true", "it_16", "csQgCzmQ");
         } catch(SQLException e) {
             e.printStackTrace();
             return;

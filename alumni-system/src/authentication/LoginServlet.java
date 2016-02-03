@@ -14,8 +14,8 @@ import java.io.IOException;
 /**
  * Created by Meranote on 1/27/2016.
  */
-@WebServlet(name = "authentication.AuthenticationServlet", urlPatterns = "/login")
-public class AuthenticationServlet extends HttpServlet {
+@WebServlet(name = "LoginServlet", urlPatterns = "/login")
+public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
@@ -30,7 +30,7 @@ public class AuthenticationServlet extends HttpServlet {
             response.sendRedirect("./");
         } else {
             request.setAttribute("res_code", 1);
-            getServletContext().getRequestDispatcher("/WEB-INF/loginform.jsp").forward(request, response);
+            getServletContext().getRequestDispatcher("/WEB-INF/JSP/loginform.jsp").forward(request, response);
         }
     }
 
@@ -42,7 +42,7 @@ public class AuthenticationServlet extends HttpServlet {
             request.setAttribute("res_code", Integer.parseInt(request.getParameter("res_code")));
         }
 
-        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/WEB-INF/loginform.jsp");
+        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/WEB-INF/JSP/loginform.jsp");
         requestDispatcher.forward(request, response);
     }
 }
