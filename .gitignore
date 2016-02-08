@@ -1,2 +1,6 @@
-/alumni-system/nbproject/private/
-/alumni-system/build/
+**/node_modules/
+**/.idea
+**/nbproject
+**/out
+*.iml
+build.xml
