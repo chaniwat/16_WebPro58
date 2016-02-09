@@ -13,17 +13,20 @@ public class MemberUtility {
 
     private MemberUtility() {}
 
-    public static boolean doLogin(String user, String pass) {
+    public static Member doLogin(String user, String pass) {
         try {
             String sql = "SELECT * FROM member WHERE username = ? AND password = ?";
             PreparedStatement statement = Database.getInstance().getConnection().prepareStatement(sql);
             statement.setString(1, user);
             statement.setString(2, pass);
 
-            return statement.executeQuery().last();
+            ResultSet result = statement.executeQuery();
+            if(result.last()) {
+                return new Member(result.getInt("id"), result.getString("fname"), result.getString("lname"));
+            }
         } catch(SQLException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 

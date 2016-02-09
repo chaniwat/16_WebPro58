@@ -1,6 +1,7 @@
 package filter;
 
-import utility.RouteHelper;
+import utility.helper.ErrorHelper;
+import utility.helper.RouteHelper;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -46,6 +47,7 @@ public class AuthorizationFilter implements Filter {
          * Authorization check
          */
         if((session == null || session.getAttribute("user") == null || (int)session.getAttribute("user") == 0) && !(uri.endsWith("login"))) {
+            ErrorHelper.setSessionError(session, ErrorHelper.ERR_NO_LOGIN_401);
             response.sendRedirect(RouteHelper.generateURL(request, "login"));
             return;
         } else if(!(session == null || session.getAttribute("user") == null || (int)session.getAttribute("user") == 0) && uri.endsWith("login")) {

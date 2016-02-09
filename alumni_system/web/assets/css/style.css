@@ -1,4 +1,6 @@
-body {
+body, html {
+  width: 100%;
+  height: 100%;
   font-family: 'athiti'; }
 
 .block {
@@ -6,5 +8,34 @@ body {
   width: 100%;
   height: 550px;
   background-color: ghostwhite; }
+
+.login-page {
+  background: -moz-radial-gradient(center, ellipse cover, #383838 0%, #0e0e0e 100%);
+  /* FF3.6-15 */
+  background: -webkit-radial-gradient(center, ellipse cover, #383838 0%, #0e0e0e 100%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: radial-gradient(ellipse at center, #383838 0%, #0e0e0e 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#383838', endColorstr='#0e0e0e',GradientType=1 );
+  /* IE6-9 fallback on horizontal gradient */ }
+  .login-page .login-container {
+    width: 500px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 15px 40px;
+    border-radius: 15px;
+    box-shadow: 0px 0px 15px black;
+    background-color: whitesmoke;
+    text-align: right; }
+    .login-page .login-container h1 {
+      margin-bottom: 30px; }
+    .login-page .login-container div.alert {
+      margin-top: -15px;
+      text-align: center; }
+    .login-page .login-container form button {
+      margin-top: 15px;
+      margin-bottom: 15px; }
 
 /*# sourceMappingURL=style.css.map */

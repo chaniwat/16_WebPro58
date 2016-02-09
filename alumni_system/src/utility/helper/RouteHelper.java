@@ -1,4 +1,4 @@
-package utility;
+package utility.helper;
 
 import javax.servlet.http.HttpServletRequest;
 
