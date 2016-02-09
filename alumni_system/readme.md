@@ -9,4 +9,6 @@ Written in intellij idea ultimate 15.0.3 (Student license)
 
 - Front-end
     - Bootstrap 3
-- Use "gulp" for compile any sass and es2015 resource.
+- Use "gulp" for compile any sass and javascript (es2015) resource.
+- Addition Java Library
+    - jBCrypt for encrypt password [de.svenkubiak:jBCrypt:0.4.1]
