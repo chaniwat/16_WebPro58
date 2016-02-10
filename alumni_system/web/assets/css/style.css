@@ -38,4 +38,11 @@ body, html {
       margin-top: 15px;
       margin-bottom: 15px; }
 
+.new-student-page .birthdate-group {
+  font-size: 1.8em; }
+  .new-student-page .birthdate-group span.control-label {
+    text-align: right; }
+  .new-student-page .birthdate-group div.seperator {
+    text-align: center; }
+
 /*# sourceMappingURL=style.css.map */

@@ -46,3 +46,20 @@ body, html {
     }
   }
 }
+
+// ----------------------------------------------- //
+//                                                 //
+//                 new student page                //
+//                                                 //
+// ----------------------------------------------- //
+.new-student-page {
+  .birthdate-group {
+    font-size: 1.8em;
+    span.control-label {
+      text-align: right;
+    }
+    div.seperator {
+      text-align: center;
+    }
+  }
+}
