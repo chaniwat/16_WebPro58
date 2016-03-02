@@ -1,7 +1,5 @@
 package auth;
 
-import org.mindrot.jbcrypt.BCrypt;
-import utility.UserUtility;
 import utility.helper.ErrorHelper;
 import utility.helper.RouteHelper;
 
@@ -16,8 +14,16 @@ import java.io.IOException;
 /**
  * Created by meranote on 2/9/2016 AD.
  */
-@WebServlet(name = "LoginServlet", urlPatterns = "/login")
+@WebServlet(name = "LoginServlet", urlPatterns = "/doLogin")
 public class LoginServlet extends HttpServlet {
+
+    private Authorization authorization = new Authorization();
+
+    @Override
+    public void init() {
+
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
@@ -25,13 +31,15 @@ public class LoginServlet extends HttpServlet {
         String username = request.getParameter("username"),
                 password = request.getParameter("password");
 
-        if(Authorization.login(username, password)) {
+        int userid;
+        if((userid = authorization.doLogin(username, password)) > 0) {
             HttpSession session = request.getSession();
 
-            session.setAttribute("user", UserUtility.getUserID(username));
+            session.setAttribute("user", userid);
             session.setMaxInactiveInterval(60*60);
 
             response.sendRedirect(RouteHelper.generateURL(request, ""));
+            return;
         } else {
             ErrorHelper.setRequestError(request, ErrorHelper.ERR_BAD_LOGIN);
             getServletContext().getRequestDispatcher("/WEB-INF/auth/login.jsp").forward(request, response);
@@ -51,4 +59,5 @@ public class LoginServlet extends HttpServlet {
 
         getServletContext().getRequestDispatcher("/WEB-INF/auth/login.jsp").forward(request, response);
     }
+
 }

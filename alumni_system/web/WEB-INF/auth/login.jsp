@@ -13,13 +13,13 @@
         <%
             if(ErrorHelper.hasRequestError(request)) {
                 if(ErrorHelper.checkRequestError(request, ErrorHelper.ERR_NO_LOGIN_401)) {
-                    out.println("<div class=\"alert alert-info\" role=\"alert\">Please login first.</div>");
+                    out.println("<div class=\"alert alert-info\" role=\"alert\">Please doLogin first.</div>");
                 } else if(ErrorHelper.checkRequestError(request, ErrorHelper.ERR_BAD_LOGIN)) {
                     out.println("<div class=\"alert alert-danger\" role=\"alert\">Incorrect username or password.</div>");
                 }
             }
         %>
-        <form action="<%= RouteHelper.generateURL(request, "login") %>" method="POST" id="login-form">
+        <form action="<%= RouteHelper.generateURL(request, "doLogin") %>" method="POST" id="login-form">
             <div class="form-group username-group">
                 <div class="input-group">
                     <span class="input-group-addon" id="username-addon">
@@ -45,7 +45,7 @@
     <%@ include file="/WEB-INF/layouts/script-all.jsp"%>
     <script>
         $(document).ready(function() {
-            new LoginPage($("form#login-form"));
+            new LoginPage($("form#doLogin-form"));
         });
     </script>
 </body>

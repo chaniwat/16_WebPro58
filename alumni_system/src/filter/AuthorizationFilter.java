@@ -13,7 +13,7 @@ import java.io.IOException;
 /**
  * Created by meranote on 2/9/2016 AD.
  */
-@WebFilter(filterName = "AuthorizationFilter")
+@WebFilter(filterName = "AuthorizationFilter", urlPatterns = {"/*"})
 public class AuthorizationFilter implements Filter {
 
     private FilterConfig filterConfig;
@@ -36,21 +36,18 @@ public class AuthorizationFilter implements Filter {
         HttpSession session = request.getSession();
 
         /**
-         * Bypass resource
+         * Bypass resource (assets)
          */
         if(uri.contains("/assets/")) {
             chain.doFilter(req, resp);
             return;
         }
 
-        /**
-         * Authorization check
-         */
-        if((session == null || session.getAttribute("user") == null || (int)session.getAttribute("user") == 0) && !(uri.endsWith("login"))) {
+        if((session == null || session.getAttribute("user") == null || (int)session.getAttribute("user") == 0) && !(uri.endsWith("doLogin"))) {
             ErrorHelper.setSessionError(session, ErrorHelper.ERR_NO_LOGIN_401);
-            response.sendRedirect(RouteHelper.generateURL(request, "login"));
+            response.sendRedirect(RouteHelper.generateURL(request, "doLogin"));
             return;
-        } else if(!(session == null || session.getAttribute("user") == null || (int)session.getAttribute("user") == 0) && uri.endsWith("login")) {
+        } else if(!(session == null || session.getAttribute("user") == null || (int)session.getAttribute("user") == 0) && uri.endsWith("doLogin")) {
             response.sendRedirect(RouteHelper.generateURL(request, ""));
             return;
         }

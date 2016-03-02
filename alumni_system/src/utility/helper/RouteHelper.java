@@ -9,6 +9,12 @@ public class RouteHelper {
 
     private RouteHelper() {}
 
+    /**
+     * Generate the path
+     * @param request
+     * @param path
+     * @return
+     */
     public static String generateURL(HttpServletRequest request, String path) {
         String uri = request.getScheme() + "://" +
                 request.getServerName() +

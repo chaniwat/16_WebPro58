@@ -4,6 +4,7 @@
 <head>
     <title>Alumni System</title>
 
+    <%-- INCLUDE ANOTHER FILE (like @include in php) --%>
     <%@ include file="/WEB-INF/layouts/header.jsp"%>
 </head>
 

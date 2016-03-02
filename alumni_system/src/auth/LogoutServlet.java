@@ -15,7 +15,7 @@ import java.io.IOException;
 @WebServlet(name = "LogoutServlet", urlPatterns = "/logout")
 public class LogoutServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        doGet(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -25,6 +25,6 @@ public class LogoutServlet extends HttpServlet {
             request.getSession().setAttribute("user", 0);
         }
 
-        response.sendRedirect(RouteHelper.generateURL(request, "login"));
+        response.sendRedirect(RouteHelper.generateURL(request, "doLogin"));
     }
 }

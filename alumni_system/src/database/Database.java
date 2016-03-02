@@ -1,7 +1,11 @@
 package database;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
@@ -9,25 +13,39 @@ import java.sql.SQLException;
  */
 public class Database {
 
-    private static Database ourInstance = new Database();
+    private static Database instance = new Database();
     public static Database getInstance() {
-        return ourInstance;
+        return instance;
     }
 
-    private static Connection connection;
+    private DataSource dataSource;
 
     private Database() {
         try {
-            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-            connection = DriverManager.getConnection("jdbc:mysql://database.it.kmitl.ac.th/it_16?autoReconnect=true", "it_16", "csQgCzmQ");
-        } catch(SQLException e) {
+            InitialContext initialContext = new InitialContext();
+            dataSource = (DataSource) initialContext.lookup("java:/comp/env/jdbc/AlumniDB");
+        } catch (NamingException e) {
             e.printStackTrace();
-            return;
         }
     }
 
     public Connection getConnection() {
-        return connection;
+        try {
+            return dataSource.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void closeConnection(Connection connection) {
+        if(connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+
+            }
+        }
     }
 
 }
