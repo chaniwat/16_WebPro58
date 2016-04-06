@@ -1,22 +1,57 @@
+<%@ page import="model.utility.RouteUtils" %>
+<%@ page import="model.auth.Authorization" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Alumni System</title>
 
-    <%-- INCLUDE ANOTHER FILE (like @include in php) --%>
-    <%@ include file="/WEB-INF/layouts/header.jsp"%>
-</head>
+<%@ taglib prefix="template" uri="/WEB-INF/tlds/TemplateTag.tld" %>
 
-<body>
-    <div class="block">
+<%
+    Authorization auth = Authorization.getAuthInstance(session);
+%>
+
+<template:page title="Alumni System">
+    <div class="jumbotron">
         <div class="container">
-            <h1>Bello!!</h1>
-
-            <a href="<%= RouteHelper.generateURL(request, "faculty/new") %>" class="btn btn-default">ADD NEW FACULTY</a> <a href="<%= RouteHelper.generateURL(request, "major/new") %>" class="btn btn-default">ADD NEW MAJOR</a> <a href="<%= RouteHelper.generateURL(request, "student/new") %>" class="btn btn-default">ADD NEW STUDENT</a> <a href="<%= RouteHelper.generateURL(request, "logout") %>" class="btn btn-default">LOGOUT</a>
+            <h1>ยินดีต้อนรับ</h1>
+            <p>ระบบศิษย์เก่า คณะเทคโนโลยีสารสนเทศ สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง</p>
+            <%
+                if(auth.isLogin()) {
+            %>
+            <p><a class="btn btn-success btn-lg" href="<%= RouteUtils.generateURL(request, "profile") %>" role="button">จัดการโปรไฟล์ »</a></p>
+            <%
+            } else {
+            %>
+            <p><a class="btn btn-primary btn-lg" href="<%= RouteUtils.generateURL(request, "login") %>" role="button">เข้าสู่ระบบศิษย์เก่า »</a></p>
+            <%
+                }
+            %>
         </div>
     </div>
 
-    <%@ include file="/WEB-INF/layouts/script-all.jsp"%>
-</body>
-</html>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Slideshow</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Heading</h2>
+                <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+                <p><a class="btn btn-default" href="#" role="button">View details »</a></p>
+            </div>
+            <div class="col-md-6">
+                <h2>Heading</h2>
+                <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+                <p><a class="btn btn-default" href="#" role="button">View details »</a></p>
+            </div>
+        </div>
+
+        <hr />
+
+        <footers>
+            <p>คณะเทคโนโลยีสารสนเทศ สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง<br>
+                เลขที่ 1 ซอยฉลองกรุง 1 แขวงลาดกระบัง เขตลาดกระบัง กรุงเทพมหานคร 10520<br>
+                โทรศัพท์ +66 (0) 2723 4900 โทรสาร +66 (0) 2723 4910</p>
+        </footers>
+    </div>
+</template:page>

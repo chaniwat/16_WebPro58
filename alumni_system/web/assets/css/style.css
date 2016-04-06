@@ -1,23 +1,53 @@
+/* Override Bootstrap rule */
 body, html {
   width: 100%;
   height: 100%;
   font-family: 'athiti'; }
 
-.block {
-  position: relative;
-  width: 100%;
-  height: 550px;
-  background-color: ghostwhite; }
+body.fixed-navbar {
+  padding-top: 50px;
+  padding-bottom: 20px; }
+
+.jumbotron {
+  padding-top: 70px;
+  padding-bottom: 70px; }
+  @media screen and (min-width: 768px) {
+    .jumbotron {
+      padding-top: 70px;
+      padding-bottom: 70px; } }
+
+.navbar {
+  background-color: #52aeff;
+  color: #FFF; }
+  .navbar a {
+    color: #FFF; }
+    .navbar a.navbar-brand {
+      background: #2999e3;
+      padding: 5px 15px; }
+      .navbar a.navbar-brand > img {
+        float: left;
+        margin-right: 12px; }
+      .navbar a.navbar-brand > span {
+        float: left;
+        padding-top: 11px; }
+  .navbar li.active, .navbar li > a:hover {
+    background-color: #6dbdff; }
+  .navbar p.navbar-text {
+    margin-right: 0px; }
+  .navbar li.dropdown a.dropdown-toggle {
+    line-height: 23px;
+    height: 50px;
+    padding-left: 8px;
+    padding-right: 7px;
+    margin-left: 5px;
+    margin-right: 5px; }
+    .navbar li.dropdown a.dropdown-toggle:hover {
+      background-color: #6dbdff; }
+  .navbar li.dropdown.open a.dropdown-toggle {
+    background-color: #6dbdff; }
 
 .login-page {
-  background: -moz-radial-gradient(center, ellipse cover, #383838 0%, #0e0e0e 100%);
-  /* FF3.6-15 */
-  background: -webkit-radial-gradient(center, ellipse cover, #383838 0%, #0e0e0e 100%);
-  /* Chrome10-25,Safari5.1-6 */
-  background: radial-gradient(ellipse at center, #383838 0%, #0e0e0e 100%);
-  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#383838', endColorstr='#0e0e0e',GradientType=1 );
-  /* IE6-9 fallback on horizontal gradient */ }
+  background-color: #fbfbfb; }
   .login-page .login-container {
     width: 500px;
     position: absolute;
@@ -27,7 +57,7 @@ body, html {
     padding: 15px 40px;
     border-radius: 15px;
     box-shadow: 0px 0px 15px black;
-    background-color: whitesmoke;
+    background-color: #FFFFFF;
     text-align: right; }
     .login-page .login-container h1 {
       margin-bottom: 30px; }
@@ -37,12 +67,5 @@ body, html {
     .login-page .login-container form button {
       margin-top: 15px;
       margin-bottom: 15px; }
-
-.new-student-page .birthdate-group {
-  font-size: 1.8em; }
-  .new-student-page .birthdate-group span.control-label {
-    text-align: right; }
-  .new-student-page .birthdate-group div.seperator {
-    text-align: center; }
 
 /*# sourceMappingURL=style.css.map */
