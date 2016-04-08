@@ -2,6 +2,8 @@ package model.utility;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Enumeration;
+import java.util.HashMap;
 
 /**
  * Created by meranote on 2/9/2016 AD.
@@ -43,6 +45,30 @@ public class RouteUtils {
      */
     public static void pushLastPathURL(HttpSession session, String lastpathurl) {
         session.setAttribute("lastpathurl", lastpathurl);
+    }
+
+    public static HashMap<String, String> convertParamsToHashMap(HttpServletRequest request, String prefix) {
+        Enumeration<String> paramnames = request.getParameterNames();
+        HashMap<String, String> params = new HashMap<>();
+
+        while (paramnames.hasMoreElements()) {
+            String paramname = paramnames.nextElement();
+            if(!paramname.startsWith(prefix)) {
+                continue;
+            } else {
+                if(request.getParameter(paramname).trim() == "" || request.getParameter(paramname) == "null") {
+                    params.put(paramname, null);
+                } else {
+                    params.put(paramname, request.getParameter(paramname));
+                }
+            }
+        }
+
+        return params;
+    }
+
+    public static HashMap<String, String> convertParamsToHashMap(HttpServletRequest request) {
+        return convertParamsToHashMap(request, "");
     }
 
     public static String generateHomeURL(HttpServletRequest request) {

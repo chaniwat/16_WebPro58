@@ -29,7 +29,7 @@ public class Database {
     }
 
     public Connection getConnection() {
-        if(Tester.isCalledByMain()) {
+        if(Tester.isTest()) {
             try {
                 return Database.getConnectionForTest();
             } catch (SQLException e) {

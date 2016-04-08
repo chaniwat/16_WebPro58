@@ -44,7 +44,6 @@ public class Page extends BodyTagSupport {
                             "<meta charset='UTF-8' />\n" +
                             "<meta http-equiv='X-UA-Compatible' content='IE=edge' />\n" +
                             "<meta name='viewport' content='width=device-width, initial-scale=1' />\n" +
-                            "\n" +
                             "<link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css' rel='stylesheet' />\n" +
                             "<link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css' rel='stylesheet' />\n" +
                             "<link href='" + RouteUtils.generateURL(request, "assets/fonts/ahtiti.css") + "' rel='stylesheet' />\n" +
@@ -52,6 +51,8 @@ public class Page extends BodyTagSupport {
                             "</head>\n" +
                             "\n" +
                             "<body class='fixed-navbar'>\n" +
+                            "\n" +
+                            "<sitedata contextPath=\"" + request.getContextPath() + "\"></sitedata>\n" +
                             "\n" +
                             "<nav class='navbar navbar-fixed-top'>\n" +
                             "<div class='container'>\n" +

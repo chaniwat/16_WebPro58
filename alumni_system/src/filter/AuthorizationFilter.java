@@ -1,7 +1,7 @@
 package filter;
 
 import model.auth.Authorization;
-import model.utility.ErrorUtils;
+import model.utility.ResponseCodeUtils;
 import model.utility.RouteUtils;
 import org.reflections.Reflections;
 
@@ -51,6 +51,8 @@ public class AuthorizationFilter implements Filter {
             return;
         }
 
+        // FIXME: 4/7/2016 AD Filter path not work as expected (wildcard path failed)
+
         String[] uriSplit = uri.split("/");
         String uriNoContext = "";
         for(int i = 2; i < uriSplit.length; i++) {
@@ -88,7 +90,7 @@ public class AuthorizationFilter implements Filter {
 
             if(!authorization.isLogin()) {
                 RouteUtils.pushLastPathURL(session, uriNoContext);
-                ErrorUtils.setSessionError(session, ErrorUtils.UNAUTHORIZED);
+                ResponseCodeUtils.pushSessionCode(session, ResponseCodeUtils.UNAUTHORIZED);
                 response.sendRedirect(RouteUtils.generateURL(request, "login"));
                 return;
             }

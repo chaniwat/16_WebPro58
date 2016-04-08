@@ -1,9 +1,15 @@
 package model.utility.tester;
 
+import annotation.test;
+import exception.NoUserFoundException;
+import model.Alumni;
+import model.User;
 import org.objectweb.asm.*;
 
 import java.io.InputStream;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -15,7 +21,12 @@ public class Tester {
         final String stackTraceClassName = stackTraceElement.getClassName();
         final String stackTraceMethodName = stackTraceElement.getMethodName();
         final int stackTraceLineNumber = stackTraceElement.getLineNumber();
-        Class<?> stackTraceClass = Class.forName(stackTraceClassName);
+        Class<?> stackTraceClass;
+        try {
+            stackTraceClass = Class.forName(stackTraceClassName);
+        } catch (ClassNotFoundException ex) {
+            return null;
+        }
 
         // I am only using AtomicReference as a container to dump a String into, feel free to ignore it for now
         final AtomicReference<String> methodDescriptorReference = new AtomicReference<String>();
@@ -62,26 +73,43 @@ public class Tester {
             }
         }
 
-        throw new RuntimeException("Could not find the calling method");
+        return null;
     }
 
-    public static boolean isCalledByMain() {
+    public static boolean isTest() {
         for(StackTraceElement elem : Thread.currentThread().getStackTrace()) {
             try {
-                String methodname = (Tester.getMethod(elem)).getName();
-                if(methodname.equals("main")) {
-                    return true;
-                }
+                Method method = Tester.getMethod(elem);
+                if(method == null) continue;
+                Annotation annotation = method.getAnnotation(test.class);
+                if(annotation != null) return true;
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
+
         return false;
     }
 
     public static void main(String[] args) throws Exception {
-        if(isCalledByMain()) {
+        test();
+    }
+
+    @test
+    public static void test() {
+        if(isTest()) {
             System.out.println("testing");
+
+            Alumni alumni = Alumni.getAlumniByStudentId(57070001);
+
+            String day = null, month = null, year = null;
+            if(alumni.getBirthdate() != null) {
+                day = new SimpleDateFormat("dd").format(alumni.getBirthdate());
+                month = new SimpleDateFormat("MM").format(alumni.getBirthdate());
+                year = new SimpleDateFormat("yyyy").format(alumni.getBirthdate());
+            }
+
+            System.out.println(day + " " + month + " " + year);
         }
     }
 

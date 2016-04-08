@@ -1,5 +1,5 @@
 <%@ page import="model.utility.RouteUtils" %>
-<%@ page import="model.utility.ErrorUtils" %>
+<%@ page import="model.utility.ResponseCodeUtils" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -16,13 +16,17 @@
 </head>
 
 <body class="login-page">
+    <sitedata contextPath="<%= request.getContextPath() %>"></sitedata>
+
     <div class="login-container">
         <center><h1>Login | เข้าสู่ระบบ</h1></center>
         <%
-            if(ErrorUtils.hasRequestError(request)) {
-                if(ErrorUtils.checkRequestError(request, ErrorUtils.UNAUTHORIZED)) {
+            if(ResponseCodeUtils.hasCodeInRequest(request)) {
+                int code = ResponseCodeUtils.pullRequestCode(request);
+
+                if(code == ResponseCodeUtils.UNAUTHORIZED) {
                     out.println("<div class=\"alert alert-info\" role=\"alert\">เข้าสู่ระบบ</div>");
-                } else if(ErrorUtils.checkRequestError(request, ErrorUtils.BAD_LOGIN)) {
+                } else if(code == ResponseCodeUtils.BAD_LOGIN) {
                     out.println("<div class=\"alert alert-danger\" role=\"alert\">ชื่อผู้ใช้หรือรหัสผ่านผิด</div>");
                 }
             }
@@ -33,7 +37,7 @@
                     <span class="input-group-addon" id="username-addon">
                         <span class="fa fa-user"></span>
                     </span>
-                    <input type="text" class="form-control" id="username" name="username" placeholder="Username" aria-describedby="username-addon" />
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Username" aria-describedby="username-addon" data-empty="false" />
                 </div>
             </div>
 
@@ -42,7 +46,7 @@
                     <span class="input-group-addon" id="password-addon">
                         <span class="fa fa-unlock-alt"></span>
                     </span>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" aria-describedby="password-addon" />
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" aria-describedby="password-addon" data-empty="false" />
                 </div>
             </div>
 
@@ -53,8 +57,5 @@
     <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="<%= RouteUtils.generateURL(request, "assets/js/script.js") %>"></script>
-    <script>
-        new LoginPage($("form#login-form"));
-    </script>
 </body>
 </html>

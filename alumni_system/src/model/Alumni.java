@@ -1,20 +1,17 @@
 package model;
 
 import exception.NoAlumniFoundException;
+import exception.NoUserFoundException;
 import model.database.Database;
-import org.mindrot.jbcrypt.BCrypt;
 
-import javax.xml.crypto.Data;
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Created by meranote on 4/5/2016 AD.
+ * Alumni Model
+ * for alumni table
  */
 public class Alumni implements Serializable {
 
@@ -25,6 +22,7 @@ public class Alumni implements Serializable {
     private ArrayList<Track> tracks;
 
     public Alumni() {
+        address = new Address();
         tracks = new ArrayList<>();
     }
 
@@ -164,30 +162,34 @@ public class Alumni implements Serializable {
         this.birthdate = birthdate;
     }
 
+    /**
+     * Add new alumni
+     * @param alumni
+     */
     public static void addNewAlumni(Alumni alumni) {
         Connection connection = null;
         try {
             connection = Database.getInstance().getConnection();
 
-            String sql = "INSERT INTO user VALUES (0, ?, ?, 'ALUMNI')";
+            User user = null;
+            try {
+                user = User.getUserByID(alumni.student_id);
+                if(user.getType() != User.UserType.ALUMNI) throw new RuntimeException("Type not match, manually delete in database or change type of user");
+            } catch (NoUserFoundException ex) {
+                user = new User();
+                user.setUsername(String.valueOf(alumni.student_id));
+                user.setType(User.UserType.ALUMNI);
+                User.addUser(user, "itkmitl");
+
+                user = User.getUserByUsername(String.valueOf(alumni.student_id));
+            }
+
+            alumni.user_id = user.getId();
+
+            String sql = "INSERT INTO alumni VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setString(1, String.valueOf(alumni.student_id));
-            stmt.setString(2, BCrypt.hashpw("itkmitl", BCrypt.gensalt()));
-            stmt.executeUpdate();
-
-            sql = "SELECT user_id FROM user WHERE username = ?";
-            stmt = connection.prepareStatement(sql);
-            stmt.setString(1, String.valueOf(alumni.student_id));
-
-            ResultSet result = stmt.executeQuery();
-            result.next();
-
-            int user_id = result.getInt("user_id");
-
-            sql = "INSERT INTO alumni VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            stmt = connection.prepareStatement(sql);
             stmt.setInt(1, alumni.student_id);
-            stmt.setInt(2, user_id);
+            stmt.setInt(2, alumni.user_id);
             stmt.setString(3, alumni.pname_th);
             stmt.setString(4, alumni.fname_th);
             stmt.setString(5, alumni.lname_th);
@@ -203,25 +205,7 @@ public class Alumni implements Serializable {
             stmt.setString(15, alumni.avatar);
             stmt.executeUpdate();
 
-            if(alumni.address != null) {
-                sql = "SELECT province_id FROM provinces WHERE name_th = ?";
-                stmt = connection.prepareStatement(sql);
-                stmt.setString(1, alumni.address.getProvince());
-                result = stmt.executeQuery();
-                result.next();
-
-                int province_id = result.getInt("province_id");
-
-                sql = "INSERT INTO alumni_address VALUES (?, ?, ?, ?, ?, ?)";
-                stmt = connection.prepareStatement(sql);
-                stmt.setInt(1, alumni.student_id);
-                stmt.setString(2, alumni.address.getAddress());
-                stmt.setString(3, alumni.address.getDistrict());
-                stmt.setString(4, alumni.address.getAmphure());
-                stmt.setInt(5, province_id);
-                stmt.setString(6, alumni.address.getZipcode());
-                stmt.executeUpdate();
-            }
+            Address.addAddressToStudentId(alumni.student_id, alumni.address);
 
             for (Track t : alumni.tracks) {
                 Alumni.addTracks(alumni, t);
@@ -233,17 +217,23 @@ public class Alumni implements Serializable {
         }
     }
 
+    /**
+     * Add new track to alumni
+     * @param alumni
+     * @param track
+     */
     public static void addTracks(Alumni alumni, Track track) {
         Connection connection = null;
         try {
             connection = Database.getInstance().getConnection();
 
-            String sql = "INSERT INTO alumni_track VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO alumni_track VALUES (?, ?, ?, ?, ?)";
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setInt(1, alumni.student_id);
             stmt.setInt(2, alumni.user_id);
             stmt.setInt(3, track.getTrack_id());
             stmt.setInt(4, track.getStarteduyear());
+            stmt.setInt(5, track.getEndeduyear());
             stmt.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -252,11 +242,81 @@ public class Alumni implements Serializable {
         }
     }
 
-    public static void updateAlumni(Alumni alumni) {
-        // TODO update alumni
+    /**
+     * Update alumni data
+     * @param alumni
+     */
+    public static void updateAlumni(Alumni alumni) throws NoAlumniFoundException {
+        getAlumniByStudentId(alumni.student_id);
+
+        Connection connection = null;
+        try {
+            connection = Database.getInstance().getConnection();
+
+            String sql = "UPDATE alumni " +
+                    "SET pname_th = ?, fname_th = ?, lname_th = ?, " +
+                    "pname_en = ?, fname_en = ?, lname_en = ?, " +
+                    "nickname = ?, birthdate = ?, email = ?, phone = ?, " +
+                    "occupation = ?, work_name = ?, avatar = ? " +
+                    "WHERE student_id = ?";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, alumni.pname_th);
+            stmt.setString(2, alumni.fname_th);
+            stmt.setString(3, alumni.lname_th);
+            stmt.setString(4, alumni.pname_en);
+            stmt.setString(5, alumni.fname_en);
+            stmt.setString(6, alumni.lname_en);
+            stmt.setString(7, alumni.nickname);
+            stmt.setDate(8, new java.sql.Date(alumni.getBirthdate().getTime()));
+            stmt.setString(9, alumni.email);
+            stmt.setString(10, alumni.phone);
+            stmt.setString(11, alumni.occupation);
+            stmt.setString(12, alumni.work_name);
+            stmt.setString(13, alumni.avatar);
+            stmt.setInt(14, alumni.student_id);
+            stmt.executeUpdate();
+
+            Address.updateAddressToStudentId(alumni.student_id, alumni.address);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if(connection != null) Database.closeConnection(connection);
+        }
     }
 
-    public static Alumni getAlumniByStudentId(int student_id) {
+    /**
+     * Get All alumni object.
+     * @return
+     */
+    public static ArrayList<Alumni> getAllAlumni() {
+        Connection connection = null;
+        try {
+            connection = Database.getInstance().getConnection();
+
+            String sql = "SELECT * FROM alumni";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            ResultSet result = stmt.executeQuery();
+
+            ArrayList<Alumni> alumnis = new ArrayList<>();
+            while (result.next()) {
+                alumnis.add(buildAlumniObject(connection, result));
+            }
+
+            return alumnis;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        } finally {
+            if(connection != null) Database.closeConnection(connection);
+        }
+    }
+
+    /**
+     * Get alumni by student_id
+     * @param student_id
+     * @return
+     */
+    public static Alumni getAlumniByStudentId(int student_id) throws NoAlumniFoundException {
         Connection connection = null;
         try {
             connection = Database.getInstance().getConnection();
@@ -279,7 +339,12 @@ public class Alumni implements Serializable {
         }
     }
 
-    public static Alumni getAlumniByUserId(int user_id) {
+    /**
+     * Get alumni by user_id
+     * @param user_id
+     * @return
+     */
+    public static Alumni getAlumniByUserId(int user_id) throws NoAlumniFoundException {
         Connection connection = null;
         try {
             connection = Database.getInstance().getConnection();
@@ -302,6 +367,13 @@ public class Alumni implements Serializable {
         }
     }
 
+    /**
+     * Build alumni object and return
+     * @param connection
+     * @param result
+     * @return
+     * @throws SQLException
+     */
     private static Alumni buildAlumniObject(Connection connection, ResultSet result) throws SQLException {
         Alumni alumni = new Alumni();
 
@@ -321,48 +393,31 @@ public class Alumni implements Serializable {
         alumni.work_name = result.getString("work_name");
         alumni.avatar = result.getString("avatar");
 
-        String sql = "SELECT address, district, amphure, name_th, zipcode " +
-                "FROM alumni_address " +
-                "JOIN provinces " +
-                "ON alumni_address.province_id = provinces.province_id " +
-                "WHERE student_id = ?";
-        PreparedStatement stmt = connection.prepareStatement(sql);
-        stmt.setInt(1, alumni.student_id);
-        result = stmt.executeQuery();
+        alumni.address = Address.getAddressByStudentId(alumni.student_id);
 
-        if(result.next()) {
-            Address address = new Address();
-            address.setAddress(result.getString("address"));
-            address.setDistrict(result.getString("district"));
-            address.setAmphure(result.getString("amphure"));
-            address.setProvince(result.getString("name_th"));
-            address.setZipcode(result.getString("zipcode"));
-
-            alumni.address = address;
-        }
-
-        sql = "SELECT alumni_track.starteduyear, " +
+        String sql = "SELECT alumni_track.starteduyear, alumni_track.endeduyear, " +
                 "track.track_id, track.name_th AS 'track_name_th', track.name_en AS 'track_name_en', " +
                 "curriculum.curriculum_id, curriculum.name_th AS 'curriculum_name_th', curriculum.name_en AS 'curriculum_name_en' " +
                 "FROM alumni_track " +
                 "JOIN track ON alumni_track.track_id = track.track_id " +
                 "JOIN curriculum ON track.curriculum_id = curriculum.curriculum_id " +
                 "WHERE student_id = ?";
-        stmt = connection.prepareStatement(sql);
+        PreparedStatement stmt = connection.prepareStatement(sql);
         stmt.setInt(1, alumni.student_id);
-        result = stmt.executeQuery();
+        ResultSet alu_result = stmt.executeQuery();
 
-        while (result.next()) {
+        while (alu_result.next()) {
             Track track = new Track();
-            track.setTrack_id(result.getInt("track_id"));
-            track.setName_th(result.getString("track_name_th"));
-            track.setName_en(result.getString("track_name_en"));
-            track.setStarteduyear(result.getInt("starteduyear"));
+            track.setTrack_id(alu_result.getInt("track_id"));
+            track.setName_th(alu_result.getString("track_name_th"));
+            track.setName_en(alu_result.getString("track_name_en"));
+            track.setStarteduyear(alu_result.getInt("starteduyear"));
+            track.setEndeduyear(alu_result.getInt("endeduyear"));
 
             Curriculum curriculum = new Curriculum();
-            curriculum.setCurriculum_id(result.getInt("curriculum_id"));
-            curriculum.setName_th(result.getString("curriculum_name_th"));
-            curriculum.setName_en(result.getString("curriculum_name_en"));
+            curriculum.setCurriculum_id(alu_result.getInt("curriculum_id"));
+            curriculum.setName_th(alu_result.getString("curriculum_name_th"));
+            curriculum.setName_en(alu_result.getString("curriculum_name_en"));
 
             track.setCurriculum(curriculum);
 
@@ -372,10 +427,50 @@ public class Alumni implements Serializable {
         return alumni;
     }
 
-    public static void main(String[] args) {
-        Alumni alumni = Alumni.getAlumniByStudentId(57070029);
+    /**
+     * Remove alumni by student_id
+     * @param student_id
+     * @throws NoAlumniFoundException
+     */
+    public static void removeAlumniByStudentId(int student_id) throws NoAlumniFoundException {
+        getAlumniByStudentId(student_id);
 
-        System.out.println(alumni.pname_th + " " + alumni.fname_th + " " + alumni.lname_th);
+        Connection connection = null;
+        try {
+            connection = Database.getInstance().getConnection();
+
+            String sql = "DELETE FROM alumni WHERE student_id = ?";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, student_id);
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if(connection != null) Database.closeConnection(connection);
+        }
+    }
+
+    /**
+     * Remove alumni by user_id
+     * @param user_id
+     * @throws NoAlumniFoundException
+     */
+    public static void removeAlumniByUserId(int user_id) throws NoAlumniFoundException {
+        getAlumniByUserId(user_id);
+
+        Connection connection = null;
+        try {
+            connection = Database.getInstance().getConnection();
+
+            String sql = "DELETE FROM alumni WHERE user_id = ?";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, user_id);
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if(connection != null) Database.closeConnection(connection);
+        }
     }
 
 }

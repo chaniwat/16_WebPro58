@@ -1,7 +1,7 @@
 package controller.auth;
 
 import model.auth.Authorization;
-import model.utility.ErrorUtils;
+import model.utility.ResponseCodeUtils;
 import model.utility.RouteUtils;
 
 import javax.servlet.ServletException;
@@ -38,7 +38,7 @@ public class LoginServlet extends HttpServlet {
             response.sendRedirect(RouteUtils.generateURL(request, RouteUtils.pullLastPathURL(session)));
             return;
         } else {
-            ErrorUtils.setRequestError(request, ErrorUtils.BAD_LOGIN);
+            ResponseCodeUtils.pushRequestCode(request, ResponseCodeUtils.BAD_LOGIN);
             getServletContext().getRequestDispatcher("/WEB-INF/auth/login.jsp").forward(request, response);
         }
     }
@@ -56,9 +56,8 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        if(ErrorUtils.hasSessionError(session)) {
-            ErrorUtils.setRequestErrorFromSession(session, request);
-            ErrorUtils.clearError(session);
+        if(ResponseCodeUtils.hasCodeInSession(session)) {
+            ResponseCodeUtils.pushRequestCode(request, ResponseCodeUtils.pullSessionCode(session));
         }
 
         getServletContext().getRequestDispatcher("/WEB-INF/auth/login.jsp").forward(request, response);

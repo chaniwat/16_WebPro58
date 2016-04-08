@@ -2,7 +2,6 @@ package controller.auth;
 
 import model.auth.Authorization;
 import model.utility.RouteUtils;
-import model.utility.ErrorUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

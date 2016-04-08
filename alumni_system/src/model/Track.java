@@ -17,7 +17,7 @@ public class Track {
     private int track_id;
     private Curriculum curriculum;
     private String name_th, name_en;
-    private int starteduyear;
+    private int starteduyear, endeduyear;
 
     public Track() {
         curriculum = new Curriculum();
@@ -63,6 +63,14 @@ public class Track {
         this.name_en = name_en;
     }
 
+    public int getEndeduyear() {
+        return endeduyear;
+    }
+
+    public void setEndeduyear(int endeduyear) {
+        this.endeduyear = endeduyear;
+    }
+
     public static Track getTrack(int track_id) throws NoTrackFoundException {
         Connection connection = null;
         try {
@@ -78,18 +86,7 @@ public class Track {
 
             ResultSet result = stmt.executeQuery();
             if(result.next()) {
-                Track t = new Track();
-                t.track_id = result.getInt("track_id");
-                t.name_th = result.getString("track_name_th");
-                t.name_en = result.getString("track_name_en");
-
-                Curriculum curriculum = new Curriculum();
-                curriculum.setCurriculum_id(result.getInt("curriculum_id"));
-                curriculum.setName_th(result.getString("curriculum_name_th"));
-                curriculum.setName_en(result.getString("curriculum_name_en"));
-                t.curriculum = curriculum;
-
-                return t;
+                return buildTrackObject(result);
             } else {
                 throw new NoTrackFoundException();
             }
@@ -115,18 +112,7 @@ public class Track {
             ResultSet result = stmt.executeQuery();
             ArrayList<Track> tracks = new ArrayList<>();
             while (result.next()) {
-                Track t = new Track();
-                t.track_id = result.getInt("track_id");
-                t.name_th = result.getString("track_name_th");
-                t.name_en = result.getString("track_name_en");
-
-                Curriculum curriculum = new Curriculum();
-                curriculum.setCurriculum_id(result.getInt("curriculum_id"));
-                curriculum.setName_th(result.getString("curriculum_name_th"));
-                curriculum.setName_en(result.getString("curriculum_name_en"));
-                t.curriculum = curriculum;
-
-                tracks.add(t);
+                tracks.add(buildTrackObject(result));
             }
             return tracks;
         } catch (SQLException ex) {
@@ -135,6 +121,21 @@ public class Track {
         } finally {
             if(connection != null) Database.closeConnection(connection);
         }
+    }
+
+    private static Track buildTrackObject(ResultSet result) throws SQLException {
+        Track t = new Track();
+        t.track_id = result.getInt("track_id");
+        t.name_th = result.getString("track_name_th");
+        t.name_en = result.getString("track_name_en");
+
+        Curriculum curriculum = new Curriculum();
+        curriculum.setCurriculum_id(result.getInt("curriculum_id"));
+        curriculum.setName_th(result.getString("curriculum_name_th"));
+        curriculum.setName_en(result.getString("curriculum_name_en"));
+        t.curriculum = curriculum;
+
+        return t;
     }
 
 }
