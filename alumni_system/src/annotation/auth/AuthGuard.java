@@ -13,5 +13,6 @@ import java.lang.annotation.Target;
 public @interface AuthGuard {
 
     String guard() default "user";
+    boolean redirectback() default true;
 
 }

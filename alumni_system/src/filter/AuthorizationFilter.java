@@ -98,7 +98,7 @@ public class AuthorizationFilter implements Filter {
             authorization.setGuard(authGuardSession);
 
             if(!authorization.isLogin()) {
-                RouteUtils.pushLastPathURL(session, uriNoContext);
+                if(authGuardAnnotation.redirectback()) RouteUtils.pushLastPathURL(session, uriNoContext);
                 ResponseCodeUtils.pushSessionCode(session, ResponseCodeUtils.UNAUTHORIZED);
                 response.sendRedirect(RouteUtils.generateURL(request, "login"));
                 return;

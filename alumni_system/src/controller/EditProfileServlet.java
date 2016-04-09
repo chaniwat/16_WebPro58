@@ -22,7 +22,7 @@ import java.util.HashMap;
  * Created by meranote on 4/7/2016 AD.
  */
 @WebServlet(name = "EditProfileServlet", urlPatterns = {"/profile/edit"})
-@AuthGuard
+@AuthGuard(redirectback = false)
 public class EditProfileServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
