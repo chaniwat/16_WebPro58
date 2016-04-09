@@ -100,16 +100,16 @@ public class Tester {
         if(isTest()) {
             System.out.println("testing");
 
-            Alumni alumni = Alumni.getAlumniByStudentId(57070001);
+            String uri = "/profile/";
 
-            String day = null, month = null, year = null;
-            if(alumni.getBirthdate() != null) {
-                day = new SimpleDateFormat("dd").format(alumni.getBirthdate());
-                month = new SimpleDateFormat("MM").format(alumni.getBirthdate());
-                year = new SimpleDateFormat("yyyy").format(alumni.getBirthdate());
+            String[] uriSplit = uri.split("/");
+            String uriNoContext = "";
+            for(int i = 2; i < uriSplit.length; i++) {
+                if(i == uriSplit.length - 1) uriNoContext += uriSplit[i];
+                else uriNoContext += uriSplit[i] + "/";
             }
 
-            System.out.println(day + " " + month + " " + year);
+            System.out.println(uriNoContext);
         }
     }
 

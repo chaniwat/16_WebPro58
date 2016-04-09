@@ -1,5 +1,6 @@
 package controller;
 
+import annotation.auth.AuthGuard;
 import model.Address;
 import model.Alumni;
 import model.User;
@@ -21,6 +22,7 @@ import java.util.HashMap;
  * Created by meranote on 4/7/2016 AD.
  */
 @WebServlet(name = "EditProfileServlet", urlPatterns = {"/profile/edit"})
+@AuthGuard
 public class EditProfileServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -36,13 +38,7 @@ public class EditProfileServlet extends HttpServlet {
     private void doUpdateAlumni(HttpServletRequest request, HttpServletResponse response) {
         HashMap<String, String> params = RouteUtils.convertParamsToHashMap(request, "alumni-form-");
 
-        if(params.get("alumni-form-stuid") == null || params.get("alumni-form-pnameth") == null ||
-                params.get("alumni-form-fnameth") == null || params.get("alumni-form-lnameth") == null) {
-            redirectToProfilePage(request, response, ResponseCodeUtils.FORM_INPUT_NOT_COMPLETE);
-            return;
-        }
-
-        // Check permission (prevent another alumni or teacher to edit another alumnis' profile)
+        // Check permission (prevent another alumni or teacher to edit another alumni's profile)
         Authorization auth = Authorization.getAuthInstance(request.getSession());
         User user = auth.getCurrentUser();
 
@@ -51,6 +47,12 @@ public class EditProfileServlet extends HttpServlet {
         if((user.getType() == User.UserType.TEACHER) ||
                 (user.getType() == User.UserType.ALUMNI && Alumni.getAlumniByUserId(user.getId()).getStudent_id() != student_id)) {
             redirectToProfilePage(request, response, ResponseCodeUtils.NOT_ENOUGH_PERMISSION);
+            return;
+        }
+
+        if(params.get("alumni-form-stuid") == null || params.get("alumni-form-pnameth") == null ||
+                params.get("alumni-form-fnameth") == null || params.get("alumni-form-lnameth") == null) {
+            redirectToProfilePage(request, response, ResponseCodeUtils.FORM_INPUT_NOT_COMPLETE);
             return;
         }
 
@@ -88,7 +90,7 @@ public class EditProfileServlet extends HttpServlet {
 
         alumni.getAddress().setAddress(params.get("alumni-form-address"));
         alumni.getAddress().setDistrict(params.get("alumni-form-district"));
-        alumni.getAddress().setAmphure(params.get("alumni-form-district"));
+        alumni.getAddress().setAmphure(params.get("alumni-form-amphure"));
 
         if(params.get("alumni-form-province") != null) {
             alumni.getAddress().setProvince(Address.Province.getProvinceByProvinceId(Integer.parseInt(params.get("alumni-form-province"))));

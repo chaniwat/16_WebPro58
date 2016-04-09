@@ -15,7 +15,7 @@ import java.io.IOException;
 /**
  * Created by meranote on 2/9/2016 AD.
  */
-@WebServlet(name = "LoginServlet", urlPatterns = "/login")
+@WebServlet(name = "LoginServlet", urlPatterns = {"/login/*"})
 public class LoginServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

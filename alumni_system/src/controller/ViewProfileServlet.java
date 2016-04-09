@@ -8,6 +8,7 @@ import model.Teacher;
 import model.User;
 import model.auth.Authorization;
 import model.utility.ResponseCodeUtils;
+import model.utility.RouteUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,7 +21,7 @@ import java.io.IOException;
 /**
  * Created by meranote on 4/6/2016 AD.
  */
-@WebServlet(name = "ViewProfileServlet", urlPatterns = {"/profile", "/profile/*"})
+@WebServlet(name = "ViewProfileServlet", urlPatterns = {"/profile/*"})
 @AuthGuard
 public class ViewProfileServlet extends HttpServlet {
 
@@ -29,8 +30,38 @@ public class ViewProfileServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         HttpSession session = request.getSession();
-        Authorization auth = Authorization.getAuthInstance(session);
 
+        if(ResponseCodeUtils.hasCodeInSession(session) && ResponseCodeUtils.getSessionCode(session) == ResponseCodeUtils.NOT_ENOUGH_PERMISSION)  {
+            response.sendRedirect(RouteUtils.generateURL(request, "profile"));
+            return;
+        }
+
+        User user;
+        if((user = getUser(request)) == null) {
+            ResponseCodeUtils.pushSessionCode(session, ResponseCodeUtils.NO_USER_MODEL_FOUND);
+            response.sendRedirect(RouteUtils.generateURL(request, "profile"));
+            return;
+        } else {
+            request.setAttribute("user", user);
+            switch (user.getType()) {
+                case ALUMNI:
+                    request.setAttribute("alumni", Alumni.getAlumniByUserId(user.getId()));
+                    break;
+                //            case TEACHER: request.setAttribute("teacher", Teacher.getTeacherByUserId(user.getId())); break;
+                //            case STAFF: request.setAttribute("staff", Staff.getStaffByUserId(user.getId())); break;
+            }
+
+            if (ResponseCodeUtils.hasCodeInSession(session)) {
+                ResponseCodeUtils.pushRequestCode(request, ResponseCodeUtils.pullSessionCode(session));
+            }
+        }
+
+        request.getRequestDispatcher("/WEB-INF/profile.jsp").forward(request, response);
+    }
+
+
+    private User getUser(HttpServletRequest request) {
+        Authorization auth = Authorization.getAuthInstance(request.getSession());
         User user = null;
 
         if(request.getRequestURI().endsWith("/profile") || request.getRequestURI().endsWith("/profile/") ) {
@@ -47,25 +78,12 @@ public class ViewProfileServlet extends HttpServlet {
                     try {
                         user = User.getUserByUsername(splits[splits.length - 1]);
                     } catch (NoUserFoundException ex2) {
-                        ResponseCodeUtils.pushRequestCode(request, ResponseCodeUtils.NO_USER_MODEL_FOUND);
-                        request.getRequestDispatcher("/WEB-INF/profile.jsp").forward(request, response);
-                        return;
+                        user = null;
                     }
                 }
             }
         }
 
-        request.setAttribute("user", user);
-        switch (user.getType()) {
-            case ALUMNI: request.setAttribute("alumni", Alumni.getAlumniByUserId(user.getId())); break;
-//            case TEACHER: request.setAttribute("teacher", Teacher.getTeacherByUserId(user.getId())); break;
-//            case STAFF: request.setAttribute("staff", Staff.getStaffByUserId(user.getId())); break;
-        }
-
-        if(ResponseCodeUtils.hasCodeInSession(session)) {
-            ResponseCodeUtils.pushRequestCode(request, ResponseCodeUtils.pullSessionCode(session));
-        }
-
-        request.getRequestDispatcher("/WEB-INF/profile.jsp").forward(request, response);
+        return user;
     }
 }

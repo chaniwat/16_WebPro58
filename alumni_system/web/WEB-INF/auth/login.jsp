@@ -22,11 +22,9 @@
         <center><h1>Login | เข้าสู่ระบบ</h1></center>
         <%
             if(ResponseCodeUtils.hasCodeInRequest(request)) {
-                int code = ResponseCodeUtils.pullRequestCode(request);
-
-                if(code == ResponseCodeUtils.UNAUTHORIZED) {
+                if(ResponseCodeUtils.getRequestCode(request) == ResponseCodeUtils.UNAUTHORIZED) {
                     out.println("<div class=\"alert alert-info\" role=\"alert\">เข้าสู่ระบบ</div>");
-                } else if(code == ResponseCodeUtils.BAD_LOGIN) {
+                } else if(ResponseCodeUtils.getRequestCode(request) == ResponseCodeUtils.BAD_LOGIN) {
                     out.println("<div class=\"alert alert-danger\" role=\"alert\">ชื่อผู้ใช้หรือรหัสผ่านผิด</div>");
                 }
             }

@@ -76,14 +76,21 @@ public class ResponseCodeUtils {
     }
 
     /**
-     * Pull and clear error in request scope.
-     * @param request
-     * @return true if match, false if not.
+     * Get session error code
+     * @param session
+     * @return
      */
-    public static int pullRequestCode(HttpServletRequest request) {
-        int code = (int)request.getAttribute("error");
-        pushRequestCode(request, NO_ERR);
-        return code;
+    public static int getSessionCode(HttpSession session) {
+        return (int)session.getAttribute("error");
+    }
+
+    /**
+     * Get request error code
+     * @param request
+     * @return
+     */
+    public static int getRequestCode(HttpServletRequest request) {
+        return (int)request.getAttribute("error");
     }
 
 }

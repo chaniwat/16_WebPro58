@@ -24,14 +24,6 @@
 
     <div class="container">
 
-        <%
-            if(ResponseCodeUtils.hasCodeInRequest(request) && ResponseCodeUtils.pullRequestCode(request) == ResponseCodeUtils.NO_USER_MODEL_FOUND) {
-        %>
-        <h1>No user found</h1>
-        <%
-        } else {
-        %>
-
         <h1>Your Profile</h1>
 
         <ul class="nav nav-tabs" role="tablist">
@@ -266,10 +258,6 @@
                 %>
             </div>
         </div>
-
-        <%
-            }
-        %>
 
         <hr />
 
