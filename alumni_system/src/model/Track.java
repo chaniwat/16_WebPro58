@@ -10,7 +10,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * Created by meranote on 4/5/2016 AD.
+ * Track model
+ * for track table
  */
 public class Track {
 
@@ -198,13 +199,13 @@ public class Track {
     private static Track buildTrackObject(ResultSet result) throws SQLException {
         Track t = new Track();
         t.track_id = result.getInt("track_id");
-        t.name_th = result.getString("track_name_th");
-        t.name_en = result.getString("track_name_en");
+        t.name_th = result.getString("track.name_th");
+        t.name_en = result.getString("track.name_en");
 
         Curriculum curriculum = new Curriculum();
         curriculum.setCurriculum_id(result.getInt("curriculum_id"));
-        curriculum.setName_th(result.getString("curriculum_name_th"));
-        curriculum.setName_en(result.getString("curriculum_name_en"));
+        curriculum.setName_th(result.getString("curriculum.name_th"));
+        curriculum.setName_en(result.getString("curriculum.name_en"));
         t.curriculum = curriculum;
 
         return t;

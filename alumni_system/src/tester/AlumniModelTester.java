@@ -1,4 +1,4 @@
-package model.utility.tester;
+package tester;
 
 import annotation.test;
 import model.Alumni;
@@ -17,15 +17,7 @@ public class AlumniModelTester {
 
     @test
     public static void main(String[] args) {
-//        Alumni alumni = Alumni.getAlumniByStudentId(57070029);
-//
-//        System.out.println(alumni.getPname_th() + alumni.getFname_th() + " " + alumni.getLname_th());
-//
-//        for(Alumni.Track track : alumni.getTracks()) {
-//            System.out.println(track.getStudent_id() + " " + track.getGeneration() + " " + track.getTrack().getName_th() + " " + track.getTrack().getCurriculum().getName_th());
-//        }
-
-        Alumni.removeAlumniByStudentId(57070029);
+        testAddAlumni();
     }
 
     @test
@@ -46,18 +38,28 @@ public class AlumniModelTester {
         track1.setTrack(Track.getTrack(1));
         track1.setStarteduyear(2014);
         track1.setEndeduyear(2019);
-
-        Alumni.Track track2 = new Alumni.Track();
-        track2.setStudent_id(57607029);
-        track2.setGeneration(6);
-        track2.setTrack(Track.getTrack(2));
-        track2.setStarteduyear(2018);
-        track2.setEndeduyear(2020);
-
         alumni.getTracks().add(track1);
-        alumni.getTracks().add(track2);
+
+//        Alumni.Track track2 = new Alumni.Track();
+//        track2.setStudent_id(60607029);
+//        track2.setGeneration(7);
+//        track2.setTrack(Track.getTrack(1));
+//        track2.setStarteduyear(2018);
+//        track2.setEndeduyear(2020);
+//        alumni.getTracks().add(track2);
 
         Alumni.addAlumni(alumni);
+    }
+
+    @test
+    public static void testPrintAlumni() {
+        Alumni alumni = Alumni.getAlumniByStudentId(57070029);
+
+        System.out.println(alumni.getPname_th() + alumni.getFname_th() + " " + alumni.getLname_th());
+
+        for(Alumni.Track track : alumni.getTracks()) {
+            System.out.println(track.getStudent_id() + " " + track.getGeneration() + " " + track.getTrack().getName_th() + " " + track.getTrack().getCurriculum().getName_th());
+        }
     }
 
     @test
@@ -71,6 +73,11 @@ public class AlumniModelTester {
                 System.out.println(track.getTrack().getName_th() + " " + track.getStarteduyear());
             }
         }
+    }
+
+    @test
+    public static void testRemoveAlumni() {
+        Alumni.removeAlumniByStudentId(57070029);
     }
 
     @test

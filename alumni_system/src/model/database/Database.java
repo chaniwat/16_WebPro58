@@ -1,6 +1,6 @@
 package model.database;
 
-import model.utility.tester.Tester;
+import tester.Tester;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
