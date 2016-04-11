@@ -39,6 +39,11 @@ public class Work {
         public void setName_en(String name_en) {
             this.name_en = name_en;
         }
+
+        public static Section getSectionById(int section_id) {
+            // TODO get section by section_id
+            return null;
+        }
     }
 
 }

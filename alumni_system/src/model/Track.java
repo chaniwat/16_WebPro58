@@ -161,36 +161,6 @@ public class Track {
     }
 
     /**
-     * Get all track that in given curriculum
-     * @param curriculum_id
-     * @return
-     * @throws SQLException
-     */
-    public static ArrayList<Track> getAllTrack(int curriculum_id) {
-        Connection connection = null;
-        try {
-            connection = Database.getInstance().getConnection();
-
-            String sql = "SELECT * FROM track JOIN curriculum ON track.curriculum_id = curriculum.curriculum_id WHERE curriculum_id = ?";
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, curriculum_id);
-
-            ResultSet result = stmt.executeQuery();
-            ArrayList<Track> tracks = new ArrayList<>();
-            while (result.next()) {
-                tracks.add(buildTrackObject(result));
-            }
-
-            return tracks;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        } finally {
-            if(connection != null) Database.closeConnection(connection);
-        }
-    }
-
-    /**
      * Build track object
      * @param result
      * @return

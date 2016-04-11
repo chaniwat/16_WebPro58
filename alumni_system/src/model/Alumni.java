@@ -290,6 +290,7 @@ public class Alumni implements Serializable {
     /**
      * Update alumni data
      * @param alumni Updated {@link Alumni} object
+     * @throws NoAlumniFoundException
      */
     public static void updateAlumni(Alumni alumni) throws NoAlumniFoundException {
         Connection connection = null;
@@ -343,8 +344,9 @@ public class Alumni implements Serializable {
     /**
      * Update track data
      * @param track Update {@link Alumni.Track} object
+     * @throws NoTrackFoundInAlumniException
      */
-    public static void updateAlumniTrack(Alumni.Track track) {
+    public static void updateAlumniTrack(Alumni.Track track) throws NoTrackFoundInAlumniException {
         Connection connection = null;
 
         try {
@@ -358,7 +360,9 @@ public class Alumni implements Serializable {
             stmt.setInt(2, track.starteduyear);
             stmt.setInt(3, track.endeduyear);
             stmt.setInt(4, track.student_id);
-            stmt.executeUpdate();
+            int result = stmt.executeUpdate();
+
+            if(result <= 0) throw new NoTrackFoundInAlumniException();
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {

@@ -155,21 +155,26 @@ public class User implements Serializable {
     public static void removeUserById(int user_id) throws NoUserFoundException {
         User user = getUserByID(user_id);
 
-        Connection connection = null;
-        try {
-            connection = Database.getInstance().getConnection();
+        if(user.type == UserType.ALUMNI) {
+            Alumni.removeAlumniByUserId(user_id);
+        } else if(user.type == UserType.STAFF) {
+            Staff.removeStaffByUserId(user_id);
+        } else if(user.type == UserType.TEACHER) {
+            Teacher.removeTeacherByUserId(user_id);
+        } else if(user.type == UserType.DEVELOPER) {
+            Connection connection = null;
+            try {
+                connection = Database.getInstance().getConnection();
 
-            if(user.type == UserType.ALUMNI) {
-                Alumni.removeAlumniByUserId(user_id);
-            } else if(user.type == UserType.STAFF) {
-//                Staff.removeStaffByUserId(user_id);
-            } else if(user.type == UserType.TEACHER) {
-//                Teacher.removerTeacherByUserId(user_id);
-            } else if(user.type == UserType.DEVELOPER) {
-                // TODO Delete developer account
+                String sql = "DELETE FROM user WHERE user_id = ? AND type = 'DEVELOPER'";
+                PreparedStatement stmt = connection.prepareStatement(sql);
+                stmt.setInt(1, user_id);
+                stmt.executeUpdate();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            } finally {
+                if(connection != null) Database.closeConnection(connection);
             }
-        } finally {
-            if(connection != null) Database.closeConnection(connection);
         }
     }
 
