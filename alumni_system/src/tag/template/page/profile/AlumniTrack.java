@@ -3,6 +3,7 @@ package tag.template.page.profile;
 import model.Alumni;
 import model.User;
 import model.auth.Authorization;
+import model.utility.RouteUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -65,6 +66,9 @@ public class AlumniTrack extends SimpleTagSupport {
                 "</tbody>\n" +
                 "</table>"
         );
+        if(editable) {
+            out.println("<a href=\"" + RouteUtils.generateURL(request, "track/edit") + "\" class=\"btn btn-primary\">แก้ไขข้อมูล</a>");
+        }
     }
 
 }

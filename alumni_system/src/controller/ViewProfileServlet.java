@@ -2,9 +2,6 @@ package controller;
 
 import annotation.auth.AuthGuard;
 import exception.NoUserFoundException;
-import model.Alumni;
-import model.Staff;
-import model.Teacher;
 import model.User;
 import model.auth.Authorization;
 import model.utility.ResponseCodeUtils;
@@ -37,23 +34,18 @@ public class ViewProfileServlet extends HttpServlet {
         }
 
         User user;
-        if((user = getUser(request)) == null) {
+        if((user = getUserByPath(request)) == null) {
             ResponseCodeUtils.pushSessionCode(session, ResponseCodeUtils.NO_USER_MODEL_FOUND);
             response.sendRedirect(RouteUtils.generateURL(request, "profile"));
             return;
-        } else {
-            request.setAttribute("user", user);
-        }
+        } else request.setAttribute("user", user);
 
-        if (ResponseCodeUtils.hasCodeInSession(session)) {
-            ResponseCodeUtils.pushRequestCode(request, ResponseCodeUtils.pullSessionCode(session));
-        }
+        if (ResponseCodeUtils.hasCodeInSession(session)) ResponseCodeUtils.pushRequestCode(request, ResponseCodeUtils.pullSessionCode(session));
 
         request.getRequestDispatcher("/WEB-INF/profile.jsp").forward(request, response);
     }
 
-
-    private User getUser(HttpServletRequest request) {
+    private User getUserByPath(HttpServletRequest request) {
         Authorization auth = Authorization.getAuthInstance(request.getSession());
         User user = null;
 
@@ -79,4 +71,5 @@ public class ViewProfileServlet extends HttpServlet {
 
         return user;
     }
+
 }
