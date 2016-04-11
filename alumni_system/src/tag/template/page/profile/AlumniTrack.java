@@ -1,10 +1,8 @@
 package tag.template.page.profile;
 
 import model.Alumni;
-import model.Track;
 import model.User;
 import model.auth.Authorization;
-import model.utility.RouteUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -20,7 +18,6 @@ import java.io.IOException;
 public class AlumniTrack extends SimpleTagSupport {
 
     private User user;
-    private Alumni alumni;
 
     public void setUser(User user) {
         this.user = user;
@@ -31,18 +28,19 @@ public class AlumniTrack extends SimpleTagSupport {
         HttpServletRequest request = (HttpServletRequest)((PageContext) getJspContext()).getRequest();
         HttpSession session = request.getSession();
 
-        alumni = Alumni.getAlumniByUserId(user.getId());
+        Alumni alumni = Alumni.getAlumniByUserId(user.getId());
         User currentUser = Authorization.getAuthInstance(session).getCurrentUser();
 
         boolean editable = !((currentUser.getType() == User.UserType.TEACHER) ||
-                (currentUser.getType() == User.UserType.ALUMNI && Alumni.getAlumniByUserId(currentUser.getId()).getStudent_id() != alumni.getStudent_id()));
+                (currentUser.getType() == User.UserType.ALUMNI && Alumni.getAlumniByUserId(currentUser.getId()).getAlumni_id() != alumni.getAlumni_id()));
 
         JspWriter out = getJspContext().getOut();
         out.println(
                 "<table class=\"table table-bordered\">\n" +
                 "<thead>\n" +
                 "<tr>\n" +
-                "<th>ลำดับที่</th>\n" +
+                "<th>รหัสนักศึกษา</th>\n" +
+                "<th>รุ่น</th>\n" +
                 "<th>แขนงวิชา</th>\n" +
                 "<th>หลักสูตร</th>\n" +
                 "<th>ปีที่เข้าการศึกษา</th>\n" +
@@ -51,13 +49,13 @@ public class AlumniTrack extends SimpleTagSupport {
                 "</thead>\n" +
                 "<tbody>"
         );
-        int i = 1;
-        for(Track track : alumni.getTracks()) {
+        for(Alumni.Track track : alumni.getTracks()) {
             out.println(
                     "<tr>\n" +
-                    "<td>" + i++ + "</td>\n" +
-                    "<td>" + track.getName_th() + "</td>\n" +
-                    "<td>" + track.getCurriculum().getName_th() + "</td>\n" +
+                    "<td>" + track.getStudent_id() + "</td>\n" +
+                    "<td>" + track.getGeneration() + "</td>\n" +
+                    "<td>" + track.getTrack().getName_th() + "</td>\n" +
+                    "<td>" + track.getTrack().getCurriculum().getName_th() + "</td>\n" +
                     "<td>" + track.getStarteduyear() + "</td>\n" +
                     "<td>" + track.getEndeduyear() + "</td>\n" +
                     "</tr>"
@@ -67,9 +65,6 @@ public class AlumniTrack extends SimpleTagSupport {
                 "</tbody>\n" +
                 "</table>"
         );
-        if(editable) {
-            // FIXME MODAL OR FORM TO ADD NEW TRACK (NOT LINK LIKE THIS OKAY?)
-            out.println("<a href=\"" + RouteUtils.generateURL(request, "track/add") + "\" class=\"btn btn-primary\">เพิ่มแทร๊กใหม่</a>");
-        }
     }
+
 }

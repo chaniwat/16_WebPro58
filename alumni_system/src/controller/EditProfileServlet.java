@@ -1,8 +1,8 @@
 package controller;
 
 import annotation.auth.AuthGuard;
-import model.Address;
 import model.Alumni;
+import model.Province;
 import model.User;
 import model.auth.Authorization;
 import model.utility.ResponseCodeUtils;
@@ -42,10 +42,10 @@ public class EditProfileServlet extends HttpServlet {
         Authorization auth = Authorization.getAuthInstance(request.getSession());
         User user = auth.getCurrentUser();
 
-        int student_id = Integer.parseInt(params.get("alumni-form-stuid"));
+        int alumni_id = Integer.parseInt(params.get("alumni-form-id"));
 
         if((user.getType() == User.UserType.TEACHER) ||
-                (user.getType() == User.UserType.ALUMNI && Alumni.getAlumniByUserId(user.getId()).getStudent_id() != student_id)) {
+                (user.getType() == User.UserType.ALUMNI && Alumni.getAlumniByUserId(user.getId()).getAlumni_id() != alumni_id)) {
             redirectToProfilePage(request, response, ResponseCodeUtils.NOT_ENOUGH_PERMISSION);
             return;
         }
@@ -58,7 +58,7 @@ public class EditProfileServlet extends HttpServlet {
         }
 
         Alumni alumni = new Alumni();
-        alumni.setStudent_id(student_id);
+        alumni.setAlumni_id(alumni_id);
         alumni.setPname_th(params.get("alumni-form-pnameth"));
         alumni.setFname_th(params.get("alumni-form-fnameth"));
         alumni.setLname_th(params.get("alumni-form-lnameth"));
@@ -94,7 +94,7 @@ public class EditProfileServlet extends HttpServlet {
         alumni.getAddress().setAmphure(params.get("alumni-form-amphure"));
 
         if(params.get("alumni-form-province") != null) {
-            alumni.getAddress().setProvince(Address.Province.getProvinceByProvinceId(Integer.parseInt(params.get("alumni-form-province"))));
+            alumni.getAddress().setProvince(Province.getProvinceByProvinceId(Integer.parseInt(params.get("alumni-form-province"))));
         } else {
             alumni.getAddress().setProvince(null);
         }

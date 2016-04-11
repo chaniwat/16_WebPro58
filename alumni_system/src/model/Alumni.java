@@ -1,11 +1,9 @@
 package model;
 
-import exception.NoAlumniAddressFoundException;
 import exception.NoAlumniFoundException;
-import exception.NoProvinceFoundException;
+import exception.NoTrackFoundInAlumniException;
 import exception.NoUserFoundException;
 import model.database.Database;
-import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.Serializable;
 import java.sql.*;
@@ -159,27 +157,17 @@ public class Alumni implements Serializable {
 
     /**
      * Add new alumni
-     * @param alumni
+     * @param alumni New {@link Alumni} object to add
      */
-    public static void addAlumni(Alumni alumni) {
+    public static void addAlumni(Alumni alumni) throws NoTrackFoundInAlumniException {
+        if(alumni.tracks.size() <= 0) {
+            throw new NoTrackFoundInAlumniException();
+        }
+
         Connection connection = null;
 
         try {
             connection = Database.getInstance().getConnection();
-            Alumni.Track track = alumni.tracks.get(0);
-
-            User user;
-            try {
-                user = User.getUserByUsername(String.valueOf(track.student_id));
-                if(user.getType() != User.UserType.ALUMNI) throw new RuntimeException("Type not match, manually delete in database or change type of user");
-            } catch (NoUserFoundException ex) {
-                user = new User();
-                user.setUsername(String.valueOf(track.student_id));
-                user.setType(User.UserType.ALUMNI);
-                User.addUser(user, "itkmitl");
-
-                user = User.getUserByUsername(String.valueOf(track.student_id));
-            }
 
             String sql = "INSERT INTO alumni VALUES (0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = connection.prepareStatement(sql);
@@ -205,25 +193,29 @@ public class Alumni implements Serializable {
             stmt.setString(3, alumni.lname_th);
             stmt.executeUpdate();
 
-            sql = "INSERT INTO alumni_track SELECT `alumni_id`, ?, ?, ?, ?, ? FROM alumni WHERE alumni.pname_th = ? AND alumni.fname_th = ? AND alumni.lname_th = ?";
-            stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, track.student_id);
-            stmt.setInt(2, track.generation);
-            stmt.setInt(3, track.track.getTrack_id());
-            stmt.setInt(4, track.starteduyear);
-            stmt.setInt(5, track.endeduyear);
-            stmt.setString(6, alumni.pname_th);
-            stmt.setString(7, alumni.fname_th);
-            stmt.setString(8, alumni.lname_th);
-            stmt.executeUpdate();
+            for(Alumni.Track track : alumni.tracks) {
+                User user = getOrCreateUser(connection, String.valueOf(track.student_id));
 
-            sql = "INSERT INTO alumni_user_pivot SELECT `user_id`, `alumni_id` FROM alumni, user WHERE user.user_id = ? AND alumni.pname_th = ? AND alumni.fname_th = ? AND alumni.lname_th = ?"
-            stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, user.getId());
-            stmt.setString(2, alumni.pname_th);
-            stmt.setString(3, alumni.fname_th);
-            stmt.setString(4, alumni.lname_th);
-            stmt.executeUpdate();
+                sql = "INSERT INTO alumni_track SELECT `alumni_id`, ?, ?, ?, ?, ? FROM alumni WHERE alumni.pname_th = ? AND alumni.fname_th = ? AND alumni.lname_th = ?";
+                stmt = connection.prepareStatement(sql);
+                stmt.setInt(1, track.student_id);
+                stmt.setInt(2, track.generation);
+                stmt.setInt(3, track.track.getTrack_id());
+                stmt.setInt(4, track.starteduyear);
+                stmt.setInt(5, track.endeduyear);
+                stmt.setString(6, alumni.pname_th);
+                stmt.setString(7, alumni.fname_th);
+                stmt.setString(8, alumni.lname_th);
+                stmt.executeUpdate();
+
+                sql = "INSERT INTO alumni_user_pivot SELECT `user_id`, `alumni_id` FROM alumni, user WHERE user.user_id = ? AND alumni.pname_th = ? AND alumni.fname_th = ? AND alumni.lname_th = ?";
+                stmt = connection.prepareStatement(sql);
+                stmt.setInt(1, user.getId());
+                stmt.setString(2, alumni.pname_th);
+                stmt.setString(3, alumni.fname_th);
+                stmt.setString(4, alumni.lname_th);
+                stmt.executeUpdate();
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
@@ -233,7 +225,8 @@ public class Alumni implements Serializable {
 
     /**
      * Add new track to alumni
-     * @param alumni
+     * @param alumni Target {@link Alumni} object
+     * @param track New {@link Alumni.Track} object to add to alumni
      */
     public static void addTracks(Alumni alumni, Alumni.Track track) {
         Connection connection = null;
@@ -241,18 +234,7 @@ public class Alumni implements Serializable {
         try {
             connection = Database.getInstance().getConnection();
 
-            User user;
-            try {
-                user = User.getUserByUsername(String.valueOf(track.student_id));
-                if(user.getType() != User.UserType.ALUMNI) throw new RuntimeException("Type not match, manually delete in database or change type of user");
-            } catch (NoUserFoundException ex) {
-                user = new User();
-                user.setUsername(String.valueOf(track.student_id));
-                user.setType(User.UserType.ALUMNI);
-                User.addUser(user, "itkmitl");
-
-                user = User.getUserByUsername(String.valueOf(track.student_id));
-            }
+            User user = getOrCreateUser(connection, String.valueOf(track.student_id));
 
             String sql = "INSERT INTO alumni_track VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = connection.prepareStatement(sql);
@@ -264,7 +246,10 @@ public class Alumni implements Serializable {
             stmt.setInt(6, track.endeduyear);
             stmt.executeUpdate();
 
-            sql = "INSERT INTO alumni_user_pivot SELECT `user_id`, `alumni_id` FROM alumni, user WHERE user.user_id = ? AND alumni.pname_th = ? AND alumni.fname_th = ? AND alumni.lname_th = ?"
+            sql = "INSERT INTO alumni_user_pivot " +
+                    "SELECT `user_id`, `alumni_id` " +
+                    "FROM alumni, user " +
+                    "WHERE user.user_id = ? AND alumni.pname_th = ? AND alumni.fname_th = ? AND alumni.lname_th = ?";
             stmt = connection.prepareStatement(sql);
             stmt.setInt(1, user.getId());
             stmt.setString(2, alumni.pname_th);
@@ -279,8 +264,32 @@ public class Alumni implements Serializable {
     }
 
     /**
+     *  Get user, if not exist create new one.
+     *  @param username
+     *  @param connection
+     *  @return User
+     */
+    private static User getOrCreateUser(Connection connection, String username) {
+        User user;
+
+        try {
+            user = User.getUserByUsername(username);
+            if(user.getType() != User.UserType.ALUMNI) throw new RuntimeException("Type not match, manually delete in database or change type of user");
+        } catch (NoUserFoundException ex) {
+            user = new User();
+            user.setUsername(username);
+            user.setType(User.UserType.ALUMNI);
+            User.addUser(user, "itkmitl");
+
+            user = User.getUserByUsername(username);
+        }
+
+        return user;
+    }
+
+    /**
      * Update alumni data
-     * @param alumni
+     * @param alumni Updated {@link Alumni} object
      */
     public static void updateAlumni(Alumni alumni) throws NoAlumniFoundException {
         Connection connection = null;
@@ -333,9 +342,9 @@ public class Alumni implements Serializable {
 
     /**
      * Update track data
-     * @param track
+     * @param track Update {@link Alumni.Track} object
      */
-    public static void updateTrack(Alumni.Track track) {
+    public static void updateAlumniTrack(Alumni.Track track) {
         Connection connection = null;
 
         try {
@@ -359,20 +368,59 @@ public class Alumni implements Serializable {
 
     /**
      * Get All alumni object.
-     * @return
+     * @return {@link ArrayList}&lt;{@link Alumni}&gt;
      */
     public static ArrayList<Alumni> getAllAlumni() {
         Connection connection = null;
         try {
             connection = Database.getInstance().getConnection();
 
-            String sql = "SELECT * FROM alumni";
+            String sql = "SELECT * FROM alumni JOIN alumni_address ON alumni.alumni_id = alumni_address.alumni_id";
             PreparedStatement stmt = connection.prepareStatement(sql);
             ResultSet result = stmt.executeQuery();
 
             ArrayList<Alumni> alumnis = new ArrayList<>();
             while (result.next()) {
-                alumnis.add(buildAlumniObject(result));
+                Alumni alumni = new Alumni();
+
+                alumni.alumni_id = result.getInt("alumni_id");
+                alumni.pname_th = result.getString("pname_th");
+                alumni.fname_th = result.getString("fname_th");
+                alumni.lname_th = result.getString("lname_th");
+                alumni.pname_en = result.getString("pname_en");
+                alumni.fname_en = result.getString("fname_en");
+                alumni.lname_en = result.getString("lname_en");
+                alumni.nickname = result.getString("nickname");
+                alumni.birthdate = result.getDate("birthdate");
+                alumni.email = result.getString("email");
+                alumni.phone = result.getString("phone");
+                alumni.occupation = result.getString("occupation");
+                alumni.work_name = result.getString("work_name");
+                alumni.avatar = result.getString("avatar");
+
+                alumni.address.address = result.getString("address");
+                alumni.address.district = result.getString("district");
+                alumni.address.amphure = result.getString("amphure");
+                alumni.address.province = Province.getProvinceByProvinceId(result.getInt("province_id"));
+                alumni.address.zipcode = result.getString("zipcode");
+
+                String sql2 = "SELECT * FROM alumni_track WHERE alumni_id = ?";
+                PreparedStatement stmt2 = connection.prepareStatement(sql2);
+                stmt2.setInt(1, alumni.alumni_id);
+
+                ResultSet result2 = stmt2.executeQuery();
+                while(result2.next()) {
+                    Alumni.Track track = new Alumni.Track();
+                    track.setStudent_id(result2.getInt("student_id"));
+                    track.setGeneration(result2.getInt("generation"));
+                    track.setTrack(model.Track.getTrack(result2.getInt("track_id")));
+                    track.setStarteduyear(result2.getInt("starteduyear"));
+                    track.setEndeduyear(result2.getInt("endeduyear"));
+
+                    alumni.tracks.add(track);
+                }
+
+                alumnis.add(alumni);
             }
 
             return alumnis;
@@ -387,20 +435,63 @@ public class Alumni implements Serializable {
     /**
      * Get alumni by student_id
      * @param alumni_id
-     * @return
+     * @return {@link Alumni}
+     * @throws NoAlumniFoundException
      */
     public static Alumni getAlumniById(int alumni_id) throws NoAlumniFoundException {
         Connection connection = null;
         try {
             connection = Database.getInstance().getConnection();
 
-            String sql = "SELECT * FROM alumni WHERE alumni_id = ?";
+            String sql = "SELECT * " +
+                    "FROM alumni " +
+                    "JOIN alumni_address ON alumni.alumni_id = alumni_address.alumni_id " +
+                    "JOIN alumni_track ON alumni.alumni_id = alumni_track.alumni_id " +
+                    "WHERE alumni.alumni_id = ?";
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setInt(1, alumni_id);
 
             ResultSet result = stmt.executeQuery();
             if(result.next()) {
-                return buildAlumniObject(result);
+                Alumni alumni = new Alumni();
+
+                alumni.alumni_id = result.getInt("alumni_id");
+                alumni.pname_th = result.getString("pname_th");
+                alumni.fname_th = result.getString("fname_th");
+                alumni.lname_th = result.getString("lname_th");
+                alumni.pname_en = result.getString("pname_en");
+                alumni.fname_en = result.getString("fname_en");
+                alumni.lname_en = result.getString("lname_en");
+                alumni.nickname = result.getString("nickname");
+                alumni.birthdate = result.getDate("birthdate");
+                alumni.email = result.getString("email");
+                alumni.phone = result.getString("phone");
+                alumni.occupation = result.getString("occupation");
+                alumni.work_name = result.getString("work_name");
+                alumni.avatar = result.getString("avatar");
+
+                alumni.address.address = result.getString("address");
+                alumni.address.district = result.getString("district");
+                alumni.address.amphure = result.getString("amphure");
+                int province_id;
+                if((province_id = result.getInt("province_id")) != 0)
+                    alumni.address.province = Province.getProvinceByProvinceId(province_id);
+                else alumni.address.province = null;
+                alumni.address.zipcode = result.getString("zipcode");
+
+                while(true) {
+                    Alumni.Track track = new Alumni.Track();
+                    track.setStudent_id(result.getInt("student_id"));
+                    track.setGeneration(result.getInt("generation"));
+                    track.setTrack(model.Track.getTrack(result.getInt("track_id")));
+                    track.setStarteduyear(result.getInt("starteduyear"));
+                    track.setEndeduyear(result.getInt("endeduyear"));
+
+                    alumni.tracks.add(track);
+                    if(!result.next()) break;
+                }
+
+                return alumni;
             } else {
                 throw new NoAlumniFoundException();
             }
@@ -415,20 +506,21 @@ public class Alumni implements Serializable {
     /**
      * Get alumni by user_id
      * @param user_id
-     * @return
+     * @return {@link Alumni}
+     * @throws NoAlumniFoundException
      */
     public static Alumni getAlumniByUserId(int user_id) throws NoAlumniFoundException {
         Connection connection = null;
         try {
             connection = Database.getInstance().getConnection();
 
-            String sql = "SELECT * FROM alumni JOIN alumni_user_pivot ON alumni.alumni_id = alumni_user_pivot.alumni_id WHERE user_id = ?";
+            String sql = "SELECT alumni_id FROM alumni_user_pivot WHERE user_id = ?";
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setInt(1, user_id);
 
             ResultSet result = stmt.executeQuery();
             if(result.next()) {
-                return buildAlumniObject(result);
+                return getAlumniById(result.getInt("alumni_id"));
             } else {
                 throw new NoAlumniFoundException();
             }
@@ -443,21 +535,22 @@ public class Alumni implements Serializable {
     /**
      * Get alumni by student_id
      * @param student_id
-     * @return
+     * @return {@link Alumni}
      * @throws NoAlumniFoundException
      */
     public static Alumni getAlumniByStudentId(int student_id) throws NoAlumniFoundException {
         Connection connection = null;
+
         try {
             connection = Database.getInstance().getConnection();
 
-            String sql = "SELECT * FROM alumni RIGHT JOIN alumni_track ON alumni.alumni_id = alumni_track.alumni_id AND alumni.user_id = alumni_track.user_id WHERE student_id = ?";
+            String sql = "SELECT alumni_id FROM alumni_track WHERE student_id = ?";
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setInt(1, student_id);
 
             ResultSet result = stmt.executeQuery();
             if(result.next()) {
-                return buildAlumniObject(result);
+                return getAlumniById(result.getInt("alumni_id"));
             } else {
                 throw new NoAlumniFoundException();
             }
@@ -470,47 +563,26 @@ public class Alumni implements Serializable {
     }
 
     /**
-     * Build alumni object and return
-     * @param result
-     * @return
-     * @throws SQLException
-     */
-    private static Alumni buildAlumniObject(ResultSet result) throws SQLException {
-        Alumni alumni = new Alumni();
-
-        alumni.alumni_id = result.getInt("alumni_id");
-        alumni.pname_th = result.getString("pname_th");
-        alumni.fname_th = result.getString("fname_th");
-        alumni.lname_th = result.getString("lname_th");
-        alumni.pname_en = result.getString("pname_en");
-        alumni.fname_en = result.getString("fname_en");
-        alumni.lname_en = result.getString("lname_en");
-        alumni.nickname = result.getString("nickname");
-        alumni.birthdate = result.getDate("birthdate");
-        alumni.email = result.getString("email");
-        alumni.phone = result.getString("phone");
-        alumni.occupation = result.getString("occupation");
-        alumni.work_name = result.getString("work_name");
-        alumni.avatar = result.getString("avatar");
-
-        alumni.address = Alumni.Address.getAddressById(alumni.alumni_id);
-        alumni.tracks = Alumni.Track.getTrackById(alumni.alumni_id);
-
-        return alumni;
-    }
-
-    /**
      * Remove alumni by alumni_id
      * @param alumni_id
      * @throws NoAlumniFoundException
      */
-    public static void removeAlumniById(int alumni_id) {
+    public static void removeAlumniById(int alumni_id) throws NoAlumniFoundException {
         Connection connection = null;
 
         try {
             connection = Database.getInstance().getConnection();
 
-            // TODO delete row
+            String sql = "DELETE alumni_user_pivot, alumni, user " +
+                    "FROM alumni_user_pivot " +
+                    "JOIN alumni ON alumni_user_pivot.alumni_id = alumni.alumni_id " +
+                    "JOIN user ON alumni_user_pivot.user_id = user.user_id " +
+                    "WHERE alumni_user_pivot.alumni_id = ?";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, alumni_id);
+            int result = stmt.executeUpdate();
+
+            if(result <= 0) throw new NoAlumniFoundException();
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
@@ -523,13 +595,20 @@ public class Alumni implements Serializable {
      * @param student_id
      * @throws NoAlumniFoundException
      */
-    public static void removeAlumniByStudentId(int student_id) {
+    public static void removeAlumniByStudentId(int student_id) throws NoAlumniFoundException {
         Connection connection = null;
 
         try {
             connection = Database.getInstance().getConnection();
 
-            // TODO delete row
+            String sql = "SELECT * FROM alumni_track WHERE student_id = ?";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, student_id);
+
+            ResultSet result = stmt.executeQuery();
+
+            if(result.next()) removeAlumniById(result.getInt("alumni_id"));
+            else throw new NoAlumniFoundException();
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
@@ -542,13 +621,22 @@ public class Alumni implements Serializable {
      * @param user_id
      * @throws NoAlumniFoundException
      */
-    public static void removeAlumniByUserId(int user_id) {
+    public static void removeAlumniByUserId(int user_id) throws NoAlumniFoundException {
         Connection connection = null;
 
         try {
             connection = Database.getInstance().getConnection();
 
-            // TODO delete row
+            String sql = "DELETE alumni_user_pivot, alumni, user " +
+                    "FROM alumni_user_pivot " +
+                    "JOIN alumni ON alumni_user_pivot.alumni_id = alumni.alumni_id " +
+                    "JOIN user ON alumni_user_pivot.user_id = user.user_id " +
+                    "WHERE alumni_user_pivot.user_id = ?";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, user_id);
+            int result = stmt.executeUpdate();
+
+            if(result <= 0) throw new NoAlumniFoundException();
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
@@ -556,6 +644,42 @@ public class Alumni implements Serializable {
         }
     }
 
+    /**
+     * Remove alumni track by student_id
+     * @param student_id
+     * @throws NoTrackFoundInAlumniException
+     */
+    public static void removeAlumniTrackByStudentId(int student_id) throws NoTrackFoundInAlumniException {
+        Connection connection = null;
+
+        try {
+            connection = Database.getInstance().getConnection();
+
+            String sql = "DELETE FROM alumni_track WHERE student_id = ?";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, student_id);
+            int result = stmt.executeUpdate();
+
+            if(result <= 0) throw new NoTrackFoundInAlumniException();
+
+            sql = "DELETE alumni_user_pivot, user " +
+                "FROM alumni_user_pivot " +
+                "JOIN user ON alumni_user_pivot.user_id = user.user_id " +
+                "WHERE user.username = ?";
+            stmt = connection.prepareStatement(sql);
+            stmt.setString(1, String.valueOf(student_id));
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if(connection != null) Database.closeConnection(connection);
+        }
+    }
+
+    /**
+     * Track Model
+     * for alumni_track table
+     */
     public static class Track {
 
         private int student_id, generation, starteduyear, endeduyear;
@@ -606,209 +730,7 @@ public class Alumni implements Serializable {
      * Address Model
      * for alumni_address table
      */
-    public class Address {
-
-        /**
-         * Province Model
-         * for provinces table
-         */
-        public static class Province {
-            private int province_id, province_code;
-            private String name_th, name_en;
-
-            public int getProvince_id() {
-                return province_id;
-            }
-
-            public void setProvince_id(int province_id) {
-                this.province_id = province_id;
-            }
-
-            public int getProvince_code() {
-                return province_code;
-            }
-
-            public void setProvince_code(int province_code) {
-                this.province_code = province_code;
-            }
-
-            public String getName_th() {
-                return name_th;
-            }
-
-            public void setName_th(String name_th) {
-                this.name_th = name_th;
-            }
-
-            public String getName_en() {
-                return name_en;
-            }
-
-            public void setName_en(String name_en) {
-                this.name_en = name_en;
-            }
-
-            public static ArrayList<Province> getAllProvince() {
-                Connection connection = null;
-                try {
-                    connection = Database.getInstance().getConnection();
-
-                    String sql = "SELECT * FROM provinces";
-                    PreparedStatement stmt = connection.prepareStatement(sql);
-
-                    ResultSet result = stmt.executeQuery();
-
-                    ArrayList<Province> provinces = new ArrayList<>();
-                    while (result.next()) {
-                        provinces.add(buildProvinceObject(result));
-                    }
-                    return provinces;
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                    return null;
-                } finally {
-                    if(connection != null) Database.closeConnection(connection);
-                }
-            }
-
-            /**
-             * Get Province by province_id
-             * @param province_id
-             * @return
-             * @throws NoProvinceFoundException
-             */
-            public static Province getProvinceByProvinceId(int province_id) throws NoProvinceFoundException {
-                Connection connection = null;
-                try {
-                    connection = Database.getInstance().getConnection();
-
-                    String sql = "SELECT * FROM provinces WHERE province_id = ?";
-                    PreparedStatement stmt = connection.prepareStatement(sql);
-                    stmt.setInt(1, province_id);
-
-                    ResultSet result = stmt.executeQuery();
-
-                    if(result.next()) {
-                        return buildProvinceObject(result);
-                    } else {
-                        throw new NoProvinceFoundException();
-                    }
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                    return null;
-                } finally {
-                    if(connection != null) Database.closeConnection(connection);
-                }
-            }
-
-            /**
-             * Get Province by province_code
-             * @param province_code
-             * @return
-             * @throws NoProvinceFoundException
-             */
-            public static Province getProvinceByProvinceCode(int province_code) throws NoProvinceFoundException {
-                Connection connection = null;
-                try {
-                    connection = Database.getInstance().getConnection();
-
-                    String sql = "SELECT * FROM provinces WHERE province_code = ?";
-                    PreparedStatement stmt = connection.prepareStatement(sql);
-                    stmt.setInt(1, province_code);
-
-                    ResultSet result = stmt.executeQuery();
-
-                    if(result.next()) {
-                        return buildProvinceObject(result);
-                    } else {
-                        throw new NoProvinceFoundException();
-                    }
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                    return null;
-                } finally {
-                    if(connection != null) Database.closeConnection(connection);
-                }
-            }
-
-            /**
-             * Get Province by name_th
-             * @param name_th
-             * @return
-             * @throws NoProvinceFoundException
-             */
-            public static Province getProvinceByNameTH(String name_th) throws NoProvinceFoundException {
-                Connection connection = null;
-                try {
-                    connection = Database.getInstance().getConnection();
-
-                    String sql = "SELECT * FROM provinces WHERE name_th = ?";
-                    PreparedStatement stmt = connection.prepareStatement(sql);
-                    stmt.setString(1, name_th);
-
-                    ResultSet result = stmt.executeQuery();
-
-                    if(result.next()) {
-                        return buildProvinceObject(result);
-                    } else {
-                        throw new NoProvinceFoundException();
-                    }
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                    return null;
-                } finally {
-                    if(connection != null) Database.closeConnection(connection);
-                }
-            }
-
-            /**
-             * Get Province by name_en
-             * @param name_en
-             * @return
-             * @throws NoProvinceFoundException
-             */
-            public static Province getProvinceByNameEN(String name_en) throws NoProvinceFoundException {
-                Connection connection = null;
-                try {
-                    connection = Database.getInstance().getConnection();
-
-                    String sql = "SELECT * FROM provinces WHERE name_en = ?";
-                    PreparedStatement stmt = connection.prepareStatement(sql);
-                    stmt.setString(1, name_en);
-
-                    ResultSet result = stmt.executeQuery();
-
-                    if(result.next()) {
-                        return buildProvinceObject(result);
-                    } else {
-                        throw new NoProvinceFoundException();
-                    }
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                    return null;
-                } finally {
-                    if(connection != null) Database.closeConnection(connection);
-                }
-            }
-
-            /**
-             * Build province object
-             * @param result
-             * @return
-             * @throws SQLException
-             */
-            private static Province buildProvinceObject(ResultSet result) throws SQLException {
-                Province province = new Province();
-
-                province.province_id = result.getInt("province_id");
-                province.province_code = result.getInt("province_code");
-                province.name_th = result.getString("name_th");
-                province.name_en = result.getString("name_en");
-
-                return province;
-            }
-
-        }
+    public static class Address {
 
         private String address, amphure, district, zipcode;
         private Province province;
@@ -851,49 +773,6 @@ public class Alumni implements Serializable {
 
         public void setZipcode(String zipcode) {
             this.zipcode = zipcode;
-        }
-
-        /**
-         * Build Address object
-         * @param result
-         * @return
-         * @throws SQLException
-         */
-        private static Address buildAddressObject(ResultSet result) throws SQLException {
-            Address address = new Address();
-
-            address.address = result.getString("address");
-            address.district = result.getString("district");
-            address.amphure = result.getString("amphure");
-            address.zipcode = result.getString("zipcode");
-            if (result.getInt("province_id") != 0)
-                address.province = Province.getProvinceByProvinceId(result.getInt("province_id"));
-            else address.province = null;
-
-            return address;
-        }
-
-        /**
-         * Remove address by student_id
-         * @param student_id
-         * @throws NoAlumniAddressFoundException
-         */
-        public static void removeAddressByStudentId(int student_id) throws NoAlumniAddressFoundException {
-            getAddressByStudentId(student_id);
-
-            Connection connection = null;
-            try {
-                connection = Database.getInstance().getConnection();
-
-                String sql = "DELETE alumni_address WHERE student_id = ?";
-                PreparedStatement stmt = connection.prepareStatement(sql);
-                stmt.setInt(1, student_id);
-                stmt.executeUpdate();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            } finally {
-                if(connection != null) Database.closeConnection(connection);
-            }
         }
 
     }

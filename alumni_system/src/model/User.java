@@ -159,7 +159,7 @@ public class User implements Serializable {
             connection = Database.getInstance().getConnection();
 
             if(user.type == UserType.ALUMNI) {
-                Alumni.removeAlumniByUserId(user_id);
+//                Alumni.removeAlumniByUserId(user_id);
             } else if(user.type == UserType.STAFF) {
 //                Staff.removeStaffByUserId(user_id);
             } else if(user.type == UserType.TEACHER) {

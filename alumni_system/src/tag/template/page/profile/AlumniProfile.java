@@ -1,7 +1,7 @@
 package tag.template.page.profile;
 
-import model.Address;
 import model.Alumni;
+import model.Province;
 import model.User;
 import model.auth.Authorization;
 import model.utility.RouteUtils;
@@ -22,7 +22,6 @@ import java.util.ArrayList;
 public class AlumniProfile extends SimpleTagSupport {
 
     private User user;
-    private Alumni alumni;
 
     public void setUser(User user) {
         this.user = user;
@@ -35,10 +34,10 @@ public class AlumniProfile extends SimpleTagSupport {
 
         Alumni alumni = Alumni.getAlumniByUserId(user.getId());
         User currentUser = Authorization.getAuthInstance(session).getCurrentUser();
-        ArrayList<Address.Province> provinces = Address.Province.getAllProvince();
+        ArrayList<Province> provinces = Province.getAllProvince();
 
         boolean editable = !((currentUser.getType() == User.UserType.TEACHER) ||
-                (currentUser.getType() == User.UserType.ALUMNI && Alumni.getAlumniByUserId(currentUser.getId()).getStudent_id() != alumni.getStudent_id()));
+                (currentUser.getType() == User.UserType.ALUMNI && Alumni.getAlumniByUserId(currentUser.getId()).getAlumni_id() != alumni.getAlumni_id()));
 
         int bDay = 0, bMonth = 0, bYear = 0;
         if(alumni.getBirthdate() != null) {
@@ -52,12 +51,6 @@ public class AlumniProfile extends SimpleTagSupport {
                 "<h2>ประวัติส่วนตัว</h2>\n" +
                 "<form action=\"" + RouteUtils.generateURL(request, "profile/edit") + "\" method=\"POST\" id=\"alumni-form\" class=\"form-horizontal\">\n" +
                 "<input type=\"hidden\" id=\"profilepage-usertype\" name=\"usertype\" value=\"" + user.getType() + "\"/>\n" +
-                "<div class=\"form-group\">\n" +
-                "<label for=\"alumni-form-stuid\" class=\"col-md-3 control-label\">รหัสนักศักษา</label>\n" +
-                "<div class=\"col-md-9\">\n" +
-                "<input type=\"text\" class=\"form-control\" name=\"alumni-form-stuid\" id=\"alumni-form-stuid\" placeholder=\"Student ID\" value=\"" + (alumni.getStudent_id() == 0 ? "" : alumni.getStudent_id()) + "\" data-lock=\"true\">\n" +
-                "</div>\n" +
-                "</div>\n" +
                 "<div class=\"form-group\">\n" +
                 "<label for=\"alumni-form-pnameth\" class=\"col-md-3 control-label\">คำนำหน้าชื่อ (ภาษาไทย)</label>\n" +
                 "<div class=\"col-md-9\">\n" +
@@ -150,7 +143,7 @@ public class AlumniProfile extends SimpleTagSupport {
             out.println("<select class=\"form-control\" name=\"alumni-form-province\" id=\"alumni-form-province\" data-default=\"" + alumni.getAddress().getProvince().getProvince_id() + "\">");
         }
         out.println("<option value=\"null\">Province</option>");
-        for(Address.Province province : provinces) {
+        for(Province province : provinces) {
             out.println("<option value=\"" + province.getProvince_id() + "\">" + province.getName_th() + "</option>");
         }
         out.println(

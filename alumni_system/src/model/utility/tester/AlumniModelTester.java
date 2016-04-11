@@ -1,8 +1,8 @@
 package model.utility.tester;
 
 import annotation.test;
-import model.Address;
 import model.Alumni;
+import model.Province;
 import model.Track;
 
 import java.text.ParseException;
@@ -15,28 +15,47 @@ import java.util.Date;
  */
 public class AlumniModelTester {
 
+    @test
     public static void main(String[] args) {
-        testAddAlumni();
+//        Alumni alumni = Alumni.getAlumniByStudentId(57070029);
+//
+//        System.out.println(alumni.getPname_th() + alumni.getFname_th() + " " + alumni.getLname_th());
+//
+//        for(Alumni.Track track : alumni.getTracks()) {
+//            System.out.println(track.getStudent_id() + " " + track.getGeneration() + " " + track.getTrack().getName_th() + " " + track.getTrack().getCurriculum().getName_th());
+//        }
+
+        Alumni.removeAlumniByStudentId(57070029);
     }
 
     @test
     public static void testAddAlumni() {
         Alumni alumni = new Alumni();
 
-        alumni.setStudent_id(57070029);
         alumni.setPname_th("นาย");
         alumni.setFname_th("ชานิวัฒน์");
         alumni.setLname_th("แสงไชย");
 
-        Track track = Track.getTrack(4);
-        track.setStarteduyear(2014);
-        track.setEndeduyear(2019);
-
-        Address address = new Address();
-        address.setProvince(Address.Province.getProvinceByProvinceId(1));
+        Alumni.Address address = new Alumni.Address();
+        address.setProvince(Province.getProvinceByProvinceId(1));
         alumni.setAddress(address);
 
-        alumni.getTracks().add(track);
+        Alumni.Track track1 = new Alumni.Track();
+        track1.setStudent_id(57070029);
+        track1.setGeneration(12);
+        track1.setTrack(Track.getTrack(1));
+        track1.setStarteduyear(2014);
+        track1.setEndeduyear(2019);
+
+        Alumni.Track track2 = new Alumni.Track();
+        track2.setStudent_id(57607029);
+        track2.setGeneration(6);
+        track2.setTrack(Track.getTrack(2));
+        track2.setStarteduyear(2018);
+        track2.setEndeduyear(2020);
+
+        alumni.getTracks().add(track1);
+        alumni.getTracks().add(track2);
 
         Alumni.addAlumni(alumni);
     }
@@ -48,8 +67,8 @@ public class AlumniModelTester {
         for(Alumni alumni : alumnis) {
             System.out.println(alumni.getPname_th() + " " + alumni.getFname_th() + " " + alumni.getLname_th());
             System.out.println(alumni.getAddress().getAmphure());
-            for(Track track : alumni.getTracks()) {
-                System.out.println(track.getName_th() + " " + track.getStarteduyear());
+            for(Alumni.Track track : alumni.getTracks()) {
+                System.out.println(track.getTrack().getName_th() + " " + track.getStarteduyear());
             }
         }
     }
