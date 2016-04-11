@@ -17,18 +17,9 @@ public class Track {
     private int track_id;
     private Curriculum curriculum;
     private String name_th, name_en;
-    private int starteduyear, endeduyear;
 
     public Track() {
         curriculum = new Curriculum();
-    }
-
-    public int getStarteduyear() {
-        return starteduyear;
-    }
-
-    public void setStarteduyear(int starteduyear) {
-        this.starteduyear = starteduyear;
     }
 
     public int getTrack_id() {
@@ -61,14 +52,6 @@ public class Track {
 
     public void setName_en(String name_en) {
         this.name_en = name_en;
-    }
-
-    public int getEndeduyear() {
-        return endeduyear;
-    }
-
-    public void setEndeduyear(int endeduyear) {
-        this.endeduyear = endeduyear;
     }
 
     public static Track getTrack(int track_id) throws NoTrackFoundException {

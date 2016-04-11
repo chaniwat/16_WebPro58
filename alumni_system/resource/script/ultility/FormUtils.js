@@ -83,7 +83,7 @@ export default class {
 
     static setValToDefault(elem) {
         var defVal = this.getDefaultVal(elem);
-        if(defVal != null || defVal != "null") {
+        if(defVal != null && defVal != "null") {
             elem.val(defVal);
         }
     }

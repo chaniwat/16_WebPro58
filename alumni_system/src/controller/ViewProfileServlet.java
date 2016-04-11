@@ -43,17 +43,10 @@ public class ViewProfileServlet extends HttpServlet {
             return;
         } else {
             request.setAttribute("user", user);
-            switch (user.getType()) {
-                case ALUMNI:
-                    request.setAttribute("alumni", Alumni.getAlumniByUserId(user.getId()));
-                    break;
-                //            case TEACHER: request.setAttribute("teacher", Teacher.getTeacherByUserId(user.getId())); break;
-                //            case STAFF: request.setAttribute("staff", Staff.getStaffByUserId(user.getId())); break;
-            }
+        }
 
-            if (ResponseCodeUtils.hasCodeInSession(session)) {
-                ResponseCodeUtils.pushRequestCode(request, ResponseCodeUtils.pullSessionCode(session));
-            }
+        if (ResponseCodeUtils.hasCodeInSession(session)) {
+            ResponseCodeUtils.pushRequestCode(request, ResponseCodeUtils.pullSessionCode(session));
         }
 
         request.getRequestDispatcher("/WEB-INF/profile.jsp").forward(request, response);

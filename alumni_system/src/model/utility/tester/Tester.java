@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -99,17 +100,6 @@ public class Tester {
     public static void test() {
         if(isTest()) {
             System.out.println("testing");
-
-            String uri = "/profile/";
-
-            String[] uriSplit = uri.split("/");
-            String uriNoContext = "";
-            for(int i = 2; i < uriSplit.length; i++) {
-                if(i == uriSplit.length - 1) uriNoContext += uriSplit[i];
-                else uriNoContext += uriSplit[i] + "/";
-            }
-
-            System.out.println(uriNoContext);
         }
     }
 

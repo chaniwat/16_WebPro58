@@ -38,7 +38,7 @@ public class AlumniModelTester {
 
         alumni.getTracks().add(track);
 
-        Alumni.addNewAlumni(alumni);
+        Alumni.addAlumni(alumni);
     }
 
     @test

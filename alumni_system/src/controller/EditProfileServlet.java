@@ -49,6 +49,7 @@ public class EditProfileServlet extends HttpServlet {
             redirectToProfilePage(request, response, ResponseCodeUtils.NOT_ENOUGH_PERMISSION);
             return;
         }
+        // End Check Permission
 
         if(params.get("alumni-form-stuid") == null || params.get("alumni-form-pnameth") == null ||
                 params.get("alumni-form-fnameth") == null || params.get("alumni-form-lnameth") == null) {

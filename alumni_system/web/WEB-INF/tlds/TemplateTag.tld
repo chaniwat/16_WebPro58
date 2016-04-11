@@ -15,6 +15,46 @@
             <name>title</name>
         </attribute>
     </tag>
+    <tag>
+        <name>alumniProfile</name>
+        <tag-class>tag.template.page.profile.AlumniProfile</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>user</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+    <tag>
+        <name>alumniTrack</name>
+        <tag-class>tag.template.page.profile.AlumniTrack</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>user</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+    <tag>
+        <name>staffProfile</name>
+        <tag-class>tag.template.page.profile.StaffProfile</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>user</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+    <tag>
+        <name>teacherProfile</name>
+        <tag-class>tag.template.page.profile.TeacherProfile</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>user</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
 
 
     <!-- Invoke 'Generate' action to add tags or functions -->
