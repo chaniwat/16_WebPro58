@@ -78,6 +78,32 @@ public class Track {
     }
 
     /**
+     * Update track
+     * @param track Updated {@link Track} object
+     */
+    public static void updateTrack(Track track) {
+        Connection connection = null;
+
+        try {
+            connection = Database.getInstance().getConnection();
+
+            String sql = "UPDATE track " +
+                    "SET name_th = ?, name_en = ?, curriculum_id = ? " +
+                    "WHERE track_id = ?";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, track.name_th);
+            stmt.setString(2, track.name_en);
+            stmt.setInt(3, track.curriculum.getCurriculum_id());
+            stmt.setInt(4, track.getTrack_id());
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if(connection != null) Database.closeConnection(connection);
+        }
+    }
+
+    /**
      * Get track by track_id
      * @param track_id
      * @return
