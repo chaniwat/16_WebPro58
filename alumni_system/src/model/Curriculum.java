@@ -12,6 +12,10 @@ public class Curriculum {
         this.curriculum_id = curriculum_id;
     }
 
+    public int getCurriculum_id() {
+        return curriculum_id;
+    }
+
     public String getName_th() {
         return name_th;
     }

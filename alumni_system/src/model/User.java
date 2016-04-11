@@ -159,7 +159,7 @@ public class User implements Serializable {
             connection = Database.getInstance().getConnection();
 
             if(user.type == UserType.ALUMNI) {
-//                Alumni.removeAlumniByUserId(user_id);
+                Alumni.removeAlumniByUserId(user_id);
             } else if(user.type == UserType.STAFF) {
 //                Staff.removeStaffByUserId(user_id);
             } else if(user.type == UserType.TEACHER) {
@@ -205,13 +205,12 @@ public class User implements Serializable {
     /**
      * Change user password
      * @param user_id
-     * @param password
+     * @param password BCrpyt hash password
      * @throws NoUserFoundException
      */
     public static void changeUserPassword(int user_id, String password) throws NoUserFoundException {
-        getUserByID(user_id);
-
         Connection connection = null;
+
         try {
             connection = Database.getInstance().getConnection();
 
@@ -219,7 +218,9 @@ public class User implements Serializable {
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, BCrypt.hashpw(password, BCrypt.gensalt()));
             stmt.setInt(2, user_id);
-            stmt.executeUpdate();
+            int result = stmt.executeUpdate();
+
+            if(result <= 0) throw new NoUserFoundException();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }

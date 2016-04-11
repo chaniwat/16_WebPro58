@@ -54,16 +54,41 @@ public class Track {
         this.name_en = name_en;
     }
 
+    /**
+     * Add new track
+     * @param track
+     */
+    public static void addTrack(Track track) {
+        Connection connection = null;
+
+        try {
+            connection = Database.getInstance().getConnection();
+
+            String sql = "INSERT INTO track VALUES (0, ?, ?, ?)";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, track.name_th);
+            stmt.setString(2, track.name_en);
+            stmt.setInt(3, track.curriculum.getCurriculum_id());
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if(connection != null) Database.closeConnection(connection);
+        }
+    }
+
+    /**
+     * Get track by track_id
+     * @param track_id
+     * @return
+     * @throws NoTrackFoundException
+     */
     public static Track getTrack(int track_id) throws NoTrackFoundException {
         Connection connection = null;
         try {
             connection = Database.getInstance().getConnection();
 
-            String sql = "SELECT track.track_id, track.name_th AS 'track_name_th', track.name_en AS 'track_name_en', " +
-                    "curriculum.curriculum_id, curriculum.name_th AS 'curriculum_name_th', curriculum.name_en AS 'curriculum_name_en' " +
-                    "FROM track " +
-                    "JOIN curriculum ON track.curriculum_id = curriculum.curriculum_id " +
-                    "WHERE track_id = ?";
+            String sql = "SELECT * FROM track JOIN curriculum ON track.curriculum_id = curriculum.curriculum_id WHERE track_id = ?";
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setInt(1, track_id);
 
@@ -81,15 +106,16 @@ public class Track {
         }
     }
 
+    /**
+     * Get all track
+     * @return
+     */
     public static ArrayList<Track> getAllTrack() {
         Connection connection = null;
         try {
             connection = Database.getInstance().getConnection();
 
-            String sql = "SELECT track.track_id, track.name_th AS 'track_name_th', track.name_en AS 'track_name_en', " +
-                    "curriculum.curriculum_id, curriculum.name_th AS 'curriculum_name_th', curriculum.name_en AS 'curriculum_name_en' " +
-                    "FROM track " +
-                    "JOIN curriculum ON track.curriculum_id = curriculum.curriculum_id";
+            String sql = "SELECT * FROM track JOIN curriculum ON track.curriculum_id = curriculum.curriculum_id";
             PreparedStatement stmt = connection.prepareStatement(sql);
 
             ResultSet result = stmt.executeQuery();
@@ -97,6 +123,7 @@ public class Track {
             while (result.next()) {
                 tracks.add(buildTrackObject(result));
             }
+
             return tracks;
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -106,6 +133,42 @@ public class Track {
         }
     }
 
+    /**
+     * Get all track that in given curriculum
+     * @param curriculum_id
+     * @return
+     * @throws SQLException
+     */
+    public static ArrayList<Track> getAllTrack(int curriculum_id) {
+        Connection connection = null;
+        try {
+            connection = Database.getInstance().getConnection();
+
+            String sql = "SELECT * FROM track JOIN curriculum ON track.curriculum_id = curriculum.curriculum_id WHERE curriculum_id = ?";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, curriculum_id);
+
+            ResultSet result = stmt.executeQuery();
+            ArrayList<Track> tracks = new ArrayList<>();
+            while (result.next()) {
+                tracks.add(buildTrackObject(result));
+            }
+
+            return tracks;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        } finally {
+            if(connection != null) Database.closeConnection(connection);
+        }
+    }
+
+    /**
+     * Build track object
+     * @param result
+     * @return
+     * @throws SQLException
+     */
     private static Track buildTrackObject(ResultSet result) throws SQLException {
         Track t = new Track();
         t.track_id = result.getInt("track_id");
