@@ -110,7 +110,7 @@ public class Track {
      * @return
      * @throws NoTrackFoundException
      */
-    public static Track getTrack(int track_id) throws NoTrackFoundException {
+    public static Track getTrackById(int track_id) throws NoTrackFoundException {
         Connection connection = null;
         try {
             connection = Database.getInstance().getConnection();
@@ -142,7 +142,7 @@ public class Track {
         try {
             connection = Database.getInstance().getConnection();
 
-            String sql = "SELECT * FROM track JOIN curriculum ON track.curriculum_id = curriculum.curriculum_id";
+            String sql = "SELECT * FROM track LEFT JOIN curriculum ON track.curriculum_id = curriculum.curriculum_id";
             PreparedStatement stmt = connection.prepareStatement(sql);
 
             ResultSet result = stmt.executeQuery();

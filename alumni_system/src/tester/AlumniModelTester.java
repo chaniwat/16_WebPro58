@@ -37,7 +37,7 @@ public class AlumniModelTester {
         Alumni.Track track1 = new Alumni.Track();
         track1.setStudent_id(57070029);
         track1.setGeneration(12);
-        track1.setTrack(Track.getTrack(1));
+        track1.setTrack(Track.getTrackById(1));
         track1.setStarteduyear(2014);
         track1.setEndeduyear(2019);
         alumni.getTracks().add(track1);
@@ -45,7 +45,7 @@ public class AlumniModelTester {
 //        Alumni.Track track2 = new Alumni.Track();
 //        track2.setStudent_id(60607029);
 //        track2.setGeneration(7);
-//        track2.setTrack(Track.getTrack(1));
+//        track2.setTrack(Track.getTrackById(1));
 //        track2.setStarteduyear(2018);
 //        track2.setEndeduyear(2020);
 //        alumni.getTracks().add(track2);

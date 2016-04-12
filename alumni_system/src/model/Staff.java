@@ -202,7 +202,7 @@ public class Staff {
         try {
             connection = Database.getInstance().getConnection();
 
-            String sql = "SELECT * FROM staff JOIN work_section ON staff.section_id = work_section.section_id";
+            String sql = "SELECT * FROM staff LEFT JOIN work_section ON staff.section_id = work_section.section_id";
             PreparedStatement stmt = connection.prepareStatement(sql);
             ResultSet result = stmt.executeQuery();
 
