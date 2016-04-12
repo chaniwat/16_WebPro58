@@ -334,6 +334,7 @@ public class Alumni implements Serializable {
             else stmt.setNull(4, Types.INTEGER);
             stmt.setString(5, alumni.address.zipcode);
             stmt.setInt(6, alumni.alumni_id);
+            stmt.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
@@ -603,8 +604,8 @@ public class Alumni implements Serializable {
             alumni.address.province = new Province();
             alumni.address.province.setProvince_id(result.getInt("province_id"));
             alumni.address.province.setProvince_code(result.getInt("province_code"));
-            alumni.address.province.setName_th(result.getString("province.name_th"));
-            alumni.address.province.setName_en(result.getString("province.name_en"));
+            alumni.address.province.setName_th(result.getString("provinces.name_th"));
+            alumni.address.province.setName_en(result.getString("provinces.name_en"));
         }
         else alumni.address.province = null;
         alumni.address.zipcode = result.getString("zipcode");

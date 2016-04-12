@@ -268,6 +268,15 @@ var _class = function () {
             _FormUtils2.default.setValToDefault(this.profileform.find("#alumni-form-province"));
 
             _FormUtils2.default.disableAll(this.profileform);
+        } else if (this.usertype == "TEACHER") {
+            this.profileform = $("#teacher-form");
+            this.profileformbtn = this.profileform.find("button#teacher-form-btn");
+            this.profileformbtn.click(this, this.changeAlumniFormState);
+            this.profileformstate = "VIEW";
+
+            _FormUtils2.default.setValToDefault(this.profileform.find("#teacher-form-workstatus"));
+
+            _FormUtils2.default.disableAll(this.profileform);
         }
     }
 

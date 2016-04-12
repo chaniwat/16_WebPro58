@@ -56,13 +56,7 @@ public class AuthorizationFilter implements Filter {
             return;
         }
 
-        String[] uriSplit = uri.split("/");
-        String uriNoContext = "";
-        for(int i = 2; i < uriSplit.length; i++) {
-            if(i == uriSplit.length - 1) uriNoContext += uriSplit[i];
-            else uriNoContext += uriSplit[i] + "/";
-        }
-        if(!uriNoContext.equals("")) uriNoContext += "/";
+        String uriNoContext = RouteUtils.getURINoContext(request);
 
         /**
          * Bypass index

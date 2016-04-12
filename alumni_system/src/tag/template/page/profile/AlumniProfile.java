@@ -50,7 +50,8 @@ public class AlumniProfile extends SimpleTagSupport {
         out.println(
                 "<h2>ประวัติส่วนตัว</h2>\n" +
                 "<form action=\"" + RouteUtils.generateURL(request, "profile/edit") + "\" method=\"POST\" id=\"alumni-form\" class=\"form-horizontal\">\n" +
-                "<input type=\"hidden\" id=\"profilepage-usertype\" name=\"usertype\" value=\"" + user.getType() + "\"/>\n" +
+                "<input type=\"hidden\" id=\"profilepage-usertype\" name=\"profilepage-usertype\" value=\"" + user.getType() + "\"/>\n" +
+                "<input type=\"hidden\" id=\"alumni-form-id\" name=\"alumni-form-id\" value=\"" + alumni.getAlumni_id() + "\"/>\n" +
                 "<div class=\"form-group\">\n" +
                 "<label for=\"alumni-form-pnameth\" class=\"col-md-3 control-label\">คำนำหน้าชื่อ (ภาษาไทย)</label>\n" +
                 "<div class=\"col-md-9\">\n" +

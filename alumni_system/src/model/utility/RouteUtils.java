@@ -74,4 +74,19 @@ public class RouteUtils {
     public static String generateHomeURL(HttpServletRequest request) {
         return generateURL(request, "");
     }
+
+    public static String getURINoContext(HttpServletRequest request) {
+        String uri = request.getRequestURI();
+
+        String[] uriSplit = uri.split("/");
+        String uriNoContext = "";
+        for(int i = 2; i < uriSplit.length; i++) {
+            if(i == uriSplit.length - 1) uriNoContext += uriSplit[i];
+            else uriNoContext += uriSplit[i] + "/";
+        }
+        if(!uriNoContext.equals("")) uriNoContext += "/";
+
+        return uriNoContext;
+    }
+
 }

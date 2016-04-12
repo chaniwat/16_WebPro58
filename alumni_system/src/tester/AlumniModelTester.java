@@ -17,9 +17,15 @@ public class AlumniModelTester {
 
     @test
     public static void main(String[] args) {
-        Alumni alumni = Alumni.getAlumniByStudentId(57070029);
+        ArrayList<Alumni> alumnis = Alumni.getAllAlumni();
 
-        System.out.println(alumni.getAlumni_id() + " : " + alumni.getPname_th() + alumni.getFname_th() + " " + alumni.getLname_th());
+        int i = 0;
+        for(Alumni alumni : alumnis) {
+            System.out.println(alumni.getAlumni_id() + " : " + alumni.getPname_th() + alumni.getFname_th() + " " + alumni.getLname_th());
+            i++;
+        }
+
+        System.out.println("Total row : " + i);
     }
 
     @test

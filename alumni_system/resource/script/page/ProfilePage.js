@@ -21,6 +21,15 @@ export default class {
             FormUtils.setValToDefault(this.profileform.find("#alumni-form-province"));
 
             FormUtils.disableAll(this.profileform);
+        } else if(this.usertype == "TEACHER") {
+            this.profileform = $("#teacher-form");
+            this.profileformbtn = this.profileform.find("button#teacher-form-btn");
+            this.profileformbtn.click(this, this.changeAlumniFormState);
+            this.profileformstate = "VIEW";
+
+            FormUtils.setValToDefault(this.profileform.find("#teacher-form-workstatus"));
+
+            FormUtils.disableAll(this.profileform);
         }
     }
 

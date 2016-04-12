@@ -42,6 +42,7 @@ public class ViewProfileServlet extends HttpServlet {
 
         if (ResponseCodeUtils.hasCodeInSession(session)) ResponseCodeUtils.pushRequestCode(request, ResponseCodeUtils.pullSessionCode(session));
 
+        session.setAttribute("profile.view.current.path", RouteUtils.getURINoContext(request));
         request.getRequestDispatcher("/WEB-INF/profile.jsp").forward(request, response);
     }
 
