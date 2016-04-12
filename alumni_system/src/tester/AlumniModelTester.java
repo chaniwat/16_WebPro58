@@ -17,7 +17,9 @@ public class AlumniModelTester {
 
     @test
     public static void main(String[] args) {
-        testAddAlumni();
+        Alumni alumni = Alumni.getAlumniByStudentId(57070029);
+
+        System.out.println(alumni.getAlumni_id() + " : " + alumni.getPname_th() + alumni.getFname_th() + " " + alumni.getLname_th());
     }
 
     @test
