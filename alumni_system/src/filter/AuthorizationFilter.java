@@ -82,10 +82,13 @@ public class AuthorizationFilter implements Filter {
             }
         }
 
-        Class c = matchPath.get(matchPath.lastKey());
-        annotation.auth.AuthGuard authGuardAnnotation = (annotation.auth.AuthGuard) c.getAnnotation(annotation.auth.AuthGuard.class);
-        if(authGuardAnnotation != null) {
-            authGuardSession = authGuardAnnotation.guard();
+        annotation.auth.AuthGuard authGuardAnnotation = null;
+        if(matchPath.size() > 0) {
+            Class c = matchPath.get(matchPath.lastKey());
+            authGuardAnnotation = (annotation.auth.AuthGuard) c.getAnnotation(annotation.auth.AuthGuard.class);
+            if(authGuardAnnotation != null) {
+                authGuardSession = authGuardAnnotation.guard();
+            }
         }
 
         if(authGuardSession != null) {

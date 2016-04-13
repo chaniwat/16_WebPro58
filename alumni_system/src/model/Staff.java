@@ -168,7 +168,7 @@ public class Staff {
 
             String sql = "UPDATE staff " +
                     "SET pname_th = ?, fname_th = ?, lname_th = ?, " +
-                    "pname_en = ?, fname_en = ?, lname_th = ?, " +
+                    "pname_en = ?, fname_en = ?, lname_en = ?, " +
                     "phone = ?, email = ?, section_id = ? " +
                     "WHERE staff_id = ?";
             PreparedStatement stmt = connection.prepareStatement(sql);
