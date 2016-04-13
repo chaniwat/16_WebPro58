@@ -9,31 +9,33 @@ export default class {
         if(this.usertype == "ALUMNI") {
             this.profileform = $("#alumni-form");
             this.profileformbtn = this.profileform.find("button#alumni-form-btn");
-            this.profileformbtn.click(this, this.changeAlumniFormState);
-            this.profileformstate = "VIEW";
 
-            var dateSelection = new DateSelectionBuilder(
+            new DateSelectionBuilder(
                 this.profileform.find("#alumni-form-birthdate-year"),
                 this.profileform.find("#alumni-form-birthdate-month"),
                 this.profileform.find("#alumni-form-birthdate-day")
             );
 
             FormUtils.setValToDefault(this.profileform.find("#alumni-form-province"));
-
-            FormUtils.disableAll(this.profileform);
         } else if(this.usertype == "TEACHER") {
             this.profileform = $("#teacher-form");
             this.profileformbtn = this.profileform.find("button#teacher-form-btn");
-            this.profileformbtn.click(this, this.changeAlumniFormState);
-            this.profileformstate = "VIEW";
 
             FormUtils.setValToDefault(this.profileform.find("#teacher-form-workstatus"));
+        } else if(this.usertype == "STAFF") {
+            this.profileform = $("#staff-form");
+            this.profileformbtn = this.profileform.find("button#staff-form-btn");
 
-            FormUtils.disableAll(this.profileform);
+            FormUtils.setValToDefault(this.profileform.find("#staff-form-worksection"));
         }
+
+        this.profileformstate = "VIEW";
+        this.profileformbtn.click(this, this.submitForm);
+        FormUtils.bindNotEmptyForm(this.profileform);
+        FormUtils.disableAll(this.profileform);
     }
 
-    changeAlumniFormState(e) {
+    submitForm(e) {
         var o = e.data;
 
         if(o.profileformstate == "VIEW") {
@@ -45,6 +47,11 @@ export default class {
             o.profileformbtn.html("บันทึก");
 
             e.preventDefault();
+        } else if(o.profileformstate == "EDIT") {
+            if(!FormUtils.isFormComplete(o.profileform)) {
+                e.preventDefault();
+                $("<span class=\"submit-alert\">โปรดกรอกข้อมูลที่ต้องการให้ครบ</span>").insertAfter(o.profileformbtn);
+            }
         }
     }
 

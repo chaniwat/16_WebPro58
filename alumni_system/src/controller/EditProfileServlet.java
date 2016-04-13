@@ -31,15 +31,57 @@ public class EditProfileServlet extends HttpServlet {
         switch (type) {
             case ALUMNI: doUpdateAlumni(request, response); return;
             case TEACHER: doUpdateTeacher(request, response); return;
-            case STAFF: return;
+            case STAFF: doUpdateStaff(request, response); return;
             case DEVELOPER: return;
         }
+    }
+
+    private void doUpdateStaff(HttpServletRequest request, HttpServletResponse response) {
+        HashMap<String, String> params = RouteUtils.convertParamsToHashMap(request, "staff-form-");
+
+        // Check permission (prevent another alumni or teacher to edit staff's profile)
+        Authorization auth = Authorization.getAuthInstance(request.getSession());
+        User user = auth.getCurrentUser();
+
+        if(params.get("staff-form-id") == null) {
+            redirectToProfilePage(request, response, ResponseCodeUtils.FORM_INPUT_NOT_COMPLETE, true);
+            return;
+        }
+
+        if(user.getType() != User.UserType.STAFF) {
+            redirectToProfilePage(request, response, ResponseCodeUtils.NOT_ENOUGH_PERMISSION, true);
+            return;
+        }
+        // End Check Permission
+
+        if(params.get("staff-form-pnameth") == null ||
+                params.get("staff-form-fnameth") == null || params.get("staff-form-lnameth") == null) {
+            redirectToProfilePage(request, response, ResponseCodeUtils.FORM_INPUT_NOT_COMPLETE, true);
+            return;
+        }
+
+        Staff staff = new Staff();
+        staff.setStaff_id(Integer.parseInt(params.get("staff-form-id")));
+        staff.setPname_th(params.get("staff-form-pnameth"));
+        staff.setFname_th(params.get("staff-form-fnameth"));
+        staff.setLname_th(params.get("staff-form-lnameth"));
+        staff.setPname_en(params.get("staff-form-pnameen"));
+        staff.setFname_en(params.get("staff-form-fnameen"));
+        staff.setLname_en(params.get("staff-form-lnameen"));
+        staff.setEmail(params.get("staff-form-email"));
+        staff.setPhone(params.get("staff-form-phone"));
+        staff.setSection(Work.Section.getSectionById(Integer.parseInt(params.get("staff-form-worksection"))));
+
+        Staff.updateStaff(staff);
+
+        redirectToProfilePage(request, response, ResponseCodeUtils.PROFILE_UPDATED_COMPLETE);
+        return;
     }
 
     private void doUpdateTeacher(HttpServletRequest request, HttpServletResponse response) {
         HashMap<String, String> params = RouteUtils.convertParamsToHashMap(request, "teacher-form-");
 
-        // Check permission (prevent another alumni or teacher to edit another alumni's profile)
+        // Check permission (prevent another alumni or teacher to edit another teacher's profile)
         Authorization auth = Authorization.getAuthInstance(request.getSession());
         User user = auth.getCurrentUser();
 

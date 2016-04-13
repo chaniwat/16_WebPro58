@@ -46,6 +46,10 @@ body.fixed-navbar {
   .navbar li.dropdown.open a.dropdown-toggle {
     background-color: #6dbdff; }
 
+.form-group span.submit-alert {
+  margin-left: 15px;
+  color: #a94442; }
+
 .login-page {
   background-color: #fbfbfb; }
   .login-page .login-container {

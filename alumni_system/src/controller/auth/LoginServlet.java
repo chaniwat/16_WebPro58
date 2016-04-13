@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
 /**
  * Created by meranote on 2/9/2016 AD.
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/login/*"})
+@WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends GenericServlet {
 
     @Override

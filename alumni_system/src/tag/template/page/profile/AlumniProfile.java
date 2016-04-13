@@ -53,21 +53,21 @@ public class AlumniProfile extends SimpleTagSupport {
                 "<input type=\"hidden\" id=\"profilepage-usertype\" name=\"profilepage-usertype\" value=\"" + user.getType() + "\"/>\n" +
                 "<input type=\"hidden\" id=\"alumni-form-id\" name=\"alumni-form-id\" value=\"" + alumni.getAlumni_id() + "\"/>\n" +
                 "<div class=\"form-group\">\n" +
-                "<label for=\"alumni-form-pnameth\" class=\"col-md-3 control-label\">คำนำหน้าชื่อ (ภาษาไทย)</label>\n" +
+                "<label for=\"alumni-form-pnameth\" class=\"col-md-3 control-label\">คำนำหน้าชื่อ (ภาษาไทย)*</label>\n" +
                 "<div class=\"col-md-9\">\n" +
-                "<input type=\"text\" class=\"form-control\" name=\"alumni-form-pnameth\" id=\"alumni-form-pnameth\" placeholder=\"Title (TH)\" value=\"" + (alumni.getPname_th() == null ? "" : alumni.getPname_th()) + "\">\n" +
+                "<input type=\"text\" class=\"form-control\" name=\"alumni-form-pnameth\" id=\"alumni-form-pnameth\" placeholder=\"Title (TH)\" value=\"" + (alumni.getPname_th() == null ? "" : alumni.getPname_th()) + "\" data-empty=\"false\">\n" +
                 "</div>\n" +
                 "</div>\n" +
                 "<div class=\"form-group\">\n" +
-                "<label for=\"alumni-form-fnameth\" class=\"col-md-3 control-label\">ชื่อ (ภาษาไทย)</label>\n" +
+                "<label for=\"alumni-form-fnameth\" class=\"col-md-3 control-label\">ชื่อ (ภาษาไทย)*</label>\n" +
                 "<div class=\"col-md-9\">\n" +
-                "<input type=\"text\" class=\"form-control\" name=\"alumni-form-fnameth\" id=\"alumni-form-fnameth\" placeholder=\"Name (TH)\" value=\"" + (alumni.getFname_th() == null ? "" : alumni.getFname_th()) + "\">\n" +
+                "<input type=\"text\" class=\"form-control\" name=\"alumni-form-fnameth\" id=\"alumni-form-fnameth\" placeholder=\"Name (TH)\" value=\"" + (alumni.getFname_th() == null ? "" : alumni.getFname_th()) + "\" data-empty=\"false\">\n" +
                 "</div>\n" +
                 "</div>\n" +
                 "<div class=\"form-group\">\n" +
-                "<label for=\"alumni-form-lnameth\" class=\"col-md-3 control-label\">นามสกุล (ภาษาไทย)</label>\n" +
+                "<label for=\"alumni-form-lnameth\" class=\"col-md-3 control-label\">นามสกุล (ภาษาไทย)*</label>\n" +
                 "<div class=\"col-md-9\">\n" +
-                "<input type=\"text\" class=\"form-control\" name=\"alumni-form-lnameth\" id=\"alumni-form-lnameth\" placeholder=\"Surname (TH)\" value=\"" + (alumni.getLname_th() == null ? "" : alumni.getLname_th()) + "\">\n" +
+                "<input type=\"text\" class=\"form-control\" name=\"alumni-form-lnameth\" id=\"alumni-form-lnameth\" placeholder=\"Surname (TH)\" value=\"" + (alumni.getLname_th() == null ? "" : alumni.getLname_th()) + "\" data-empty=\"false\">\n" +
                 "</div>\n" +
                 "</div>\n" +
                 "<div class=\"form-group\">\n" +

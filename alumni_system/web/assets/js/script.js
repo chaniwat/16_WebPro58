@@ -182,31 +182,16 @@ var _class = function () {
         _classCallCheck(this, _class);
 
         this.loginForm = $("form#login-form");
-        this.userElem = this.loginForm.find("input#username");
-        this.passElem = this.loginForm.find("input#password");
 
-        this.userElem.blur(this, this.updateInput);
-        this.passElem.blur(this, this.updateInput);
+        _FormUtils2.default.bindNotEmptyForm(this.loginForm);
         this.loginForm.submit(this, this.checkSubmitForm);
     }
 
     _createClass(_class, [{
-        key: "updateInput",
-        value: function updateInput(e) {
-            var elemGroup = $(this).is("#username") ? e.data.loginForm.find(".username-group") : e.data.loginForm.find(".password-group");
-            if ($(this).val().trim() == "") {
-                elemGroup.addClass("has-error");
-            } else {
-                elemGroup.removeClass("has-error");
-            }
-        }
-    }, {
         key: "checkSubmitForm",
         value: function checkSubmitForm(e) {
             var o = e.data;
-            var showErrorfn = function showErrorfn(userVal, passVal) {
-                userVal == "" ? o.loginForm.find(".username-group").addClass("has-error") : 0;
-                passVal == "" ? o.loginForm.find(".password-group").addClass("has-error") : 0;
+            var showErrorfn = function showErrorfn() {
                 $("<div class=\"alert alert-danger uncomplete-field\" role=\"alert\">โปรดกรอกข้อมูลให้ครบ</div>").insertAfter(".login-page h1");
                 $(".login-page div.alert.uncomplete-field").hide().slideDown();
             };
@@ -216,10 +201,10 @@ var _class = function () {
                 if ($(".login-page div.alert").not(".uncomplete-field").length) {
                     $(".login-page div.alert").slideUp(function () {
                         $(".login-page div.alert").remove();
-                        showErrorfn(o.userElem.val().trim(), o.passElem.val().trim());
+                        showErrorfn();
                     });
                 } else if (!$(".login-page div.alert.uncomplete-field").length) {
-                    showErrorfn(o.userElem.val().trim(), o.passElem.val().trim());
+                    showErrorfn();
                 }
             }
         }
@@ -260,29 +245,31 @@ var _class = function () {
         if (this.usertype == "ALUMNI") {
             this.profileform = $("#alumni-form");
             this.profileformbtn = this.profileform.find("button#alumni-form-btn");
-            this.profileformbtn.click(this, this.changeAlumniFormState);
-            this.profileformstate = "VIEW";
 
-            var dateSelection = new _DateSelectionBuilder2.default(this.profileform.find("#alumni-form-birthdate-year"), this.profileform.find("#alumni-form-birthdate-month"), this.profileform.find("#alumni-form-birthdate-day"));
+            new _DateSelectionBuilder2.default(this.profileform.find("#alumni-form-birthdate-year"), this.profileform.find("#alumni-form-birthdate-month"), this.profileform.find("#alumni-form-birthdate-day"));
 
             _FormUtils2.default.setValToDefault(this.profileform.find("#alumni-form-province"));
-
-            _FormUtils2.default.disableAll(this.profileform);
         } else if (this.usertype == "TEACHER") {
             this.profileform = $("#teacher-form");
             this.profileformbtn = this.profileform.find("button#teacher-form-btn");
-            this.profileformbtn.click(this, this.changeAlumniFormState);
-            this.profileformstate = "VIEW";
 
             _FormUtils2.default.setValToDefault(this.profileform.find("#teacher-form-workstatus"));
+        } else if (this.usertype == "STAFF") {
+            this.profileform = $("#staff-form");
+            this.profileformbtn = this.profileform.find("button#staff-form-btn");
 
-            _FormUtils2.default.disableAll(this.profileform);
+            _FormUtils2.default.setValToDefault(this.profileform.find("#staff-form-worksection"));
         }
+
+        this.profileformstate = "VIEW";
+        this.profileformbtn.click(this, this.submitForm);
+        _FormUtils2.default.bindNotEmptyForm(this.profileform);
+        _FormUtils2.default.disableAll(this.profileform);
     }
 
     _createClass(_class, [{
-        key: "changeAlumniFormState",
-        value: function changeAlumniFormState(e) {
+        key: "submitForm",
+        value: function submitForm(e) {
             var o = e.data;
 
             if (o.profileformstate == "VIEW") {
@@ -294,6 +281,11 @@ var _class = function () {
                 o.profileformbtn.html("บันทึก");
 
                 e.preventDefault();
+            } else if (o.profileformstate == "EDIT") {
+                if (!_FormUtils2.default.isFormComplete(o.profileform)) {
+                    e.preventDefault();
+                    $("<span class=\"submit-alert\">โปรดกรอกข้อมูลที่ต้องการให้ครบ</span>").insertAfter(o.profileformbtn);
+                }
             }
         }
     }]);
@@ -465,6 +457,7 @@ var _class = function () {
             var checkfn = function checkfn() {
                 if ($(this).attr("type") != null && $(this).attr("type") == "hidden") return;
                 if ($(this).data("empty") != null && $(this).data("empty") == false && $(this).val().trim() == "") {
+                    $(this).parent().parent().addClass("has-error");
                     flag = false;
                 }
             };
@@ -491,6 +484,28 @@ var _class = function () {
             var defVal = this.getDefaultVal(elem);
             if (defVal != null && defVal != "null") {
                 elem.val(defVal);
+            }
+        }
+    }, {
+        key: "bindNotEmptyForm",
+        value: function bindNotEmptyForm(formElem) {
+            var notEmptyElems = [];
+            $("input[data-empty=false]").each(function () {
+                notEmptyElems.push($(this));
+            });
+
+            for (var i = 0; i < notEmptyElems.length; i++) {
+                notEmptyElems[i].blur(this, this.updateNotEmptyInput);
+            }
+        }
+    }, {
+        key: "updateNotEmptyInput",
+        value: function updateNotEmptyInput(e) {
+            var elemGroup = $(this).parent().parent();
+            if ($(this).val().trim() == "") {
+                elemGroup.addClass("has-error");
+            } else {
+                elemGroup.removeClass("has-error");
             }
         }
     }]);

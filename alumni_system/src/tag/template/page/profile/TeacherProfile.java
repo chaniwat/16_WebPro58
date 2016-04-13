@@ -1,7 +1,5 @@
 package tag.template.page.profile;
 
-import model.Alumni;
-import model.Province;
 import model.Teacher;
 import model.User;
 import model.auth.Authorization;
@@ -14,7 +12,6 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * Created by meranote on 4/10/2016 AD.
@@ -44,27 +41,27 @@ public class TeacherProfile extends SimpleTagSupport {
                 "<form action=\"" + RouteUtils.generateURL(request, "profile/edit") + "\" method=\"POST\" id=\"teacher-form\" class=\"form-horizontal\">\n" +
                 "<input type=\"hidden\" id=\"profilepage-usertype\" name=\"profilepage-usertype\" value=\"" + user.getType() + "\"/>\n" +
                 "<div class=\"form-group\">\n" +
-                "<label for=\"teacher-form-pnameth\" class=\"col-md-3 control-label\">รหัส</label>\n" +
+                "<label for=\"teacher-form-id\" class=\"col-md-3 control-label\">รหัส</label>\n" +
                 "<div class=\"col-md-9\">\n" +
                 "<input type=\"text\" class=\"form-control\" name=\"teacher-form-id\" id=\"teacher-form-id\" placeholder=\"ID\" value=\"" + teacher.getTeacher_id() + "\" data-lock=\"true\">\n" +
                 "</div>\n" +
                 "</div>\n" +
                 "<div class=\"form-group\">\n" +
-                "<label for=\"teacher-form-pnameth\" class=\"col-md-3 control-label\">คำนำหน้าชื่อ (ภาษาไทย)</label>\n" +
+                "<label for=\"teacher-form-pnameth\" class=\"col-md-3 control-label\">คำนำหน้าชื่อ (ภาษาไทย)*</label>\n" +
                 "<div class=\"col-md-9\">\n" +
-                "<input type=\"text\" class=\"form-control\" name=\"teacher-form-pnameth\" id=\"teacher-form-pnameth\" placeholder=\"Title (TH)\" value=\"" + (teacher.getPname_th() == null ? "" : teacher.getPname_th()) + "\">\n" +
+                "<input type=\"text\" class=\"form-control\" name=\"teacher-form-pnameth\" id=\"teacher-form-pnameth\" placeholder=\"Title (TH)\" value=\"" + (teacher.getPname_th() == null ? "" : teacher.getPname_th()) + "\" data-empty=\"false\">\n" +
                 "</div>\n" +
                 "</div>\n" +
                 "<div class=\"form-group\">\n" +
-                "<label for=\"teacher-form-fnameth\" class=\"col-md-3 control-label\">ชื่อ (ภาษาไทย)</label>\n" +
+                "<label for=\"teacher-form-fnameth\" class=\"col-md-3 control-label\">ชื่อ (ภาษาไทย)*</label>\n" +
                 "<div class=\"col-md-9\">\n" +
-                "<input type=\"text\" class=\"form-control\" name=\"teacher-form-fnameth\" id=\"teacher-form-fnameth\" placeholder=\"Name (TH)\" value=\"" + (teacher.getFname_th() == null ? "" : teacher.getFname_th()) + "\">\n" +
+                "<input type=\"text\" class=\"form-control\" name=\"teacher-form-fnameth\" id=\"teacher-form-fnameth\" placeholder=\"Name (TH)\" value=\"" + (teacher.getFname_th() == null ? "" : teacher.getFname_th()) + "\" data-empty=\"false\">\n" +
                 "</div>\n" +
                 "</div>\n" +
                 "<div class=\"form-group\">\n" +
-                "<label for=\"teacher-form-lnameth\" class=\"col-md-3 control-label\">นามสกุล (ภาษาไทย)</label>\n" +
+                "<label for=\"teacher-form-lnameth\" class=\"col-md-3 control-label\">นามสกุล (ภาษาไทย)*</label>\n" +
                 "<div class=\"col-md-9\">\n" +
-                "<input type=\"text\" class=\"form-control\" name=\"teacher-form-lnameth\" id=\"teacher-form-lnameth\" placeholder=\"Surname (TH)\" value=\"" + (teacher.getLname_th() == null ? "" : teacher.getLname_th()) + "\">\n" +
+                "<input type=\"text\" class=\"form-control\" name=\"teacher-form-lnameth\" id=\"teacher-form-lnameth\" placeholder=\"Surname (TH)\" value=\"" + (teacher.getLname_th() == null ? "" : teacher.getLname_th()) + "\" data-empty=\"false\">\n" +
                 "</div>\n" +
                 "</div>\n" +
                 "<div class=\"form-group\">\n" +
@@ -98,7 +95,7 @@ public class TeacherProfile extends SimpleTagSupport {
                 "</div>\n" +
                 "</div>\n" +
                 "<div class=\"form-group\">\n" +
-                "<label for=\"teacher-form-province\" class=\"col-md-3 control-label\">สถานะ</label>\n" +
+                "<label for=\"teacher-form-workstatus\" class=\"col-md-3 control-label\">สถานะ</label>\n" +
                 "<div class=\"col-md-9\">\n" +
                 "<select class=\"form-control\" name=\"teacher-form-workstatus\" id=\"teacher-form-workstatus\" data-default=\"" + teacher.getWork_status() + "\">\n" +
                 "<option value=\"EMPLOYEE\">พนักงาน</option>\n" +

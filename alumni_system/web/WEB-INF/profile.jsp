@@ -3,12 +3,10 @@
 <%@ taglib prefix="template" uri="/WEB-INF/tlds/TemplateTag.tld" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%-- FIXME FINISH THIS FORM !!! --%>
-
 <template:page title="Alumni System - Profile">
 
     <div class="container">
-        <h1>Your Profile</h1>
+        <h1>Profile</h1>
 
         <%
             if(ResponseCodeUtils.hasCodeInRequest(request)) {

@@ -62,6 +62,7 @@ export default class {
         var checkfn = function() {
             if($(this).attr("type") != null && $(this).attr("type") == "hidden") return;
             if($(this).data("empty") != null && $(this).data("empty") == false && $(this).val().trim() == "") {
+                $(this).parent().parent().addClass("has-error");
                 flag = false;
             }
         }
@@ -85,6 +86,26 @@ export default class {
         var defVal = this.getDefaultVal(elem);
         if(defVal != null && defVal != "null") {
             elem.val(defVal);
+        }
+    }
+
+    static bindNotEmptyForm(formElem) {
+        var notEmptyElems = [];
+        $("input[data-empty=false]").each(function() {
+            notEmptyElems.push($(this));
+        });
+
+        for(var i = 0; i < notEmptyElems.length; i++) {
+            notEmptyElems[i].blur(this, this.updateNotEmptyInput);
+        }
+    }
+
+    static updateNotEmptyInput(e) {
+        var elemGroup = $(this).parent().parent();
+        if($(this).val().trim() == "") {
+            elemGroup.addClass("has-error");
+        } else {
+            elemGroup.removeClass("has-error");
         }
     }
 
