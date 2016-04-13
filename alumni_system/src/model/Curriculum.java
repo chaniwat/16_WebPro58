@@ -10,7 +10,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * Created by meranote on 4/5/2016 AD.
+ * Curriculum model
+ * for curriculum table
  */
 public class Curriculum {
 
@@ -41,14 +42,60 @@ public class Curriculum {
         this.name_en = name_en;
     }
 
+    /**
+     * Add new curriculum
+     * @param curriculum
+     */
     public static void addCurriculum(Curriculum curriculum) {
-        // TODO add curriculum
+        Connection connection = null;
+
+        try {
+            connection = Database.getInstance().getConnection();
+
+            String sql = "INSERT INTO curriculum VALUES (0, ?, ?)";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, curriculum.name_th);
+            stmt.setString(2, curriculum.name_en);
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if(connection != null) Database.closeConnection(connection);
+        }
     }
 
-    public static void updateCurriculum(Curriculum curriculum) {
-        // TODO update curriculum
+    /**
+     * Update curriculum
+     * @param curriculum
+     * @throws NoCurriculumFoundException
+     */
+    public static void updateCurriculum(Curriculum curriculum) throws NoCurriculumFoundException {
+        Connection connection = null;
+
+        try {
+            connection = Database.getInstance().getConnection();
+
+            String sql = "UPDATE curriculum " +
+                    "SET name_th = ?, name_en = ? " +
+                    "WHERE curriculum_id = ?";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, curriculum.name_th);
+            stmt.setString(2, curriculum.name_en);
+            stmt.setInt(3, curriculum.curriculum_id);
+
+            int result = stmt.executeUpdate();
+            if(result <= 0) throw new NoCurriculumFoundException();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if(connection != null) Database.closeConnection(connection);
+        }
     }
 
+    /**
+     * Get all curriculum
+     * @return
+     */
     public static ArrayList<Curriculum> getAllCurriculum() {
         Connection connection = null;
 
@@ -72,6 +119,12 @@ public class Curriculum {
         }
     }
 
+    /**
+     * Get curriculum by curriculum_id
+     * @param curriculum_id
+     * @return
+     * @throws NoCurriculumFoundException
+     */
     public static Curriculum getCurriculumById(int curriculum_id) throws NoCurriculumFoundException {
         Connection connection = null;
 
@@ -94,6 +147,12 @@ public class Curriculum {
         }
     }
 
+    /**
+     * Build curriculum object
+     * @param result
+     * @return
+     * @throws SQLException
+     */
     private static Curriculum buildCurriculumObject(ResultSet result) throws SQLException {
         Curriculum curriculum = new Curriculum();
 
@@ -104,8 +163,28 @@ public class Curriculum {
         return curriculum;
     }
 
-    public static void removeCurriculumById(int curriculum_id) {
-        // TODO remove curriculum
+    /**
+     * Remove curriculum
+     * @param curriculum_id
+     * @throws NoCurriculumFoundException
+     */
+    public static void removeCurriculumById(int curriculum_id) throws NoCurriculumFoundException {
+        Connection connection = null;
+
+        try {
+            connection = Database.getInstance().getConnection();
+
+            String sql = "DELETE FROM curriculum WHERE curriculum_id = ?";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, curriculum_id);
+
+            int result = stmt.executeUpdate();
+            if(result <= 0) throw new NoCurriculumFoundException();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if(connection != null) Database.closeConnection(connection);
+        }
     }
 
 }

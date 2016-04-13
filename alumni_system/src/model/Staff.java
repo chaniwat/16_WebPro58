@@ -12,7 +12,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * Created by meranote on 4/5/2016 AD.
+ * Staff model
+ * for staff table
  */
 public class Staff {
 
