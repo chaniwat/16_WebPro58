@@ -80,4 +80,10 @@ body.fixed-navbar {
       margin-top: 15px;
       margin-bottom: 15px; }
 
+body.admin-page #navbar .navbar-right {
+  margin-right: 0; }
+
+body.admin-page .container-admin {
+  padding: 0 15px; }
+
 /*# sourceMappingURL=style.css.map */

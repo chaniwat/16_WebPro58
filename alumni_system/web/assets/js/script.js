@@ -19,6 +19,10 @@ var _AlumniViewPage = require("./page/AlumniViewPage");
 
 var _AlumniViewPage2 = _interopRequireDefault(_AlumniViewPage);
 
+var _FormBuilderPage = require("./page/admin/survey/FormBuilderPage");
+
+var _FormBuilderPage2 = _interopRequireDefault(_FormBuilderPage);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -52,6 +56,10 @@ var Main = function () {
                 new _AlumniViewPage2.default();
             });
 
+            route.doRoute("admin/survey/create", function () {
+                new _FormBuilderPage2.default(contextPath);
+            });
+
             route.execute();
         }
     }]);
@@ -61,7 +69,7 @@ var Main = function () {
 
 new Main();
 
-},{"./Route":2,"./page/AlumniViewPage":3,"./page/LoginPage":4,"./page/ProfilePage":5}],2:[function(require,module,exports){
+},{"./Route":2,"./page/AlumniViewPage":3,"./page/LoginPage":4,"./page/ProfilePage":5,"./page/admin/survey/FormBuilderPage":6}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -168,7 +176,7 @@ var _class = function () {
 
 exports.default = _class;
 
-},{"./ultility/RouteUtils":8}],3:[function(require,module,exports){
+},{"./ultility/RouteUtils":9}],3:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -244,7 +252,7 @@ var _class = function () {
 
 exports.default = _class;
 
-},{"./../ultility/FormUtils":7}],5:[function(require,module,exports){
+},{"./../ultility/FormUtils":8}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -324,7 +332,33 @@ var _class = function () {
 
 exports.default = _class;
 
-},{"./../ultility/DateSelectionBuilder":6,"./../ultility/FormUtils":7}],6:[function(require,module,exports){
+},{"./../ultility/DateSelectionBuilder":7,"./../ultility/FormUtils":8}],6:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _RouteUtils = require("./../../../ultility/RouteUtils");
+
+var _RouteUtils2 = _interopRequireDefault(_RouteUtils);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var _class = function _class(contextPath) {
+    _classCallCheck(this, _class);
+
+    this.contextPath = contextPath[0] == "/" ? contextPath.substring(1) : contextPath;
+
+    $("<link href=\"/" + this.contextPath + "/assets/css/bootstrap-form-builder.css\" rel=\"stylesheet\">").insertAfter("link:last");
+    $("<script data-main=\"/" + this.contextPath + "/assets/js/bootstrap-form-builder.min.js\" src=\"/" + this.contextPath + "/assets/js/lib/require.js\"></script>").insertAfter("script:last");
+};
+
+exports.default = _class;
+
+},{"./../../../ultility/RouteUtils":9}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -402,7 +436,7 @@ var _class = function () {
 
 exports.default = _class;
 
-},{"./FormUtils":7}],7:[function(require,module,exports){
+},{"./FormUtils":8}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -544,7 +578,7 @@ var _class = function () {
 
 exports.default = _class;
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
