@@ -2,6 +2,7 @@ import Route from "./Route";
 import LoginPage from "./page/LoginPage";
 import ProfilePage from "./page/ProfilePage";
 import AlumniViewPage from "./page/AlumniViewPage";
+import FormBuilderPage from "./page/admin/survey/FormBuilderPage";
 
 class Main {
 
@@ -27,6 +28,10 @@ class Main {
 
         route.doRoute(["alumni/*"], function() {
             new AlumniViewPage();
+        });
+
+        route.doRoute("admin/survey/create", function() {
+            new FormBuilderPage(contextPath);
         });
 
         route.execute();

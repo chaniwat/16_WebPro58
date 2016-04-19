@@ -1,6 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="template" uri="/WEB-INF/tlds/TemplateTag.tld" %>
 
+<%
+    boolean isFromAdmin = (boolean)session.getAttribute("errorfromadmin");
+%>
+
+<% if(isFromAdmin) { %>
 <template:page title="Alumni System">
 
     <div class="container">
@@ -16,3 +21,14 @@
     </div>
 
 </template:page>
+<% } else { %>
+<template:pageadmin>
+
+    <div class="container-admin">
+
+        <h1>ไม่พบหน้านี้ - 404</h1>
+
+    </div>
+
+</template:pageadmin>
+<% } %>

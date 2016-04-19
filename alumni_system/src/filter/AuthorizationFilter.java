@@ -104,6 +104,7 @@ public class AuthorizationFilter implements Filter {
             authorization.setGuard(Authorization.DEFAULTGUARD);
         }
 
+        request.getSession().setAttribute("errorfromadmin", false);
         chain.doFilter(req, resp);
     }
 

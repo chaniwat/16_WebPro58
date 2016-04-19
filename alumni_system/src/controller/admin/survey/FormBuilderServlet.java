@@ -1,5 +1,6 @@
 package controller.admin.survey;
 
+import annotation.auth.AuthGuard;
 import model.utility.ResponseCodeUtils;
 
 import javax.servlet.ServletException;
@@ -12,7 +13,8 @@ import java.io.IOException;
 /**
  * Created by meranote on 4/20/2016 AD.
  */
-@WebServlet(name = "FormBuilderServlet", urlPatterns = {"/admin/survey/create"})
+@WebServlet(name = "FormBuilderServlet", urlPatterns = {"/admin/survey/create", "/admin/survey/create/"})
+@AuthGuard
 public class FormBuilderServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
