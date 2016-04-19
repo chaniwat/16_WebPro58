@@ -17,6 +17,14 @@ body.fixed-navbar {
   padding-bottom: 20px;
 }
 
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: 'athiti';
+}
+
+.page-header {
+  border-bottom: 1px solid #ecf0f1;
+}
+
 .jumbotron {
   padding-top: 70px;
   padding-bottom: 70px;
@@ -34,14 +42,14 @@ body.fixed-navbar {
     color: #FFF;
     &.navbar-brand {
       background: #2999e3;
-      padding: 5px 15px;
+      padding: 9px 15px;
       > img {
         float: left;
         margin-right: 12px;
       }
       > span {
         float: left;
-        padding-top: 11px;
+        padding-top: 12px;
       }
     }
   }
@@ -63,7 +71,7 @@ body.fixed-navbar {
   li.dropdown {
     a.dropdown-toggle {
       line-height: 23px;
-      height: 50px;
+      height: 60px;
       padding-left: 8px;
       padding-right: 7px;
       margin-left: 5px;
@@ -86,7 +94,6 @@ body.fixed-navbar {
 
 .form-group span.submit-alert {
   margin-left: 15px;
-  color: #a94442;
 }
 
 // ----------------------------------------------- //

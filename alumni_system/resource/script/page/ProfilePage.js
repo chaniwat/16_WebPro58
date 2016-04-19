@@ -50,7 +50,9 @@ export default class {
         } else if(o.profileformstate == "EDIT") {
             if(!FormUtils.isFormComplete(o.profileform)) {
                 e.preventDefault();
-                $("<span class=\"submit-alert\">โปรดกรอกข้อมูลที่ต้องการให้ครบ</span>").insertAfter(o.profileformbtn);
+                if($("span.submit-alert").length <= 0) {
+                    $("<span class=\"submit-alert text-danger\">โปรดกรอกข้อมูลที่ต้องการให้ครบ</span>").insertAfter(o.profileformbtn);
+                }
             }
         }
     }
