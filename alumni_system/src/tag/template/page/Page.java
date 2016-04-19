@@ -74,11 +74,19 @@ public class Page extends BodyTagSupport {
                     "<div id='navbar' class='navbar-collapse collapse'>\n" +
                     "<ul class='nav navbar-nav'>\n" +
                     "<li><a href='" + RouteUtils.generateHomeURL(request) + "'>หน้าแรก</a></li>\n" +
-                    "<li><a href='" + RouteUtils.generateURL(request, "event/") + "'>ข่าวสารและกิจกรรม</a></li>\n" +
-                    "<li><a href='" + RouteUtils.generateURL(request, "alumni/") + "'>ศิษย์เก่า</a></li>\n" +
+                    "<li><a href='" + RouteUtils.generateURL(request, "event") + "'>ข่าวสารและกิจกรรม</a></li>\n" +
+                    "<li><a href='" + RouteUtils.generateURL(request, "alumni") + "' class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">ข้อมูลศิษย์เก่า <span class=\"caret\"></span></a>\n" +
+                    "<ul class=\"dropdown-menu\">\n" +
+                    "<li><a href='" + RouteUtils.generateURL(request, "alumni/bachelor") + "'>ปริญญาตรี</a></li>\n" +
+                    "<li><a href='" + RouteUtils.generateURL(request, "alumni/master") + "'>ปริญญาโท</a></li>\n" +
+                    "<li><a href='" + RouteUtils.generateURL(request, "alumni/doctoral") + "'>ปริญญาเอก</a></li>\n" +
+                    "</ul>" +
+                    "</li>\n" +
                     "</ul>\n" +
                     "<ul class='nav navbar-nav navbar-right'>\n"
             );
+
+
 
 
             if (auth.isLogin()) {

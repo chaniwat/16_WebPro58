@@ -6,6 +6,7 @@
 
 /* Override Bootstrap rule */
 body, html {
+  min-width: 750px;
   width: 100%;
   height: 100%;
   font-family: 'athiti';
@@ -44,7 +45,16 @@ body.fixed-navbar {
       }
     }
   }
-  li.active, li > a:hover {
+  .navbar-toggle {
+    span.icon-bar {
+      background-color: #FFF;
+    }
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  li.active, li > a:hover, nav li.open, .nav .open > a {
     background-color: #6dbdff;
   }
   p.navbar-text {
@@ -67,6 +77,10 @@ body.fixed-navbar {
         background-color: #6dbdff;
       }
     }
+  }
+
+  #navbar.navbar-collapse.in ul.dropdown-menu li a {
+    color: #FFF;
   }
 }
 

@@ -1,5 +1,6 @@
 /* Override Bootstrap rule */
 body, html {
+  min-width: 750px;
   width: 100%;
   height: 100%;
   font-family: 'athiti'; }
@@ -30,7 +31,11 @@ body.fixed-navbar {
       .navbar a.navbar-brand > span {
         float: left;
         padding-top: 11px; }
-  .navbar li.active, .navbar li > a:hover {
+  .navbar .navbar-toggle span.icon-bar {
+    background-color: #FFF; }
+  .navbar .navbar-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.1); }
+  .navbar li.active, .navbar li > a:hover, .navbar nav li.open, .navbar .nav .open > a {
     background-color: #6dbdff; }
   .navbar p.navbar-text {
     margin-right: 0px; }
@@ -45,6 +50,8 @@ body.fixed-navbar {
       background-color: #6dbdff; }
   .navbar li.dropdown.open a.dropdown-toggle {
     background-color: #6dbdff; }
+  .navbar #navbar.navbar-collapse.in ul.dropdown-menu li a {
+    color: #FFF; }
 
 .form-group span.submit-alert {
   margin-left: 15px;
