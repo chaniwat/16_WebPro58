@@ -19,7 +19,7 @@
     <sitedata contextPath="<%= request.getContextPath() %>"></sitedata>
 
     <div class="login-container">
-        <center><h1>Login | เข้าสู่ระบบ</h1></center>
+        <center><h1>Login | เข้าสู่ระบบสมาชิก</h1></center>
         <%
             if(ResponseCodeUtils.hasCodeInRequest(request)) {
                 if(ResponseCodeUtils.getRequestCode(request) == ResponseCodeUtils.UNAUTHORIZED) {
