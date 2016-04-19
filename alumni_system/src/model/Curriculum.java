@@ -15,6 +15,22 @@ import java.util.ArrayList;
  */
 public class Curriculum {
 
+    public enum Degree {
+        BACHELOR(1),
+        MASTER(2),
+        DOCTORAL(3);
+
+        private int _value;
+
+        Degree(int _value) {
+            this._value = _value;
+        }
+
+        public int getValue() {
+            return _value;
+        }
+    }
+
     private int curriculum_id;
     private String name_th, name_en;
 

@@ -1,5 +1,7 @@
 package controller;
 
+import model.utility.ResponseCodeUtils;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,5 +16,14 @@ import java.io.IOException;
 public class EditAlumniTrackServlet extends HttpServlet {
 
     // TODO edit alumni track page and form
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+
+        response.sendError(ResponseCodeUtils.PAGE_NOT_FOUND);
+        return;
+    }
 
 }

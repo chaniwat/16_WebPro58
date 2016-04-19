@@ -19,7 +19,7 @@ import java.util.TreeMap;
 /**
  * Created by meranote on 2/9/2016 AD.
  */
-@WebFilter(filterName = "AuthorizationFilter", urlPatterns = {"/*"})
+@WebFilter(filterName = "AuthorizationFilter")
 public class AuthorizationFilter implements Filter {
 
     private HashMap<String, String> authGuardConfig;

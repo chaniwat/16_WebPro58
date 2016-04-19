@@ -55,7 +55,11 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
-
+    <tag>
+        <name>footerpage</name>
+        <tag-class>tag.template.page.FooterPage</tag-class>
+        <body-content>empty</body-content>
+    </tag>
 
     <!-- Invoke 'Generate' action to add tags or functions -->
 

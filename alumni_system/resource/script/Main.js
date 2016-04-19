@@ -1,6 +1,7 @@
 import Route from "./Route";
 import LoginPage from "./page/LoginPage";
 import ProfilePage from "./page/ProfilePage";
+import AlumniViewPage from "./page/AlumniViewPage";
 
 class Main {
 
@@ -22,6 +23,10 @@ class Main {
 
         route.doRoute(["profile/*"], function() {
             new ProfilePage();
+        });
+
+        route.doRoute(["alumni/*"], function() {
+            new AlumniViewPage();
         });
 
         route.execute();

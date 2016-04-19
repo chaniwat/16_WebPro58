@@ -1,24 +1,50 @@
 <%@ page import="model.utility.ResponseCodeUtils" %>
+<%@ page import="model.auth.Authorization" %>
+<%@ page import="model.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="template" uri="/WEB-INF/tlds/TemplateTag.tld" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<%
+    User currentUser = Authorization.getAuthInstance(session).getCurrentUser();
+    User viewUser = (User)request.getAttribute("user");
+%>
+
 <template:page title="Alumni System - Profile">
 
     <div class="container">
-        <h1>Profile</h1>
+
+        <div class="page-header">
+            <% if(currentUser.getId() == viewUser.getId()) { %>
+                <h1>โปรไฟล์ส่วนตัว</h1>
+            <% } else { %>
+                <h1>โปรไฟล์สมาชิก</h1>
+            <% } %>
+        </div>
 
         <%
             if(ResponseCodeUtils.hasCodeInRequest(request)) {
-                if(ResponseCodeUtils.getRequestCode(request) == ResponseCodeUtils.NOT_ENOUGH_PERMISSION) {
-                    out.println("<div class=\"alert alert-danger\" role=\"alert\">NOT_ENOUGH_PERMISSION</div>");
-                } else if(ResponseCodeUtils.getRequestCode(request) == ResponseCodeUtils.FORM_INPUT_NOT_COMPLETE) {
-                    out.println("<div class=\"alert alert-danger\" role=\"alert\">FORM_INPUT_NOT_COMPLETE</div>");
-                } else if(ResponseCodeUtils.getRequestCode(request) == ResponseCodeUtils.PROFILE_UPDATED_COMPLETE) {
-                    out.println("<div class=\"alert alert-success\" role=\"alert\">PROFILE_UPDATED_COMPLETE</div>");
-                } else if(ResponseCodeUtils.getRequestCode(request) == ResponseCodeUtils.NO_USER_MODEL_FOUND) {
-                    out.println("<div class=\"alert alert-warning\" role=\"alert\">NO_USER_MODEL_FOUND</div>");
-                }
+                if(ResponseCodeUtils.getRequestCode(request) == ResponseCodeUtils.NOT_ENOUGH_PERMISSION) { %>
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        NOT_ENOUGH_PERMISSION
+                    </div>
+                <% } else if(ResponseCodeUtils.getRequestCode(request) == ResponseCodeUtils.FORM_INPUT_NOT_COMPLETE) { %>
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        FORM_INPUT_NOT_COMPLETE
+                    </div>
+                <% } else if(ResponseCodeUtils.getRequestCode(request) == ResponseCodeUtils.PROFILE_UPDATED_COMPLETE) { %>
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        PROFILE_UPDATED_COMPLETE
+                    </div>
+                <% } else if(ResponseCodeUtils.getRequestCode(request) == ResponseCodeUtils.NO_USER_MODEL_FOUND) { %>
+                    <div class="alert alert-warning alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        NO_USER_MODEL_FOUND
+                    </div>
+                <% }
             }
         %>
 
@@ -52,13 +78,7 @@
             </c:if>
         </div>
 
-        <hr />
-
-        <footers>
-            <p>คณะเทคโนโลยีสารสนเทศ สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง<br>
-                เลขที่ 1 ซอยฉลองกรุง 1 แขวงลาดกระบัง เขตลาดกระบัง กรุงเทพมหานคร 10520<br>
-                โทรศัพท์ +66 (0) 2723 4900 โทรสาร +66 (0) 2723 4910</p>
-        </footers>
+        <template:footerpage/>
     </div>
 
 </template:page>

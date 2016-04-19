@@ -15,6 +15,10 @@ var _ProfilePage = require("./page/ProfilePage");
 
 var _ProfilePage2 = _interopRequireDefault(_ProfilePage);
 
+var _AlumniViewPage = require("./page/AlumniViewPage");
+
+var _AlumniViewPage2 = _interopRequireDefault(_AlumniViewPage);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -44,6 +48,10 @@ var Main = function () {
                 new _ProfilePage2.default();
             });
 
+            route.doRoute(["alumni/*"], function () {
+                new _AlumniViewPage2.default();
+            });
+
             route.execute();
         }
     }]);
@@ -53,7 +61,7 @@ var Main = function () {
 
 new Main();
 
-},{"./Route":2,"./page/LoginPage":3,"./page/ProfilePage":4}],2:[function(require,module,exports){
+},{"./Route":2,"./page/AlumniViewPage":3,"./page/LoginPage":4,"./page/ProfilePage":5}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -160,7 +168,28 @@ var _class = function () {
 
 exports.default = _class;
 
-},{"./ultility/RouteUtils":7}],3:[function(require,module,exports){
+},{"./ultility/RouteUtils":8}],3:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var _class = function _class() {
+    _classCallCheck(this, _class);
+
+    this.alumnitable = $("#alumni-table");
+
+    if (this.alumnitable.length > 0) {
+        this.alumnitable.DataTable();
+    }
+};
+
+exports.default = _class;
+
+},{}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -215,7 +244,7 @@ var _class = function () {
 
 exports.default = _class;
 
-},{"./../ultility/FormUtils":6}],4:[function(require,module,exports){
+},{"./../ultility/FormUtils":7}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -295,7 +324,7 @@ var _class = function () {
 
 exports.default = _class;
 
-},{"./../ultility/DateSelectionBuilder":5,"./../ultility/FormUtils":6}],5:[function(require,module,exports){
+},{"./../ultility/DateSelectionBuilder":6,"./../ultility/FormUtils":7}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -373,7 +402,7 @@ var _class = function () {
 
 exports.default = _class;
 
-},{"./FormUtils":6}],6:[function(require,module,exports){
+},{"./FormUtils":7}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -515,7 +544,7 @@ var _class = function () {
 
 exports.default = _class;
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

@@ -46,6 +46,7 @@ public class Page extends BodyTagSupport {
                     "<meta name='viewport' content='width=device-width, initial-scale=1' />\n" +
                     "<link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css' rel='stylesheet' />\n" +
                     "<link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css' rel='stylesheet' />\n" +
+                    "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.datatables.net/t/bs/dt-1.10.11,fc-3.2.1,fh-3.1.1,r-2.0.2,rr-1.1.1,sc-1.4.1,se-1.1.2/datatables.min.css\"/>\n" +
                     "<link href='" + RouteUtils.generateURL(request, "assets/fonts/ahtiti.css") + "' rel='stylesheet' />\n" +
                     "<link href='" + RouteUtils.generateURL(request, "assets/css/style.css") + "' rel='stylesheet' />\n" +
                     "</head>\n" +
@@ -73,8 +74,8 @@ public class Page extends BodyTagSupport {
                     "<div id='navbar' class='navbar-collapse collapse'>\n" +
                     "<ul class='nav navbar-nav'>\n" +
                     "<li><a href='" + RouteUtils.generateHomeURL(request) + "'>หน้าแรก</a></li>\n" +
-                    "<li><a href='" + RouteUtils.generateURL(request, "event/all") + "'>ข่าวสารและกิจกรรม</a></li>\n" +
-                    "<li><a href='" + RouteUtils.generateURL(request, "alumni/all") + "'>ศิษย์เก่า</a></li>\n" +
+                    "<li><a href='" + RouteUtils.generateURL(request, "event/") + "'>ข่าวสารและกิจกรรม</a></li>\n" +
+                    "<li><a href='" + RouteUtils.generateURL(request, "alumni/") + "'>ศิษย์เก่า</a></li>\n" +
                     "</ul>\n" +
                     "<ul class='nav navbar-nav navbar-right'>\n"
             );
@@ -87,11 +88,16 @@ public class Page extends BodyTagSupport {
                         "<li class='dropdown'>\n" +
                         "<a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'><span class='glyphicon glyphicon-triangle-bottom'></span></a>\n" +
                         "<ul class='dropdown-menu'>\n" +
-                        "<li><a href='javascript:;'>โปรไฟล์</a></li>\n" +
+                        "<li><a href='" + RouteUtils.generateURL(request, "profile") + "'>โปรไฟล์</a></li>"
+                );
+                if(auth.getCurrentUser().getType() == User.UserType.STAFF) {
+                    out.println("<li><a href='" + RouteUtils.generateURL(request, "admin") + "'>เข้าระบบแอดมิน</a></li>");
+                }
+                out.println(
                         "<li role='separator' class='divider'></li>\n" +
                         "<li><a href='" + RouteUtils.generateURL(request, "logout") + "'>ออกจากระบบ</a></li>\n" +
                         "</ul>\n" +
-                        "</li>\n"
+                        "</li>"
                 );
             } else {
                 out.println("<li><a href='" + RouteUtils.generateURL(request, "login") + "'>เข้าสู่ระบบ</a></li>\n");
@@ -119,6 +125,7 @@ public class Page extends BodyTagSupport {
             out.print(
                 "<script src='https://code.jquery.com/jquery-2.2.0.min.js'></script>\n" +
                         "<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>\n" +
+                        "<script type=\"text/javascript\" src=\"https://cdn.datatables.net/t/bs/dt-1.10.11,fc-3.2.1,fh-3.1.1,r-2.0.2,rr-1.1.1,sc-1.4.1,se-1.1.2/datatables.min.js\"></script>\n" +
                         "<script src='" + RouteUtils.generateURL(request, "assets/js/script.js") + "'></script>\n" +
                         "</body>\n" +
                         "</html>"
@@ -129,4 +136,5 @@ public class Page extends BodyTagSupport {
 
         return EVAL_PAGE;
     }
+
 }

@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.TreeSet;
 
 /**
  * Alumni Model
@@ -392,65 +393,71 @@ public class Alumni implements Serializable {
 
             ArrayList<Alumni> alumnis = new ArrayList<>();
             while (result.next()) {
-                Alumni alumni = new Alumni();
+                alumnis.add(buildMultipleAlumniObject(result));
+            }
 
-                alumni.alumni_id = result.getInt("alumni_id");
-                alumni.pname_th = result.getString("pname_th");
-                alumni.fname_th = result.getString("fname_th");
-                alumni.lname_th = result.getString("lname_th");
-                alumni.pname_en = result.getString("pname_en");
-                alumni.fname_en = result.getString("fname_en");
-                alumni.lname_en = result.getString("lname_en");
-                alumni.nickname = result.getString("nickname");
-                alumni.birthdate = result.getDate("birthdate");
-                alumni.email = result.getString("email");
-                alumni.phone = result.getString("phone");
-                alumni.occupation = result.getString("occupation");
-                alumni.work_name = result.getString("work_name");
-                alumni.avatar = result.getString("avatar");
+            return alumnis;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        } finally {
+            if(connection != null) Database.closeConnection(connection);
+        }
+    }
 
-                alumni.address.address = result.getString("address");
-                alumni.address.district = result.getString("district");
-                alumni.address.amphure = result.getString("amphure");
-                if(result.getInt("alumni_address.province_id") != 0) {
-                    alumni.address.province = new Province();
-                    alumni.address.province.setProvince_id(result.getInt("alumni_address.province_id"));
-                    alumni.address.province.setProvince_code(result.getInt("province_code"));
-                    alumni.address.province.setName_th(result.getString("province.name_th"));
-                    alumni.address.province.setName_en(result.getString("province.name_en"));
-                }
-                else alumni.address.province = null;
-                alumni.address.zipcode = result.getString("zipcode");
+    /**
+     * Get all alumni within degree
+     * @param degree
+     * @return
+     */
+    public static ArrayList<Alumni> getAlumniWithinDegree(Curriculum.Degree degree) {
+        return getAlumniWithinDegreeAndGeneration(degree, 0);
+    }
 
-                while(true) {
-                    Alumni.Track track = new Alumni.Track();
-                    track.setStudent_id(result.getInt("student_id"));
-                    track.setGeneration(result.getInt("generation"));
+    /**
+     * Get all alumni within degree and generation
+     * @param degree
+     * @param generation
+     * @return
+     */
+    public static ArrayList<Alumni> getAlumniWithinDegreeAndGeneration(Curriculum.Degree degree, int generation) {
+        Connection connection = null;
+        try {
+            connection = Database.getInstance().getConnection();
 
-                    model.Track otrack = new model.Track();
-                    otrack.setTrack_id(result.getInt("track_id"));
-                    otrack.setName_th(result.getString("track.name_th"));
-                    otrack.setName_en(result.getString("track.name_en"));
+            String sql;
+            PreparedStatement stmt = null;
 
-                    Curriculum curriculum = new Curriculum();
-                    curriculum.setCurriculum_id(result.getInt("curriculum_id"));
-                    curriculum.setName_th(result.getString("curriculum.name_th"));
-                    curriculum.setName_en(result.getString("curriculum.name_en"));
+            if(generation == 0) {
+                sql = "SELECT * " +
+                        "FROM alumni " +
+                        "LEFT JOIN alumni_address ON alumni.alumni_id = alumni_address.alumni_id " +
+                        "LEFT JOIN alumni_track ON alumni.alumni_id = alumni_track.alumni_id " +
+                        "LEFT JOIN provinces ON alumni_address.province_id = provinces.province_id " +
+                        "LEFT JOIN track ON alumni_track.track_id = track.track_id " +
+                        "LEFT JOIN curriculum ON track.curriculum_id = curriculum.curriculum_id " +
+                        "WHERE curriculum.curriculum_id = ?";
+                stmt = connection.prepareStatement(sql);
+                stmt.setInt(1, degree.getValue());
+            } else {
+                sql = "SELECT * " +
+                        "FROM alumni " +
+                        "LEFT JOIN alumni_address ON alumni.alumni_id = alumni_address.alumni_id " +
+                        "LEFT JOIN alumni_track ON alumni.alumni_id = alumni_track.alumni_id " +
+                        "LEFT JOIN provinces ON alumni_address.province_id = provinces.province_id " +
+                        "LEFT JOIN track ON alumni_track.track_id = track.track_id " +
+                        "LEFT JOIN curriculum ON track.curriculum_id = curriculum.curriculum_id " +
+                        "WHERE curriculum.curriculum_id = ? AND alumni_track.generation = ?";
+                stmt = connection.prepareStatement(sql);
+                stmt.setInt(1, degree.getValue());
+                stmt.setInt(2, generation);
+            }
 
-                    otrack.setCurriculum(curriculum);
-                    track.setTrack(otrack);
+            ResultSet result = stmt.executeQuery();
 
-                    track.setStarteduyear(result.getInt("starteduyear"));
-                    track.setEndeduyear(result.getInt("endeduyear"));
-
-                    alumni.tracks.add(track);
-                    if(!result.next() || result.getInt("student_id") != alumni.alumni_id) {
-                        result.previous();
-                        break;
-                    }
-                }
-
-                alumnis.add(alumni);
+            ArrayList<Alumni> alumnis = new ArrayList<>();
+            while (result.next()) {
+                alumnis.add(buildMultipleAlumniObject(result));
             }
 
             return alumnis;
@@ -639,6 +646,74 @@ public class Alumni implements Serializable {
     }
 
     /**
+     * Build single alumni for multiple object
+     * @param result
+     * @return
+     * @throws SQLException
+     */
+    private static Alumni buildMultipleAlumniObject(ResultSet result) throws SQLException {
+        Alumni alumni = new Alumni();
+
+        alumni.alumni_id = result.getInt("alumni_id");
+        alumni.pname_th = result.getString("pname_th");
+        alumni.fname_th = result.getString("fname_th");
+        alumni.lname_th = result.getString("lname_th");
+        alumni.pname_en = result.getString("pname_en");
+        alumni.fname_en = result.getString("fname_en");
+        alumni.lname_en = result.getString("lname_en");
+        alumni.nickname = result.getString("nickname");
+        alumni.birthdate = result.getDate("birthdate");
+        alumni.email = result.getString("email");
+        alumni.phone = result.getString("phone");
+        alumni.occupation = result.getString("occupation");
+        alumni.work_name = result.getString("work_name");
+        alumni.avatar = result.getString("avatar");
+
+        alumni.address.address = result.getString("address");
+        alumni.address.district = result.getString("district");
+        alumni.address.amphure = result.getString("amphure");
+        if(result.getInt("alumni_address.province_id") != 0) {
+            alumni.address.province = new Province();
+            alumni.address.province.setProvince_id(result.getInt("alumni_address.province_id"));
+            alumni.address.province.setProvince_code(result.getInt("province_code"));
+            alumni.address.province.setName_th(result.getString("provinces.name_th"));
+            alumni.address.province.setName_en(result.getString("provinces.name_en"));
+        }
+        else alumni.address.province = null;
+        alumni.address.zipcode = result.getString("zipcode");
+
+        while(true) {
+            Alumni.Track track = new Alumni.Track();
+            track.setStudent_id(result.getInt("student_id"));
+            track.setGeneration(result.getInt("generation"));
+
+            model.Track otrack = new model.Track();
+            otrack.setTrack_id(result.getInt("track_id"));
+            otrack.setName_th(result.getString("track.name_th"));
+            otrack.setName_en(result.getString("track.name_en"));
+
+            Curriculum curriculum = new Curriculum();
+            curriculum.setCurriculum_id(result.getInt("curriculum_id"));
+            curriculum.setName_th(result.getString("curriculum.name_th"));
+            curriculum.setName_en(result.getString("curriculum.name_en"));
+
+            otrack.setCurriculum(curriculum);
+            track.setTrack(otrack);
+
+            track.setStarteduyear(result.getInt("starteduyear"));
+            track.setEndeduyear(result.getInt("endeduyear"));
+
+            alumni.tracks.add(track);
+            if(!result.next() || result.getInt("student_id") != alumni.alumni_id) {
+                result.previous();
+                break;
+            }
+        }
+
+        return alumni;
+    }
+
+    /**
      * Remove alumni by alumni_id
      * @param alumni_id
      * @throws NoAlumniFoundException
@@ -802,6 +877,44 @@ public class Alumni implements Serializable {
 
         public void setTrack(model.Track track) {
             this.track = track;
+        }
+
+        /**
+         * Get generation number list of degree
+         * @param degree
+         * @return
+         */
+        public static TreeSet<Integer> getGenerationNumList(Curriculum.Degree degree) {
+            Connection connection = null;
+
+            try {
+                connection = Database.getInstance().getConnection();
+
+                String sql = "SELECT alumni_track.generation\n" +
+                        "FROM alumni\n" +
+                        "LEFT JOIN alumni_address ON alumni.alumni_id = alumni_address.alumni_id\n" +
+                        "LEFT JOIN alumni_track ON alumni.alumni_id = alumni_track.alumni_id\n" +
+                        "LEFT JOIN provinces ON alumni_address.province_id = provinces.province_id\n" +
+                        "LEFT JOIN track ON alumni_track.track_id = track.track_id\n" +
+                        "LEFT JOIN curriculum ON track.curriculum_id = curriculum.curriculum_id\n" +
+                        "WHERE curriculum.curriculum_id = ?\n" +
+                        "GROUP BY alumni_track.generation";
+                PreparedStatement stmt = connection.prepareStatement(sql);
+                stmt.setInt(1, degree.getValue());
+
+                ResultSet result = stmt.executeQuery();
+
+                TreeSet<Integer> integers = new TreeSet<>();
+                while (result.next()) {
+                    integers.add(result.getInt("generation"));
+                }
+                return integers;
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                return null;
+            } finally {
+                if(connection != null) Database.closeConnection(connection);
+            }
         }
     }
 
