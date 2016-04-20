@@ -11,7 +11,7 @@
          -->
 
     <!-- maxWait: Maximum time to wait for a database connection to become available
-         in ms, in this example 10 seconds. An Exception is thrown if
+         in ms, in this example 10 seconds. An exception is thrown if
          this timeout is exceeded.  Set to -1 to wait indefinitely.
          -->
 
