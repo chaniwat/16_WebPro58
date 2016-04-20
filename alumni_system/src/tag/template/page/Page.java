@@ -99,8 +99,12 @@ public class Page extends BodyTagSupport {
                         "<ul class='dropdown-menu'>\n" +
                         "<li><a href='" + RouteUtils.generateURL(request, "profile") + "'>โปรไฟล์</a></li>"
                 );
-                if(auth.getCurrentUser().getType() == User.UserType.STAFF) {
+
+                if(user.getType() == User.UserType.STAFF || (user.getType() == User.UserType.TEACHER && user.getId() == 56)) {
                     out.println("<li><a href='" + RouteUtils.generateURL(request, "admin") + "'>เข้าระบบแอดมิน</a></li>");
+                    if(user.getId() == 56) {
+                        out.println("<li><a href='javascript:;'>^^ เพิ่มให้แล้วนะครับ ได้เฉพาะอาจารย์กับ staff :D ^^</a></li>");
+                    }
                 }
                 out.println(
                         "<li role='separator' class='divider'></li>\n" +

@@ -82,6 +82,22 @@ class Main {
 
         });
 
+        route.doRoute("admin/alumni/*", function() {
+            this.alumnitable = $("#alumni-table");
+
+            if(this.alumnitable.length > 0) {
+                this.alumnitable.DataTable();
+            }
+        });
+
+        route.doRoute("admin/event/create", function() {
+
+            $("<link href=\"https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-wysiwyg/0.3.3/bootstrap3-wysihtml5.min.css\" rel=\"stylesheet\" />").insertAfter("link:last");
+            $("<script src=\"/AlumniSystem/assets/js/lib/bootstrap3-wysihtml5.all.min.js\"></script>").insertAfter("script:last");
+            $("<script>$(\".textarea\").wysihtml5();</script>").insertAfter("script:last");
+
+        })
+
         route.doRoute("admin/survey/create", function() {
             new FormBuilderPage(contextPath);
         });
