@@ -1,26 +1,109 @@
+// ----------------------------------------------- //
+//                                                 //
+//                    Main Theme                   //
+//                                                 //
+// ----------------------------------------------- //
+
+/* Override Bootstrap rule */
 body, html {
+  min-width: 750px;
   width: 100%;
   height: 100%;
   font-family: 'athiti';
 }
 
-.block {
-  position: relative;
-  width: 100%;
-  height: 550px;
-  background-color: ghostwhite;
+body.fixed-navbar {
+  padding-top: 60px;
+  padding-bottom: 20px;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: 'athiti';
+}
+
+.page-header {
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.jumbotron {
+  padding-top: 70px;
+  padding-bottom: 70px;
+
+  @media screen and (min-width: 768px) {
+    padding-top: 70px;
+    padding-bottom: 70px;
+  }
+}
+
+.navbar {
+  background-color: #52aeff;
+  color: #FFF;
+  a {
+    color: #FFF;
+    &.navbar-brand {
+      background: #2999e3;
+      padding: 9px 15px;
+      > img {
+        float: left;
+        margin-right: 12px;
+      }
+      > span {
+        float: left;
+        padding-top: 12px;
+      }
+    }
+  }
+  .navbar-toggle {
+    span.icon-bar {
+      background-color: #FFF;
+    }
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  li.active, li > a:hover, nav li.open, .nav .open > a {
+    background-color: #6dbdff;
+  }
+  p.navbar-text {
+    margin-right: 0px;
+  }
+  li.dropdown {
+    a.dropdown-toggle {
+      line-height: 23px;
+      height: 60px;
+      padding-left: 8px;
+      padding-right: 7px;
+      margin-left: 5px;
+      margin-right: 5px;
+      &:hover {
+        background-color: #6dbdff;
+      }
+    }
+    &.open {
+      a.dropdown-toggle {
+        background-color: #6dbdff;
+      }
+    }
+  }
+
+  #navbar.navbar-collapse.in ul.dropdown-menu li a {
+    color: #FFF;
+  }
+}
+
+.form-group span.submit-alert {
+  margin-left: 15px;
 }
 
 // ----------------------------------------------- //
 //                                                 //
-//                   doLogin page                    //
+//                    Login page                   //
 //                                                 //
 // ----------------------------------------------- //
 .login-page {
-  background: -moz-radial-gradient(center, ellipse cover, rgb(56,56,56) 0%, rgb(14,14,14) 100%); /* FF3.6-15 */
-  background: -webkit-radial-gradient(center, ellipse cover, rgb(56,56,56) 0%,rgb(14,14,14) 100%); /* Chrome10-25,Safari5.1-6 */
-  background: radial-gradient(ellipse at center, rgb(56,56,56) 0%,rgb(14,14,14) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#383838', endColorstr='#0e0e0e',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+  background: url("../images/itkmitl-1-blur.jpg") no-repeat center center;
+  background-size: cover;
 
   .login-container {
     width: 500px;
@@ -29,9 +112,9 @@ body, html {
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 15px 40px;
-    border-radius: 15px;
-    box-shadow: 0px 0px 15px black;
-    background-color: whitesmoke;
+    border-radius: 2px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.90);
+    background-color: #FFFFFF;
     text-align: right;
     h1 {
       margin-bottom: 30px;
@@ -49,17 +132,27 @@ body, html {
 
 // ----------------------------------------------- //
 //                                                 //
-//                 new student page                //
+//                    Admin page                   //
 //                                                 //
 // ----------------------------------------------- //
-.new-student-page {
-  .birthdate-group {
-    font-size: 1.8em;
-    span.control-label {
-      text-align: right;
-    }
-    div.seperator {
-      text-align: center;
+body.admin-page {
+
+  .nav>li>a:hover, .nav>li>a:active, .nav>li>a:focus {
+    color: #FFF;
+  }
+
+  .page-header {
+    border-bottom: 1px solid #d6dadb;
+  }
+
+  #navbar {
+    .navbar-right {
+      margin-right: 0;
     }
   }
+
+  .container-admin {
+    padding: 0 15px;
+  }
+
 }
