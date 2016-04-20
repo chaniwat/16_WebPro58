@@ -50,7 +50,9 @@ public class PageAdmin extends BodyTagSupport {
                     "<meta name='viewport' content='width=device-width, initial-scale=1' />\n" +
 //                    "<link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css' rel='stylesheet' />\n" +
                     "<link href='" + RouteUtils.generateURL(request, "assets/css/bootstrap.min.theme.css") + "' rel='stylesheet' />\n" +
+                    "<link href='https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.3/css/AdminLTE.min.css' rel='stylesheet' />\n" +
                     "<link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css' rel='stylesheet' />\n" +
+                    "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css\">\n" +
                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.datatables.net/t/bs/dt-1.10.11,fc-3.2.1,fh-3.1.1,r-2.0.2,rr-1.1.1,sc-1.4.1,se-1.1.2/datatables.min.css\"/>\n" +
                     "<link href='" + RouteUtils.generateURL(request, "assets/fonts/ahtiti.css") + "' rel='stylesheet' />\n" +
                     "<link href='" + RouteUtils.generateURL(request, "assets/css/style.css") + "' rel='stylesheet' />\n" +
@@ -150,8 +152,14 @@ public class PageAdmin extends BodyTagSupport {
             pageContext.getOut().print(bodyContent.getString());
 
             out.println("<script src='https://code.jquery.com/jquery-2.2.0.min.js'></script>");
-            if(!skipBootstrapJsLoad) out.println("<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>");
+            if(!skipBootstrapJsLoad) {
+                out.println("" +
+                        "<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>\n" +
+                        "<script src='https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.3/js/app.min.js'></script>"
+                );
+            }
             out.print(
+                    "<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.0.2/Chart.min.js'></script>\n" +
                     "<script type=\"text/javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/holder/2.9.3/holder.min.js\"></script>\n" +
                     "<script type=\"text/javascript\" src=\"https://cdn.datatables.net/t/bs/dt-1.10.11,fc-3.2.1,fh-3.1.1,r-2.0.2,rr-1.1.1,sc-1.4.1,se-1.1.2/datatables.min.js\"></script>\n" +
                     "<script src='" + RouteUtils.generateURL(request, "assets/js/script.js") + "'></script>\n" +

@@ -2,10 +2,11 @@
 <%@ taglib prefix="template" uri="/WEB-INF/tlds/TemplateTag.tld" %>
 
 <%
-    boolean isFromAdmin = (boolean)session.getAttribute("errorfromadmin");
+    Boolean isFromAdmin = (Boolean)session.getAttribute("errorfromadmin");
+    session.setAttribute("errorfromadmin", false);
 %>
 
-<% if(isFromAdmin) { %>
+<% if(isFromAdmin == null || !isFromAdmin) { %>
 <template:page title="Alumni System">
 
     <div class="container">

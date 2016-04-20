@@ -29,7 +29,7 @@
             if(generations != null) {
                 for(Integer i : generations) {
         %>
-        <a href="<%= RouteUtils.generateURL(request, "alumni/" + degree + "/" + i) %>" class="btn btn-primary btn-lg btn-block">รุ่นที่ <%= i %></a>
+        <a href="<%= RouteUtils.generateURL(request, "alumni/" + degree + "/" + i) %>" class="btn btn-success btn-lg btn-block">รุ่นที่ <%= i %></a>
         <%
                 }
             }

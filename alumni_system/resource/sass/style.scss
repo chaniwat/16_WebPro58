@@ -13,7 +13,7 @@ body, html {
 }
 
 body.fixed-navbar {
-  padding-top: 50px;
+  padding-top: 60px;
   padding-bottom: 20px;
 }
 
@@ -136,6 +136,14 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 //                                                 //
 // ----------------------------------------------- //
 body.admin-page {
+
+  .nav>li>a:hover, .nav>li>a:active, .nav>li>a:focus {
+    color: #FFF;
+  }
+
+  .page-header {
+    border-bottom: 1px solid #d6dadb;
+  }
 
   #navbar {
     .navbar-right {

@@ -43,7 +43,6 @@ public class AdminCheckFilter implements Filter {
         }
 
         chain.doFilter(req, resp);
-        request.getSession().setAttribute("errorfromadmin", false);
     }
 
 }
