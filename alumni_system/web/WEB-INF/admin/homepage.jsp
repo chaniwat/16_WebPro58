@@ -1,5 +1,5 @@
 <%@ page import="java.sql.Connection" %>
-<%@ page import="model.database.Database" %>
+<%@ page import="com.alumnisystem.database.Database" %>
 <%@ page import="java.sql.PreparedStatement" %>
 <%@ page import="java.sql.ResultSet" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

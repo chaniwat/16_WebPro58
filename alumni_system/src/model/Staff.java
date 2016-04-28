@@ -2,8 +2,7 @@ package model;
 
 import exception.NoStaffFoundException;
 import exception.NoUserFoundException;
-import model.Work;
-import model.database.Database;
+import com.alumnisystem.database.Database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

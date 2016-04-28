@@ -1,7 +1,7 @@
 package model;
 
 import exception.NoUserFoundException;
-import model.database.Database;
+import com.alumnisystem.database.Database;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.Serializable;

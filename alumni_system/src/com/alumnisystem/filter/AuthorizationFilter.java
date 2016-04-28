@@ -1,4 +1,4 @@
-package filter;
+package com.alumnisystem.filter;
 
 import model.auth.Authorization;
 import model.utility.ResponseCodeUtils;

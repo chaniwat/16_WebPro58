@@ -1,7 +1,7 @@
 package model;
 
 import exception.NoSectionFoundException;
-import model.database.Database;
+import com.alumnisystem.database.Database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

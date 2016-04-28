@@ -1,10 +1,9 @@
 package model.auth;
 
 import model.User;
-import model.database.Database;
+import com.alumnisystem.database.Database;
 import org.mindrot.jbcrypt.BCrypt;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

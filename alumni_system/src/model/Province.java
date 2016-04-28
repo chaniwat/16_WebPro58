@@ -1,7 +1,7 @@
 package model;
 
 import exception.NoProvinceFoundException;
-import model.database.Database;
+import com.alumnisystem.database.Database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * Province Model
+ * Province BaseModelFactory
  * for provinces table
  */
 public class Province {

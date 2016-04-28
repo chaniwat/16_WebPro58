@@ -3,7 +3,7 @@ package model;
 import exception.NoAlumniFoundException;
 import exception.NoTrackFoundInAlumniException;
 import exception.NoUserFoundException;
-import model.database.Database;
+import com.alumnisystem.database.Database;
 
 import java.io.Serializable;
 import java.sql.*;
@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.TreeSet;
 
 /**
- * Alumni Model
+ * AlumniFactory BaseModelFactory
  * for alumni table
  */
 public class Alumni implements Serializable {
@@ -831,7 +831,7 @@ public class Alumni implements Serializable {
     }
 
     /**
-     * Track Model
+     * Track BaseModelFactory
      * for alumni_track table
      */
     public static class Track {
@@ -919,7 +919,7 @@ public class Alumni implements Serializable {
     }
 
     /**
-     * Address Model
+     * Address BaseModelFactory
      * for alumni_address table
      */
     public static class Address {

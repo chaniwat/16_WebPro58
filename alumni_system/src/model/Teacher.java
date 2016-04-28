@@ -2,7 +2,7 @@ package model;
 
 import exception.NoTeacherFoundException;
 import exception.NoUserFoundException;
-import model.database.Database;
+import com.alumnisystem.database.Database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
