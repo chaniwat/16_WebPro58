@@ -1,11 +1,12 @@
-<%@ page import="model.utility.RouteUtils" %>
-<%@ page import="model.auth.Authorization" %>
+<%@ page import="com.alumnisystem.utility.RouteUtils" %>
+<%@ page import="com.alumnisystem.utility.Authorization" %>
+<%@ page import="com.alumnisystem.database.Database" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%@ taglib prefix="template" uri="/WEB-INF/tlds/TemplateTag.tld" %>
 
 <%
-    Authorization auth = Authorization.getAuthInstance(session);
+    Authorization auth = Authorization.getAuthInstance(request);
 %>
 
 <template:page title="Alumni System">

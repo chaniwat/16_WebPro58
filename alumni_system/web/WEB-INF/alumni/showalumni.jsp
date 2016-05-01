@@ -1,7 +1,8 @@
-<%@ page import="model.Alumni" %>
+<%@ page import="com.alumnisystem.model.Alumni" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="model.Curriculum" %>
-<%@ page import="model.utility.RouteUtils" %>
+<%@ page import="com.alumnisystem.model.Curriculum" %>
+<%@ page import="com.alumnisystem.utility.RouteUtils" %>
+<%@ page import="com.alumnisystem.model.Track" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="template" uri="/WEB-INF/tlds/TemplateTag.tld" %>
 
@@ -35,7 +36,6 @@
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Nickname</th>
-                    <th>Occupation</th>
                 </tr>
             </thead>
 
@@ -43,8 +43,8 @@
             <% for(Alumni alumni : alumnis) { %>
                 <tr>
                     <%
-                        for(Alumni.Track track : alumni.getTracks()) {
-                            if(track.getTrack().getCurriculum().getCurriculum_id() == (Curriculum.Degree.valueOf(((String)request.getAttribute("degree")).toUpperCase())).getValue()) {
+                        for(Track track : alumni.getTracks()) {
+                            if(track.getCurriculum().getId() == (Curriculum.Degree.valueOf(((String)request.getAttribute("degree")).toUpperCase())).getValue()) {
                     %>
                         <td><a href="<%= RouteUtils.generateURL(request, "profile/" + track.getStudent_id()) %>"><%= track.getStudent_id() %></a></td>
                         <td><%= track.getGeneration() %></td>
@@ -55,7 +55,6 @@
                     <td><%= alumni.getPname_th() + alumni.getFname_th() %></td>
                     <td><%= alumni.getLname_th() %></td>
                     <td><%= alumni.getNickname() %></td>
-                    <td><%= alumni.getOccupation() %></td>
                 </tr>
             <% } %>
             </tbody>

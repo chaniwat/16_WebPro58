@@ -1,8 +1,10 @@
 package com.alumnisystem.filter;
 
-import model.auth.Authorization;
-import model.utility.ResponseCodeUtils;
-import model.utility.RouteUtils;
+import com.alumnisystem.annotation.AuthGuard;
+import com.alumnisystem.database.Database;
+import com.alumnisystem.utility.Authorization;
+import com.alumnisystem.utility.ResponseCodeUtils;
+import com.alumnisystem.utility.RouteUtils;
 import org.reflections.Reflections;
 
 import javax.servlet.*;
@@ -11,26 +13,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
 /**
- * Created by meranote on 2/9/2016 AD.
+ * Authorization check
  */
 @WebFilter(filterName = "AuthorizationFilter")
 public class AuthorizationFilter implements Filter {
 
-    private HashMap<String, String> authGuardConfig;
     private FilterConfig config = null;
 
     public void init(FilterConfig config) throws ServletException {
         this.config = config;
-
-        this.authGuardConfig = new HashMap<>();
-        this.authGuardConfig.put("user", "login");
-        this.authGuardConfig.put("admin", "admin/login");
     }
 
     public void destroy() {}
@@ -42,11 +37,8 @@ public class AuthorizationFilter implements Filter {
         String uri = request.getRequestURI();
         HttpSession session = request.getSession();
 
-        Authorization authorization;
-        if((authorization = (Authorization) session.getAttribute("auth")) == null) {
-            authorization = new Authorization(session);
-            session.setAttribute("auth", authorization);
-        }
+        Authorization authorization = new Authorization(Database.getConnection(request), session);
+        request.setAttribute("auth", authorization);
 
         /**
          * Bypass resource (assets)
@@ -82,26 +74,22 @@ public class AuthorizationFilter implements Filter {
             }
         }
 
-        annotation.auth.AuthGuard authGuardAnnotation = null;
+        AuthGuard authGuardAnnotation = null;
         if(matchPath.size() > 0) {
             Class c = matchPath.get(matchPath.lastKey());
-            authGuardAnnotation = (annotation.auth.AuthGuard) c.getAnnotation(annotation.auth.AuthGuard.class);
+            authGuardAnnotation = (AuthGuard) c.getAnnotation(AuthGuard.class);
             if(authGuardAnnotation != null) {
                 authGuardSession = authGuardAnnotation.guard();
             }
         }
 
         if(authGuardSession != null) {
-            authorization.setGuard(authGuardSession);
-
             if(!authorization.isLogin()) {
                 if(authGuardAnnotation.redirectback()) RouteUtils.pushLastPathURL(session, uriNoContext);
                 ResponseCodeUtils.pushSessionCode(session, ResponseCodeUtils.UNAUTHORIZED);
                 response.sendRedirect(RouteUtils.generateURL(request, "login"));
                 return;
             }
-        } else {
-            authorization.setGuard(Authorization.DEFAULTGUARD);
         }
 
         chain.doFilter(req, resp);

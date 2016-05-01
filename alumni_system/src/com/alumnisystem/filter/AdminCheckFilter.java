@@ -1,9 +1,8 @@
 package com.alumnisystem.filter;
 
-import model.User;
-import model.auth.Authorization;
-import model.utility.ResponseCodeUtils;
-import model.utility.RouteUtils;
+import com.alumnisystem.model.User;
+import com.alumnisystem.utility.Authorization;
+import com.alumnisystem.utility.ResponseCodeUtils;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -13,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * Created by meranote on 4/19/2016 AD.
+ * Admin panel authorization check
  */
 @WebFilter(filterName = "AdminCheckFilter")
 public class AdminCheckFilter implements Filter {
@@ -29,16 +28,16 @@ public class AdminCheckFilter implements Filter {
 
         request.getSession().setAttribute("errorfromadmin", true);
 
-        Authorization authorization = Authorization.getAuthInstance(session);
+        Authorization authorization = Authorization.getAuthInstance(request);
 
-        if(!authorization.isLogin()) {
-            ResponseCodeUtils.pushSessionCode(session, ResponseCodeUtils.UNAUTHORIZED);
-            response.sendRedirect(RouteUtils.generateURL(request, "admin"));
-            return;
-        }
+//        if(!authorization.isLogin()) {
+//            ResponseCodeUtils.pushSessionCode(session, ResponseCodeUtils.UNAUTHORIZED);
+//            response.sendRedirect(RouteUtils.generateURL(request, "admin"));
+//            return;
+//        }
 
         User currentUser = authorization.getCurrentUser();
-        if(currentUser.getType() != User.UserType.STAFF && (currentUser.getType() == User.UserType.TEACHER && currentUser.getId() != 56)) {
+        if(!currentUser.isAdmin()) {
             response.sendError(ResponseCodeUtils.UNAUTHORIZED);
             return;
         }

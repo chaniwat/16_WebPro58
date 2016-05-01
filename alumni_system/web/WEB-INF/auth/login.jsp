@@ -1,5 +1,5 @@
-<%@ page import="model.utility.RouteUtils" %>
-<%@ page import="model.utility.ResponseCodeUtils" %>
+<%@ page import="com.alumnisystem.utility.RouteUtils" %>
+<%@ page import="com.alumnisystem.utility.ResponseCodeUtils" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>

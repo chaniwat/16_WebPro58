@@ -6,7 +6,7 @@
 <%@ taglib prefix="template" uri="/WEB-INF/tlds/TemplateTag.tld" %>
 
 <%
-    Connection connection = Database.getInstance().getConnection();
+    Connection connection = Database.getConnection(request);
 
     String sql;
     PreparedStatement stmt;
@@ -141,7 +141,3 @@
     </div>
 
 </template:pageadmin>
-
-<%
-    if(connection != null) Database.closeConnection(connection);
-%>

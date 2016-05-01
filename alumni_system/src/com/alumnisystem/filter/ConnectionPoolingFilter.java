@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 /**
- * Created by meranote on 4/28/2016 AD.
+ * Connection Create Filter
  */
 @WebFilter(filterName = "ConnectionPoolingFilter")
 public class ConnectionPoolingFilter implements Filter {

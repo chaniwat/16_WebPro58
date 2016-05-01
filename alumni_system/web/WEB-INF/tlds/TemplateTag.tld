@@ -9,7 +9,7 @@
     <short-name>Template Tag lib</short-name>
     <tag>
         <name>page</name>
-        <tag-class>tag.template.page.Page</tag-class>
+        <tag-class>com.alumnisystem.page.Page</tag-class>
         <body-content>JSP</body-content>
         <attribute>
             <name>title</name>
@@ -17,7 +17,7 @@
     </tag>
     <tag>
         <name>alumniProfile</name>
-        <tag-class>tag.template.page.profile.AlumniProfile</tag-class>
+        <tag-class>com.alumnisystem.page.profile.AlumniProfile</tag-class>
         <body-content>empty</body-content>
         <attribute>
             <name>user</name>
@@ -27,7 +27,7 @@
     </tag>
     <tag>
         <name>alumniTrack</name>
-        <tag-class>tag.template.page.profile.AlumniTrack</tag-class>
+        <tag-class>com.alumnisystem.page.profile.AlumniTrack</tag-class>
         <body-content>empty</body-content>
         <attribute>
             <name>user</name>
@@ -37,7 +37,7 @@
     </tag>
     <tag>
         <name>staffProfile</name>
-        <tag-class>tag.template.page.profile.StaffProfile</tag-class>
+        <tag-class>com.alumnisystem.page.profile.StaffProfile</tag-class>
         <body-content>empty</body-content>
         <attribute>
             <name>user</name>
@@ -47,7 +47,7 @@
     </tag>
     <tag>
         <name>teacherProfile</name>
-        <tag-class>tag.template.page.profile.TeacherProfile</tag-class>
+        <tag-class>com.alumnisystem.page.profile.TeacherProfile</tag-class>
         <body-content>empty</body-content>
         <attribute>
             <name>user</name>
@@ -57,12 +57,12 @@
     </tag>
     <tag>
         <name>footerpage</name>
-        <tag-class>tag.template.page.FooterPage</tag-class>
+        <tag-class>com.alumnisystem.page.FooterPage</tag-class>
         <body-content>empty</body-content>
     </tag>
     <tag>
         <name>pageadmin</name>
-        <tag-class>tag.template.page.PageAdmin</tag-class>
+        <tag-class>com.alumnisystem.page.PageAdmin</tag-class>
         <body-content>JSP</body-content>
         <attribute>
             <name>title</name>

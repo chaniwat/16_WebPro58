@@ -1,7 +1,8 @@
-<%@ page import="model.utility.RouteUtils" %>
-<%@ page import="model.Curriculum" %>
-<%@ page import="model.Alumni" %>
+<%@ page import="com.alumnisystem.utility.RouteUtils" %>
+<%@ page import="com.alumnisystem.model.Curriculum" %>
+<%@ page import="com.alumnisystem.model.Alumni" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="com.alumnisystem.model.Track" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="template" uri="/WEB-INF/tlds/TemplateTag.tld" %>
 
@@ -47,8 +48,8 @@
             <tr>
                 <%
                     int student_id = 0;
-                    for(Alumni.Track track : alumni.getTracks()) {
-                        if(track.getTrack().getCurriculum().getCurriculum_id() == (Curriculum.Degree.valueOf(((String)request.getAttribute("degree")).toUpperCase())).getValue()) {
+                    for(Track track : alumni.getTracks()) {
+                        if(track.getCurriculum().getId() == (Curriculum.Degree.valueOf(((String)request.getAttribute("degree")).toUpperCase())).getValue()) {
                 %>
                 <td><%= track.getStudent_id() %></td>
                 <td><%= track.getGeneration() %></td>

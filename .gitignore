@@ -4,5 +4,6 @@
 **/out
 *.iml
 build.xml
+.fuse_hidden00001f970000000f
 .fuse_hidden00001f970000000b
 .fuse_hidden00001f970000000f
