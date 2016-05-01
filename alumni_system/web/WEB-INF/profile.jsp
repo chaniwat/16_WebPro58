@@ -1,12 +1,12 @@
-<%@ page import="model.utility.ResponseCodeUtils" %>
-<%@ page import="model.auth.Authorization" %>
-<%@ page import="model.User" %>
+<%@ page import="com.alumnisystem.utility.ResponseCodeUtils" %>
+<%@ page import="com.alumnisystem.utility.Authorization" %>
+<%@ page import="com.alumnisystem.model.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="template" uri="/WEB-INF/tlds/TemplateTag.tld" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%
-    User currentUser = Authorization.getAuthInstance(session).getCurrentUser();
+    User currentUser = Authorization.getAuthInstance(request).getCurrentUser();
     User viewUser = (User)request.getAttribute("user");
 %>
 
@@ -66,9 +66,6 @@
                 <c:if test="${requestScope.user.type eq 'TEACHER'}">
                     <template:teacherProfile user="${requestScope.user}" />
                 </c:if>
-                <%--<c:if test="${user.type eq 'DEVELOPER'}">--%>
-                    <%-- TODO Developer Profile Page --%>
-                <%--</c:if>--%>
             </div>
             <c:if test="${requestScope.user.type eq 'ALUMNI'}">
                 <div role="tabpanel" class="tab-pane" id="track">

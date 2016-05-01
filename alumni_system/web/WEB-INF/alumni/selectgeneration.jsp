@@ -1,4 +1,4 @@
-<%@ page import="model.utility.RouteUtils" %>
+<%@ page import="com.alumnisystem.utility.RouteUtils" %>
 <%@ page import="java.util.TreeSet" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="template" uri="/WEB-INF/tlds/TemplateTag.tld" %>
