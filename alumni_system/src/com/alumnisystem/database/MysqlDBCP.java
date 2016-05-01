@@ -9,17 +9,17 @@ import java.sql.SQLException;
  */
 public class MysqlDBCP extends BasicDataSource {
 
-    private static final String DB_URL = "localhost";
-    private static final String DB_USERNAME = "root";
-    private static final String DB_PASSWORD = "mysql";
-    private static final String DB_PORT = "3306";
-    private static final String DB_SCHEMA = "it_16";
-
-//    private static final String DB_URL = "database.it.kmitl.ac.th";
-//    private static final String DB_USERNAME = "it_16";
-//    private static final String DB_PASSWORD = "csQgCzmQ";
+//    private static final String DB_URL = "localhost";
+//    private static final String DB_USERNAME = "root";
+//    private static final String DB_PASSWORD = "mysql";
 //    private static final String DB_PORT = "3306";
 //    private static final String DB_SCHEMA = "it_16";
+
+    private static final String DB_URL = "database.it.kmitl.ac.th";
+    private static final String DB_USERNAME = "it_16";
+    private static final String DB_PASSWORD = "csQgCzmQ";
+    private static final String DB_PORT = "3306";
+    private static final String DB_SCHEMA = "it_16";
 
     public MysqlDBCP() throws SQLException {
         /*

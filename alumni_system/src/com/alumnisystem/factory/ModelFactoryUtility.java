@@ -1,6 +1,6 @@
 package com.alumnisystem.factory;
 
-import com.alumnisystem.Exception.ModelNotFound;
+import com.alumnisystem.exception.ModelNotFound;
 import com.alumnisystem.model.Model;
 
 import java.sql.Connection;
