@@ -1,12 +1,11 @@
 package com.alumnisystem.controller;
 
 import com.alumnisystem.annotation.AuthGuard;
-import com.alumnisystem.database.Database;
 import com.alumnisystem.factory.*;
 import com.alumnisystem.model.*;
 import com.alumnisystem.utility.Authorization;
-import com.alumnisystem.utility.ResponseCodeUtils;
-import com.alumnisystem.utility.RouteUtils;
+import com.alumnisystem.utility.ResponseHelper;
+import com.alumnisystem.utility.RouteHelper;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,9 +17,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 
-/**
- * Created by meranote on 4/7/2016 AD.
- */
 @WebServlet(name = "EditProfileServlet", urlPatterns = {"/profile/edit"})
 @AuthGuard(redirectback = false)
 public class EditProfileServlet extends HttpServlet {
@@ -38,34 +34,33 @@ public class EditProfileServlet extends HttpServlet {
     }
 
     private void doUpdateStaff(HttpServletRequest request, HttpServletResponse response) {
-        HashMap<String, String> params = RouteUtils.convertParamsToHashMap(request, "staff-form-");
+        HashMap<String, String> params = RouteHelper.convertParamsToHashMap("staff-form-");
 
-        // Check permission (prevent another alumni or teacher to edit staff's profile)
-        Authorization auth = Authorization.getAuthInstance(request);
-        User user = auth.getCurrentUser();
+        // Check permission (prevent another alumni or teacher to edit staff's profile)\
+        User user = Authorization.getCurrentUser();
 
         if(params.get("staff-form-id") == null) {
-            redirectToProfilePage(request, response, ResponseCodeUtils.FORM_INPUT_NOT_COMPLETE, true);
+            redirectToProfilePage(request, response, ResponseHelper.FORM_INPUT_NOT_COMPLETE, true);
             return;
         }
         int staff_id = Integer.parseInt(params.get("staff-form-id"));
 
         Staff self = null;
-        if(user.getType() == User.Type.TEACHER) self = new StaffFactory(Database.getConnection(request)).findByUserId(user.getId());
+        if(user.getType() == User.Type.TEACHER) self = new StaffFactory().findByUserId(user.getId());
 
-        if(!((self != null && staff_id != self.getStaff_id()) || !auth.getCurrentUser().isAdmin())) {
-            redirectToProfilePage(request, response, ResponseCodeUtils.NOT_ENOUGH_PERMISSION, true);
+        if(!((self != null && staff_id != self.getStaff_id()) || !Authorization.getCurrentUser().isAdmin())) {
+            redirectToProfilePage(request, response, ResponseHelper.NOT_ENOUGH_PERMISSION, true);
             return;
         }
         // End Check Permission
 
         if(params.get("staff-form-pnameth") == null ||
                 params.get("staff-form-fnameth") == null || params.get("staff-form-lnameth") == null) {
-            redirectToProfilePage(request, response, ResponseCodeUtils.FORM_INPUT_NOT_COMPLETE, true);
+            redirectToProfilePage(request, response, ResponseHelper.FORM_INPUT_NOT_COMPLETE, true);
             return;
         }
 
-        StaffFactory staffFactory = new StaffFactory(Database.getConnection(request));
+        StaffFactory staffFactory = new StaffFactory();
 
         Staff staff = new Staff();
         staff.setStaff_id(staff_id);
@@ -78,43 +73,41 @@ public class EditProfileServlet extends HttpServlet {
         staff.setLname_en(params.get("staff-form-lnameen"));
         staff.setEmail(params.get("staff-form-email"));
         staff.setPhone(params.get("staff-form-phone"));
-        staff.setSection(new WorkSectionFactory(Database.getConnection(request)).find(Integer.parseInt(params.get("staff-form-worksection"))));
+        staff.setSection(new WorkSectionFactory().find(Integer.parseInt(params.get("staff-form-worksection"))));
 
         staffFactory.update(staff);
 
-        redirectToProfilePage(request, response, ResponseCodeUtils.PROFILE_UPDATED_COMPLETE);
-        return;
+        redirectToProfilePage(request, response, ResponseHelper.PROFILE_UPDATED_COMPLETE);
     }
 
     private void doUpdateTeacher(HttpServletRequest request, HttpServletResponse response) {
-        HashMap<String, String> params = RouteUtils.convertParamsToHashMap(request, "teacher-form-");
+        HashMap<String, String> params = RouteHelper.convertParamsToHashMap("teacher-form-");
 
         // Check permission (prevent another alumni or teacher to edit another teacher's profile)
-        Authorization auth = Authorization.getAuthInstance(request);
-        User user = auth.getCurrentUser();
+        User user = Authorization.getCurrentUser();
 
         if(params.get("teacher-form-id") == null) {
-            redirectToProfilePage(request, response, ResponseCodeUtils.FORM_INPUT_NOT_COMPLETE, true);
+            redirectToProfilePage(request, response, ResponseHelper.FORM_INPUT_NOT_COMPLETE, true);
             return;
         }
         int teacher_id = Integer.parseInt(params.get("teacher-form-id"));
 
         Teacher self = null;
-        if(user.getType() == User.Type.TEACHER) self = new TeacherFactory(Database.getConnection(request)).findByUserId(user.getId());
+        if(user.getType() == User.Type.TEACHER) self = new TeacherFactory().findByUserId(user.getId());
 
         if(!((self != null && teacher_id != self.getTeacher_id()) || !user.isAdmin())) {
-            redirectToProfilePage(request, response, ResponseCodeUtils.NOT_ENOUGH_PERMISSION, true);
+            redirectToProfilePage(request, response, ResponseHelper.NOT_ENOUGH_PERMISSION, true);
             return;
         }
         // End Check Permission
 
         if(params.get("teacher-form-pnameth") == null ||
                 params.get("teacher-form-fnameth") == null || params.get("teacher-form-lnameth") == null) {
-            redirectToProfilePage(request, response, ResponseCodeUtils.FORM_INPUT_NOT_COMPLETE, true);
+            redirectToProfilePage(request, response, ResponseHelper.FORM_INPUT_NOT_COMPLETE, true);
             return;
         }
 
-        TeacherFactory teacherFactory = new TeacherFactory(Database.getConnection(request));
+        TeacherFactory teacherFactory = new TeacherFactory();
 
         Teacher teacher = new Teacher();
         teacher.setTeacher_id(teacher_id);
@@ -131,40 +124,38 @@ public class EditProfileServlet extends HttpServlet {
 
         teacherFactory.update(teacher);
 
-        redirectToProfilePage(request, response, ResponseCodeUtils.PROFILE_UPDATED_COMPLETE);
-        return;
+        redirectToProfilePage(request, response, ResponseHelper.PROFILE_UPDATED_COMPLETE);
     }
 
     private void doUpdateAlumni(HttpServletRequest request, HttpServletResponse response) {
-        HashMap<String, String> params = RouteUtils.convertParamsToHashMap(request, "alumni-form-");
+        HashMap<String, String> params = RouteHelper.convertParamsToHashMap("alumni-form-");
 
         // Check permission (prevent another alumni or teacher to edit another alumni's profile)
-        Authorization auth = Authorization.getAuthInstance(request);
-        User user = auth.getCurrentUser();
+        User user = Authorization.getCurrentUser();
 
         if(params.get("alumni-form-id") == null) {
-            redirectToProfilePage(request, response, ResponseCodeUtils.FORM_INPUT_NOT_COMPLETE, true);
+            redirectToProfilePage(request, response, ResponseHelper.FORM_INPUT_NOT_COMPLETE, true);
             return;
         }
 
         int alumni_id = Integer.parseInt(params.get("alumni-form-id"));
 
         Alumni self = null;
-        if(user.getType() == User.Type.ALUMNI) self = new AlumniFactory(Database.getConnection(request)).findByUserId(user.getId());
+        if(user.getType() == User.Type.ALUMNI) self = new AlumniFactory().findByUserId(user.getId());
 
         if(!((self != null && alumni_id == self.getAlumni_id()) || user.isAdmin())) {
-            redirectToProfilePage(request, response, ResponseCodeUtils.NOT_ENOUGH_PERMISSION, true);
+            redirectToProfilePage(request, response, ResponseHelper.NOT_ENOUGH_PERMISSION, true);
             return;
         }
         // End Check Permission
 
         if(params.get("alumni-form-pnameth") == null ||
                 params.get("alumni-form-fnameth") == null || params.get("alumni-form-lnameth") == null) {
-            redirectToProfilePage(request, response, ResponseCodeUtils.FORM_INPUT_NOT_COMPLETE, true);
+            redirectToProfilePage(request, response, ResponseHelper.FORM_INPUT_NOT_COMPLETE, true);
             return;
         }
 
-        AlumniFactory alumniFactory = new AlumniFactory(Database.getConnection(request));
+        AlumniFactory alumniFactory = new AlumniFactory();
 
         Alumni alumni = new Alumni();
         alumni.setAlumni_id(alumni_id);
@@ -210,7 +201,7 @@ public class EditProfileServlet extends HttpServlet {
 
         alumniFactory.update(alumni);
 
-        redirectToProfilePage(request, response, ResponseCodeUtils.PROFILE_UPDATED_COMPLETE);
+        redirectToProfilePage(request, response, ResponseHelper.PROFILE_UPDATED_COMPLETE);
     }
 
     private void redirectToProfilePage(HttpServletRequest request, HttpServletResponse response, int ErrorNumber) {
@@ -219,9 +210,9 @@ public class EditProfileServlet extends HttpServlet {
 
     private void redirectToProfilePage(HttpServletRequest request, HttpServletResponse response, int ErrorNumber, boolean toSelf) {
         try {
-            ResponseCodeUtils.pushSessionCode(request.getSession(), ErrorNumber);
-            if(toSelf) response.sendRedirect(RouteUtils.generateURL(request, "profile"));
-            else response.sendRedirect(RouteUtils.generateURL(request, (String) request.getSession().getAttribute("profile.view.current.path")));
+            ResponseHelper.pushSessionCode(ErrorNumber);
+            if(toSelf) response.sendRedirect(RouteHelper.generateURL("profile"));
+            else response.sendRedirect(RouteHelper.generateURL((String) request.getSession().getAttribute("profile.view.current.path")));
         } catch (IOException e) {
             e.printStackTrace();
         }

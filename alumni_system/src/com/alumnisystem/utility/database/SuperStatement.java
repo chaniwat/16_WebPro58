@@ -1,4 +1,4 @@
-package com.alumnisystem.database;
+package com.alumnisystem.utility.database;
 
 import java.io.InputStream;
 import java.io.Reader;

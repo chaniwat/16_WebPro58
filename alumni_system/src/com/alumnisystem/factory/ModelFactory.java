@@ -1,8 +1,7 @@
 package com.alumnisystem.factory;
 
-import com.alumnisystem.annotation.Model;
-import com.alumnisystem.database.SuperStatement;
-import com.alumnisystem.model.BaseModel;
+import com.alumnisystem.utility.database.Database;
+import com.alumnisystem.utility.database.SuperStatement;
 import com.sun.istack.internal.NotNull;
 
 import java.sql.Connection;
@@ -19,21 +18,9 @@ public abstract class ModelFactory<T> {
     protected SuperStatement statement;
     protected ResultSet result;
 
-    public ModelFactory(@NotNull Connection connection) {
-        this.connection = connection;
+    public ModelFactory() {
+        this.connection = Database.getConnection();
         statement = new SuperStatement(connection);
-    }
-
-    public static ModelFactory getFactory(Connection connection, Class<? extends BaseModel> modelClass) {
-        Model annoModel = modelClass.getAnnotation(Model.class);
-        if(annoModel == null) throw new RuntimeException("Not a model");
-        try {
-            return (ModelFactory) Class.forName("com.alumnisystem.factory." + annoModel.factory())
-                    .getConstructor(Connection.class).newInstance(connection);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     public abstract ArrayList<T> all();
@@ -41,6 +28,6 @@ public abstract class ModelFactory<T> {
     public abstract T create(@NotNull T model);
     public abstract T remove(@NotNull int id);
     public abstract T update(@NotNull T model);
-    abstract T setObject(@NotNull T model, ResultSet result) throws SQLException;
+    abstract T buildObject(@NotNull T model, ResultSet result) throws SQLException;
 
 }

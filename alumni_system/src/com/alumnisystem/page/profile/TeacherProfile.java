@@ -1,14 +1,12 @@
 package com.alumnisystem.page.profile;
 
-import com.alumnisystem.database.Database;
 import com.alumnisystem.factory.TeacherFactory;
 import com.alumnisystem.model.Teacher;
 import com.alumnisystem.model.User;
 import com.alumnisystem.utility.Authorization;
-import com.alumnisystem.utility.RouteUtils;
+import com.alumnisystem.utility.RouteHelper;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
@@ -30,10 +28,10 @@ public class TeacherProfile extends SimpleTagSupport {
     public void doTag() throws JspException, IOException {
         HttpServletRequest request = (HttpServletRequest)((PageContext) getJspContext()).getRequest();
 
-        TeacherFactory teacherFactory = new TeacherFactory(Database.getConnection(request));
+        TeacherFactory teacherFactory = new TeacherFactory();
 
         Teacher teacher = teacherFactory.findByUserId(user.getId());
-        User currentUser = Authorization.getAuthInstance(request).getCurrentUser();
+        User currentUser = Authorization.getCurrentUser();
 
         boolean editable = (currentUser.isAdmin() ||
                 (currentUser.getType() == User.Type.TEACHER && teacher.getTeacher_id() == teacherFactory.findByUserId(currentUser.getId()).getTeacher_id()));
@@ -41,7 +39,7 @@ public class TeacherProfile extends SimpleTagSupport {
         JspWriter out = getJspContext().getOut();
         out.println(
                 "<h2>ประวัติส่วนตัว</h2>\n" +
-                "<form action=\"" + RouteUtils.generateURL(request, "profile/edit") + "\" method=\"POST\" id=\"teacher-form\" class=\"form-horizontal\">\n" +
+                "<form action=\"" + RouteHelper.generateURL("profile/edit") + "\" method=\"POST\" id=\"teacher-form\" class=\"form-horizontal\">\n" +
                 "<input type=\"hidden\" id=\"profilepage-usertype\" name=\"profilepage-usertype\" value=\"" + user.getType() + "\"/>\n" +
                 "<div class=\"form-group\">\n" +
                 "<label for=\"teacher-form-id\" class=\"col-md-3 control-label\">รหัส</label>\n" +

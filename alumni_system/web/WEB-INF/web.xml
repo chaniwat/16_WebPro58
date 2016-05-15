@@ -24,7 +24,7 @@
     </error-page>
 
     <filter-mapping>
-        <filter-name>ConnectionPoolingFilter</filter-name>
+        <filter-name>LocalInitialFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 

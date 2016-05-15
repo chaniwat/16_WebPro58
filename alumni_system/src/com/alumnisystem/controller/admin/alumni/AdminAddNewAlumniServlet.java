@@ -1,6 +1,6 @@
 package com.alumnisystem.controller.admin.alumni;
 
-import com.alumnisystem.utility.ResponseCodeUtils;
+import com.alumnisystem.utility.ResponseHelper;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,7 +18,7 @@ public class AdminAddNewAlumniServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
 
-        response.sendError(ResponseCodeUtils.PAGE_NOT_FOUND);
+        response.sendError(ResponseHelper.PAGE_NOT_FOUND);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

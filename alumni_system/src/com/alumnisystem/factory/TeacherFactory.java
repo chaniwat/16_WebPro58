@@ -3,9 +3,7 @@ package com.alumnisystem.factory;
 import com.alumnisystem.exception.TeacherNotFound;
 import com.alumnisystem.model.Teacher;
 import com.alumnisystem.model.Work;
-import com.sun.istack.internal.NotNull;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,8 +13,8 @@ import java.util.ArrayList;
  */
 public class TeacherFactory extends ModelFactory<Teacher> {
 
-    public TeacherFactory(@NotNull Connection connection) {
-        super(connection);
+    public TeacherFactory() {
+        super();
     }
 
     /**
@@ -32,7 +30,7 @@ public class TeacherFactory extends ModelFactory<Teacher> {
                 model.getUsernames().add(model.getFname_en());
             }
 
-            new UserFactory(connection).createUser(model, model.getUsernames(), "ITKMITL");
+            new UserFactory().createUser(model, model.getUsernames(), "ITKMITL");
 
             statement.setStatement("INSERT INTO teacher VALUES (?, ?, ?)")
                     .setInt(model.getTeacher_id())
@@ -61,7 +59,7 @@ public class TeacherFactory extends ModelFactory<Teacher> {
 
             statement.executeUpdate();
 
-            new UserFactory(connection).update(teacher);
+            new UserFactory().update(teacher);
 
             return teacher;
         } catch (SQLException ex) {
@@ -83,7 +81,7 @@ public class TeacherFactory extends ModelFactory<Teacher> {
 
             ArrayList<Teacher> teachers = new ArrayList<>();
             while (result.next()) {
-                teachers.add(setObject(new Teacher(), result));
+                teachers.add(buildObject(new Teacher(), result));
             }
             return teachers;
         } catch (SQLException ex) {
@@ -106,7 +104,7 @@ public class TeacherFactory extends ModelFactory<Teacher> {
 
             ResultSet result = statement.executeQuery();
 
-            if(result.next()) return setObject(new Teacher(), result);
+            if(result.next()) return buildObject(new Teacher(), result);
             else throw new TeacherNotFound();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -127,7 +125,7 @@ public class TeacherFactory extends ModelFactory<Teacher> {
 
             ResultSet result = statement.executeQuery();
 
-            if(result.next()) return setObject(new Teacher(), result);
+            if(result.next()) return buildObject(new Teacher(), result);
             else throw new TeacherNotFound();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -142,12 +140,12 @@ public class TeacherFactory extends ModelFactory<Teacher> {
      * @throws SQLException
      */
     @Override
-    Teacher setObject(Teacher model, ResultSet result) throws SQLException {
+    Teacher buildObject(Teacher model, ResultSet result) throws SQLException {
 
         model.setTeacher_id(result.getInt("teacher.id"));
         model.setWork_status(Work.Status.valueOf(result.getString("work_status")));
 
-        new UserFactory(connection).setObject(model, result, true);
+        new UserFactory().setObject(model, result, true);
 
         return model;
     }
@@ -161,7 +159,7 @@ public class TeacherFactory extends ModelFactory<Teacher> {
     public Teacher remove(int teacher_id) throws TeacherNotFound {
         Teacher teacher = find(teacher_id);
 
-        new UserFactory(connection).removeUser(teacher.getId());
+        new UserFactory().removeUser(teacher.getId());
 
         return teacher;
     }
@@ -174,7 +172,7 @@ public class TeacherFactory extends ModelFactory<Teacher> {
     public Teacher removeByUserId(int user_id) throws TeacherNotFound {
         Teacher teacher = findByUserId(user_id);
 
-        new UserFactory(connection).removeUser(teacher.getId());
+        new UserFactory().removeUser(teacher.getId());
 
         return teacher;
     }

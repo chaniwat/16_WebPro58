@@ -7,9 +7,17 @@ import javax.servlet.http.HttpSession;
 /**
  * Response Code Helper
  */
-public class ResponseCodeUtils {
+public class ResponseHelper {
 
-    private ResponseCodeUtils() {}
+    private static ThreadLocal<HttpServletRequest> requestThreadLocal = new ThreadLocal<>();
+    private static ThreadLocal<HttpSession> sessionThreadLocal = new ThreadLocal<>();
+
+    private ResponseHelper() {}
+
+    public static void setThreadLocal(HttpServletRequest request, HttpSession session) {
+        requestThreadLocal.set(request);
+        sessionThreadLocal.set(session);
+    }
 
     public static final int NO_ERR = 0;
 
@@ -32,67 +40,60 @@ public class ResponseCodeUtils {
 
     /**
      * Check if have error in session.
-     * @param session
      * @return true if have, false if not.
      */
-    public static boolean hasCodeInSession(HttpSession session) {
-        return session.getAttribute("error") != null && (int)session.getAttribute("error") != NO_ERR;
+    public static boolean hasCodeInSession() {
+        return sessionThreadLocal.get().getAttribute("error") != null && (int)sessionThreadLocal.get().getAttribute("error") != NO_ERR;
     }
 
     /**
      * Check if have error in session.
-     * @param request
      * @return true if have, false if not.
      */
-    public static boolean hasCodeInRequest(HttpServletRequest request) {
-        return request.getAttribute("error") != null && (int)request.getAttribute("error") != NO_ERR;
+    public static boolean hasCodeInRequest() {
+        return requestThreadLocal.get().getAttribute("error") != null && (int)requestThreadLocal.get().getAttribute("error") != NO_ERR;
     }
 
     /**
      * Push error attribute in session scope.
-     * @param session
      * @param errorcode
      */
-    public static void pushSessionCode(HttpSession session, int errorcode) {
-        session.setAttribute("error", errorcode);
+    public static void pushSessionCode(int errorcode) {
+        sessionThreadLocal.get().setAttribute("error", errorcode);
     }
 
     /**
      * Push error in request scope.
-     * @param request
      * @param errorcode
      */
-    public static void pushRequestCode(HttpServletRequest request, int errorcode) {
-        request.setAttribute("error", errorcode);
+    public static void pushRequestCode(int errorcode) {
+        requestThreadLocal.get().setAttribute("error", errorcode);
     }
 
     /**
      * Pull and clear error in session scope.
-     * @param session
      * @return true if match, false if not.
      */
-    public static int pullSessionCode(HttpSession session) {
-        int code = (int)session.getAttribute("error");
-        pushSessionCode(session, NO_ERR);
+    public static int pullSessionCode() {
+        int code = (int)sessionThreadLocal.get().getAttribute("error");
+        pushSessionCode(NO_ERR);
         return code;
     }
 
     /**
      * Get session error code
-     * @param session
      * @return
      */
-    public static int getSessionCode(HttpSession session) {
-        return (int)session.getAttribute("error");
+    public static int getSessionCode() {
+        return (int)sessionThreadLocal.get().getAttribute("error");
     }
 
     /**
      * Get request error code
-     * @param request
      * @return
      */
-    public static int getRequestCode(HttpServletRequest request) {
-        return (int)request.getAttribute("error");
+    public static int getRequestCode() {
+        return (int)requestThreadLocal.get().getAttribute("error");
     }
 
 }

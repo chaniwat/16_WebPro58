@@ -2,7 +2,6 @@ package com.alumnisystem.factory;
 
 import com.alumnisystem.exception.StaffNotFound;
 import com.alumnisystem.model.*;
-import com.sun.istack.internal.NotNull;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,8 +11,8 @@ import java.util.ArrayList;
  */
 public class StaffFactory extends ModelFactory<Staff> {
 
-    public StaffFactory(@NotNull Connection connection) {
-        super(connection);
+    public StaffFactory() {
+        super();
     }
 
     /**
@@ -28,7 +27,7 @@ public class StaffFactory extends ModelFactory<Staff> {
             model.getUsernames().add(model.getFname_en());
         }
         
-        new UserFactory(connection).createUser(model, model.getUsernames(), "ITKMITL");
+        new UserFactory().createUser(model, model.getUsernames(), "ITKMITL");
         
         try {
             statement.setStatement("INSERT INTO staff VALUES (?, ?, ?)")
@@ -59,7 +58,7 @@ public class StaffFactory extends ModelFactory<Staff> {
 
             statement.executeUpdate();
 
-            new UserFactory(connection).update(model);
+            new UserFactory().update(model);
 
             return model;
         } catch (SQLException ex) {
@@ -83,7 +82,7 @@ public class StaffFactory extends ModelFactory<Staff> {
             ArrayList<Staff> staffs = new ArrayList<>();
 
             while (result.next()) {
-                staffs.add(setObject(new Staff(), result));
+                staffs.add(buildObject(new Staff(), result));
             }
 
             return staffs;
@@ -110,7 +109,7 @@ public class StaffFactory extends ModelFactory<Staff> {
 
             ResultSet result = statement.executeQuery();
 
-            if(result.next()) return setObject(new Staff(), result);
+            if(result.next()) return buildObject(new Staff(), result);
             else throw new StaffNotFound();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -134,7 +133,7 @@ public class StaffFactory extends ModelFactory<Staff> {
 
             ResultSet result = statement.executeQuery();
 
-            if(result.next()) return setObject(new Staff(), result);
+            if(result.next()) return buildObject(new Staff(), result);
             else throw new StaffNotFound();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -149,12 +148,12 @@ public class StaffFactory extends ModelFactory<Staff> {
      * @throws SQLException
      */
     @Override
-    Staff setObject(Staff model, ResultSet result) throws SQLException {
+    Staff buildObject(Staff model, ResultSet result) throws SQLException {
         model.setStaff_id(result.getInt("staff.id"));
 
-        new UserFactory(connection).setObject(model, result, true);
+        new UserFactory().setObject(model, result, true);
 
-        model.setSection(new WorkSectionFactory(connection).setObject(new Work.Section(), result));
+        model.setSection(new WorkSectionFactory().buildObject(new Work.Section(), result));
 
         return model;
     }
@@ -167,7 +166,7 @@ public class StaffFactory extends ModelFactory<Staff> {
     public Staff remove(int id) throws StaffNotFound {
         Staff staff = find(id);
 
-        new UserFactory(connection).removeUser(staff.getId());
+        new UserFactory().removeUser(staff.getId());
 
         return staff;
     }
@@ -180,7 +179,7 @@ public class StaffFactory extends ModelFactory<Staff> {
     public Staff removeByUserId(int user_id) throws StaffNotFound {
         Staff staff = findByUserId(user_id);
 
-        new UserFactory(connection).removeUser(user_id);
+        new UserFactory().removeUser(user_id);
 
         return staff;
     }

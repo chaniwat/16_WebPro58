@@ -1,5 +1,5 @@
-<%@ page import="com.alumnisystem.utility.RouteUtils" %>
-<%@ page import="com.alumnisystem.utility.ResponseCodeUtils" %>
+<%@ page import="com.alumnisystem.utility.RouteHelper" %>
+<%@ page import="com.alumnisystem.utility.ResponseHelper" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -10,10 +10,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <%--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />--%>
-    <link href="<%= RouteUtils.generateURL(request, "assets/css/bootstrap.min.theme.css") %>" rel="stylesheet" />
+    <link href="<%= RouteHelper.generateURL( "assets/css/bootstrap.min.theme.css") %>" rel="stylesheet" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" />
-    <link href="<%= RouteUtils.generateURL(request, "assets/fonts/ahtiti.css") %>" rel="stylesheet" />
-    <link href="<%= RouteUtils.generateURL(request, "assets/css/style.css") %>" rel="stylesheet" />
+    <link href="<%= RouteHelper.generateURL( "assets/fonts/ahtiti.css") %>" rel="stylesheet" />
+    <link href="<%= RouteHelper.generateURL( "assets/css/style.css") %>" rel="stylesheet" />
 </head>
 
 <body class="login-page">
@@ -22,15 +22,15 @@
     <div class="login-container">
         <center><h1>Login | เข้าสู่ระบบสมาชิก</h1></center>
         <%
-            if(ResponseCodeUtils.hasCodeInRequest(request)) {
-                if(ResponseCodeUtils.getRequestCode(request) == ResponseCodeUtils.UNAUTHORIZED) {
+            if(ResponseHelper.hasCodeInRequest()) {
+                if(ResponseHelper.getRequestCode() == ResponseHelper.UNAUTHORIZED) {
                     out.println("<div class=\"alert alert-info\" role=\"alert\">เข้าสู่ระบบ</div>");
-                } else if(ResponseCodeUtils.getRequestCode(request) == ResponseCodeUtils.BAD_LOGIN) {
+                } else if(ResponseHelper.getRequestCode() == ResponseHelper.BAD_LOGIN) {
                     out.println("<div class=\"alert alert-danger\" role=\"alert\">ชื่อผู้ใช้หรือรหัสผ่านผิด</div>");
                 }
             }
         %>
-        <form action="<%= RouteUtils.generateURL(request, "login")%>" method="POST" id="login-form">
+        <form action="<%= RouteHelper.generateURL( "login")%>" method="POST" id="login-form">
             <div class="form-group username-group">
                 <div class="input-group">
                     <span class="input-group-addon" id="username-addon">
@@ -55,6 +55,6 @@
 
     <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="<%= RouteUtils.generateURL(request, "assets/js/script.js") %>"></script>
+    <script src="<%= RouteHelper.generateURL( "assets/js/script.js") %>"></script>
 </body>
 </html>

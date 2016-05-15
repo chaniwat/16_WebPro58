@@ -1,7 +1,5 @@
 package com.alumnisystem.model;
 
-import com.alumnisystem.annotation.Model;
-
 /**
  * Work Model
  */
@@ -20,7 +18,6 @@ public class Work {
     /**
      * Work section/department Model
      */
-    @Model(factory = "WorkSectionFactory")
     public static class Section extends BaseModel {
 
         private int id;

@@ -13,8 +13,8 @@ import java.util.ArrayList;
  */
 public class UserFactory extends ModelFactory<User> {
 
-    public UserFactory(@NotNull Connection connection) {
-        super(connection);
+    public UserFactory() {
+        super();
     }
 
     @Override
@@ -25,7 +25,7 @@ public class UserFactory extends ModelFactory<User> {
             result = statement.executeQuery();
             ArrayList<User> users = new ArrayList<>();
             while (result.next()) {
-                users.add(setObject(new User(), result));
+                users.add(buildObject(new User(), result));
             }
             return users;
         } catch (SQLException ex) {
@@ -48,7 +48,7 @@ public class UserFactory extends ModelFactory<User> {
 
             result = statement.executeQuery();
             if(result.next()) {
-                return setObject(new User(), result);
+                return buildObject(new User(), result);
             } else {
                 throw new UserNotFound();
             }
@@ -72,7 +72,7 @@ public class UserFactory extends ModelFactory<User> {
 
             result = statement.executeQuery();
             if(result.next()) {
-                return setObject(new User(), result);
+                return buildObject(new User(), result);
             } else {
                 throw new UserNotFound();
             }
@@ -89,7 +89,7 @@ public class UserFactory extends ModelFactory<User> {
      * @throws SQLException
      */
     @Override
-    User setObject(User model, ResultSet result) throws SQLException {
+    User buildObject(User model, ResultSet result) throws SQLException {
         return setObject(model, result, false);
     }
 
@@ -112,6 +112,7 @@ public class UserFactory extends ModelFactory<User> {
         model.setEmail(result.getString("user.email"));
         model.setType(User.Type.valueOf(result.getString("user.type")));
         model.setAdmin(result.getBoolean("user.admintype"));
+        model.setPassword(result.getString("user.password"));
 
         if(!skipUsernameAlias) {
             while (true) {

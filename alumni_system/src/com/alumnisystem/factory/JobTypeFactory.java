@@ -15,8 +15,8 @@ import java.util.ArrayList;
  */
 public class JobTypeFactory extends ModelFactory<JobType> {
 
-    public JobTypeFactory(@NotNull Connection connection) {
-        super(connection);
+    public JobTypeFactory() {
+        super();
     }
 
     @Override
@@ -27,7 +27,7 @@ public class JobTypeFactory extends ModelFactory<JobType> {
             result = statement.executeQuery();
             ArrayList<JobType> jobTypes = new ArrayList<>();
             while (result.next()) {
-                jobTypes.add(setObject(new JobType(), result));
+                jobTypes.add(buildObject(new JobType(), result));
             }
             return jobTypes;
         } catch (SQLException ex) {
@@ -44,7 +44,7 @@ public class JobTypeFactory extends ModelFactory<JobType> {
 
             result = statement.executeQuery();
             if(result.next()) {
-                return setObject(new JobType(), result);
+                return buildObject(new JobType(), result);
             } else {
                 throw new JobTypeNotFound();
             }
@@ -106,7 +106,7 @@ public class JobTypeFactory extends ModelFactory<JobType> {
     }
 
     @Override
-    JobType setObject(@NotNull JobType model, ResultSet result) throws SQLException {
+    JobType buildObject(@NotNull JobType model, ResultSet result) throws SQLException {
         model.setId(result.getInt("jobtype.id"));
         model.setName_th(result.getString("jobtype.name_th"));
         model.setName_en(result.getString("jobtype.name_en"));

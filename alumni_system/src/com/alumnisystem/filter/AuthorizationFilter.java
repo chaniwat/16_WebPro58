@@ -1,10 +1,9 @@
 package com.alumnisystem.filter;
 
 import com.alumnisystem.annotation.AuthGuard;
-import com.alumnisystem.database.Database;
 import com.alumnisystem.utility.Authorization;
-import com.alumnisystem.utility.ResponseCodeUtils;
-import com.alumnisystem.utility.RouteUtils;
+import com.alumnisystem.utility.ResponseHelper;
+import com.alumnisystem.utility.RouteHelper;
 import org.reflections.Reflections;
 
 import javax.servlet.*;
@@ -22,11 +21,7 @@ import java.util.TreeMap;
 @WebFilter(filterName = "AuthorizationFilter")
 public class AuthorizationFilter implements Filter {
 
-    private FilterConfig config = null;
-
-    public void init(FilterConfig config) throws ServletException {
-        this.config = config;
-    }
+    public void init(FilterConfig config) throws ServletException {}
 
     public void destroy() {}
 
@@ -37,9 +32,6 @@ public class AuthorizationFilter implements Filter {
         String uri = request.getRequestURI();
         HttpSession session = request.getSession();
 
-        Authorization authorization = new Authorization(Database.getConnection(request), session);
-        request.setAttribute("auth", authorization);
-
         /**
          * Bypass resource (assets)
          */
@@ -48,7 +40,7 @@ public class AuthorizationFilter implements Filter {
             return;
         }
 
-        String uriNoContext = RouteUtils.getURINoContext(request);
+        String uriNoContext = RouteHelper.getURINoContext();
 
         /**
          * Bypass index
@@ -58,8 +50,6 @@ public class AuthorizationFilter implements Filter {
             return;
         }
 
-        String authGuardSession = null;
-
         Reflections reflections = new Reflections();
         Set<Class<?>> servlets = reflections.getTypesAnnotatedWith(javax.servlet.annotation.WebServlet.class);
         TreeMap<String, Class<?>> matchPath = new TreeMap<>();
@@ -68,7 +58,7 @@ public class AuthorizationFilter implements Filter {
                     (javax.servlet.annotation.WebServlet) c.getAnnotation(javax.servlet.annotation.WebServlet.class);
 
             for (String uriPattern : servletAnnotation.urlPatterns()) {
-                if(checkMatchPath(uriPattern, "/" + uriNoContext)) {
+                if(RouteHelper.checkMatchPatternPath(uriPattern, "/" + uriNoContext)) {
                     matchPath.put(uriPattern, c);
                 }
             }
@@ -78,43 +68,18 @@ public class AuthorizationFilter implements Filter {
         if(matchPath.size() > 0) {
             Class c = matchPath.get(matchPath.lastKey());
             authGuardAnnotation = (AuthGuard) c.getAnnotation(AuthGuard.class);
-            if(authGuardAnnotation != null) {
-                authGuardSession = authGuardAnnotation.guard();
-            }
         }
 
-        if(authGuardSession != null) {
-            if(!authorization.isLogin()) {
-                if(authGuardAnnotation.redirectback()) RouteUtils.pushLastPathURL(session, uriNoContext);
-                ResponseCodeUtils.pushSessionCode(session, ResponseCodeUtils.UNAUTHORIZED);
-                response.sendRedirect(RouteUtils.generateURL(request, "login"));
+        if(authGuardAnnotation != null) {
+            if(!Authorization.isLogin()) {
+                if(authGuardAnnotation.redirectback()) RouteHelper.pushLastPathURL(uriNoContext);
+                ResponseHelper.pushSessionCode(ResponseHelper.UNAUTHORIZED);
+                response.sendRedirect(RouteHelper.generateURL("login"));
                 return;
             }
         }
 
         chain.doFilter(req, resp);
-    }
-
-    private boolean checkMatchPath(String uri, String currentUri) {
-        if(uri.charAt(uri.length() - 1) != '/' && uri.charAt(uri.length() - 1) != '*') uri += "/";
-
-        if(currentUri.length() == 0)
-            if(uri.equals("") || uri.equals("*")) return false;
-            else return false;
-        if(currentUri.length() == uri.length() && currentUri.equals(uri)) return true;
-
-        int c;
-        for(c = 0; c < uri.length(); c++)
-            if(c < currentUri.length() && uri.charAt(c) != currentUri.charAt(c))
-                if(c == uri.length() - 1 && String.format("%c%c", uri.charAt(c - 1), uri.charAt(c)).equals("/*")) return true;
-                else return false;
-            else if(c >= currentUri.length()) break;
-
-        if(currentUri.length() - 1 > c) return false;
-        else if(uri.length() > currentUri.length())
-            if(c == uri.length() - 1 && String.format("%c%c", uri.charAt(c - 1), uri.charAt(c)).equals("/*")) return true;
-            else return false;
-        else return true;
     }
 
 }

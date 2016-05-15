@@ -1,11 +1,8 @@
 package com.alumnisystem.model;
 
-import com.alumnisystem.annotation.Model;
-
 /**
  * Staff Model
  */
-@Model(factory = "StaffFactory")
 public class Staff extends User {
 
     private int staff_id;

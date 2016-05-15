@@ -1,13 +1,10 @@
 package com.alumnisystem.model;
 
-import com.alumnisystem.annotation.Model;
-
 import java.util.ArrayList;
 
 /**
  * User Model
  */
-@Model(factory = "UserFactory")
 public class User extends BaseModel {
 
     public enum Type {
@@ -18,7 +15,7 @@ public class User extends BaseModel {
 
     protected int id;
     protected ArrayList<String> usernames = new ArrayList<>();
-    protected String pname_th, fname_th, lname_th, pname_en, fname_en, lname_en, email, phone;
+    protected String pname_th, fname_th, lname_th, pname_en, fname_en, lname_en, email, phone, password;
     protected Type type;
     protected boolean isAdmin;
 
@@ -116,6 +113,14 @@ public class User extends BaseModel {
 
     public void setAdmin(boolean admin) {
         isAdmin = admin;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 }

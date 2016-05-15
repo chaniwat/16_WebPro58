@@ -5,7 +5,6 @@ import com.alumnisystem.model.Job;
 import com.alumnisystem.model.JobType;
 import com.sun.istack.internal.NotNull;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -16,8 +15,8 @@ import java.util.ArrayList;
  */
 public class JobFactory extends ModelFactory<Job> {
 
-    public JobFactory(@NotNull Connection connection) {
-        super(connection);
+    public JobFactory() {
+        super();
     }
 
     @Override
@@ -28,7 +27,7 @@ public class JobFactory extends ModelFactory<Job> {
             result = statement.executeQuery();
             ArrayList<Job> jobs = new ArrayList<>();
             while (result.next()) {
-                jobs.add(setObject(new Job(), result));
+                jobs.add(buildObject(new Job(), result));
             }
             return jobs;
         } catch (SQLException ex) {
@@ -45,7 +44,7 @@ public class JobFactory extends ModelFactory<Job> {
 
             result = statement.executeQuery();
             if(result.next()) {
-                return setObject(new Job(), result);
+                return buildObject(new Job(), result);
             } else {
                 throw new JobNotFound();
             }
@@ -108,12 +107,12 @@ public class JobFactory extends ModelFactory<Job> {
     }
 
     @Override
-    Job setObject(@NotNull Job model, ResultSet result) throws SQLException {
+    Job buildObject(@NotNull Job model, ResultSet result) throws SQLException {
         model.setId(result.getInt("job.id"));
         model.setName_th(result.getString("job.name_th"));
         model.setName_en(result.getString("job.name_en"));
 
-        model.setJobType(new JobTypeFactory(connection).setObject(new JobType(), result));
+        model.setJobType(new JobTypeFactory().buildObject(new JobType(), result));
 
         return model;
     }

@@ -16,8 +16,8 @@ import java.util.TreeSet;
  */
 public class AlumniFactory extends ModelFactory<Alumni> {
 
-    public AlumniFactory(@NotNull Connection connection) {
-        super(connection);
+    public AlumniFactory() {
+        super();
     }
 
     /**
@@ -37,7 +37,7 @@ public class AlumniFactory extends ModelFactory<Alumni> {
             }
         }
 
-        new UserFactory(connection).createUser(model, model.getUsernames(), "ITKMITL");
+        new UserFactory().createUser(model, model.getUsernames(), "ITKMITL");
 
         try {
             statement.setStatement("INSERT INTO alumni VALUES (0, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)
@@ -94,7 +94,7 @@ public class AlumniFactory extends ModelFactory<Alumni> {
 
             ResultSet result = statement.executeQuery();
             if(!result.next()) {
-                new UserFactory(connection).addUsernameAlias(alumni, String.valueOf(track.getStudent_id()));
+                new UserFactory().addUsernameAlias(alumni, String.valueOf(track.getStudent_id()));
             }
 
             statement.setStatement("INSERT INTO alumni_track VALUES (?, ?, ?, ?, ?, ?)")
@@ -158,7 +158,7 @@ public class AlumniFactory extends ModelFactory<Alumni> {
                     .setInt(model.getAlumni_id());
             statement.executeUpdate();
 
-            new UserFactory(connection).update(model);
+            new UserFactory().update(model);
 
             return model;
         } catch (SQLException ex) {
@@ -212,7 +212,7 @@ public class AlumniFactory extends ModelFactory<Alumni> {
 
             ArrayList<Alumni> alumnis = new ArrayList<>();
             while (result.next()) {
-                alumnis.add(setObject(new Alumni(), result));
+                alumnis.add(buildObject(new Alumni(), result));
             }
 
             return alumnis;
@@ -270,7 +270,7 @@ public class AlumniFactory extends ModelFactory<Alumni> {
 
             ArrayList<Alumni> alumnis = new ArrayList<>();
             while (result.next()) {
-                alumnis.add(setObject(new Alumni(), result));
+                alumnis.add(buildObject(new Alumni(), result));
             }
 
             return alumnis;
@@ -303,7 +303,7 @@ public class AlumniFactory extends ModelFactory<Alumni> {
 
             ResultSet result = statement.executeQuery();
             if(result.next()) {
-                return setObject(new Alumni(), result);
+                return buildObject(new Alumni(), result);
             } else {
                 throw new AlumniNotFound();
             }
@@ -335,7 +335,7 @@ public class AlumniFactory extends ModelFactory<Alumni> {
 
             ResultSet result = statement.executeQuery();
             if(result.next()) {
-                return setObject(new Alumni(), result);
+                return buildObject(new Alumni(), result);
             } else {
                 throw new AlumniNotFound();
             }
@@ -368,7 +368,7 @@ public class AlumniFactory extends ModelFactory<Alumni> {
 
             ResultSet result = statement.executeQuery();
             if(result.next()) {
-                return setObject(new Alumni(), result);
+                return buildObject(new Alumni(), result);
             } else {
                 throw new AlumniNotFound();
             }
@@ -385,12 +385,12 @@ public class AlumniFactory extends ModelFactory<Alumni> {
      * @throws SQLException
      */
     @Override
-    Alumni setObject(Alumni model, ResultSet result) throws SQLException {
+    Alumni buildObject(Alumni model, ResultSet result) throws SQLException {
         model.setAlumni_id(result.getInt("alumni.id"));
 
-        new UserFactory(connection).setObject(model, result, true);
+        new UserFactory().setObject(model, result, true);
 
-        model.setJob(new JobFactory(connection).setObject(new Job(), result));
+        model.setJob(new JobFactory().buildObject(new Job(), result));
         model.setNickname(result.getString("alumni.nickname"));
         model.setBirthdate(result.getDate("alumni.birthdate"));
         model.setWork_name(result.getString("alumni.work_name"));
@@ -402,7 +402,7 @@ public class AlumniFactory extends ModelFactory<Alumni> {
         model.setZipcode(result.getString("alumni_address.zipcode"));
 
         while(true) {
-            Track track = new TrackFactory(connection).setObject(new Track(), result);
+            Track track = new TrackFactory().buildObject(new Track(), result);
 
             track.setStudent_id(result.getInt("alumni_track.student_id"));
             track.setGeneration(result.getInt("alumni_track.generation"));
@@ -428,7 +428,7 @@ public class AlumniFactory extends ModelFactory<Alumni> {
     public Alumni remove(int alumni_id) throws AlumniNotFound {
         Alumni alumni = find(alumni_id);
 
-        new UserFactory(connection).removeUser(alumni.getId());
+        new UserFactory().removeUser(alumni.getId());
 
         return alumni;
     }
@@ -441,7 +441,7 @@ public class AlumniFactory extends ModelFactory<Alumni> {
     public Alumni removeByStudentId(int student_id) throws AlumniNotFound {
         Alumni alumni = findByStudentId(student_id);
 
-        new UserFactory(connection).removeUser(alumni.getId());
+        new UserFactory().removeUser(alumni.getId());
 
         return alumni;
     }
@@ -454,7 +454,7 @@ public class AlumniFactory extends ModelFactory<Alumni> {
     public Alumni removeByUserId(int user_id) throws AlumniNotFound {
         Alumni alumni = findByUserId(user_id);
 
-        new UserFactory(connection).removeUser(alumni.getId());
+        new UserFactory().removeUser(alumni.getId());
 
         return alumni;
     }

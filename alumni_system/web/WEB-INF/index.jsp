@@ -1,30 +1,21 @@
-<%@ page import="com.alumnisystem.utility.RouteUtils" %>
+<%@ page import="com.alumnisystem.utility.RouteHelper" %>
 <%@ page import="com.alumnisystem.utility.Authorization" %>
-<%@ page import="com.alumnisystem.database.Database" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%@ taglib prefix="template" uri="/WEB-INF/tlds/TemplateTag.tld" %>
-
-<%
-    Authorization auth = Authorization.getAuthInstance(request);
-%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <template:page title="Alumni System">
     <div class="jumbotron">
         <div class="container">
             <h1>ยินดีต้อนรับ</h1>
             <p>ระบบศิษย์เก่า คณะเทคโนโลยีสารสนเทศ สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง</p>
-            <%
-                if(auth.isLogin()) {
-            %>
-            <p><a class="btn btn-success btn-lg" href="<%= RouteUtils.generateURL(request, "profile") %>" role="button">จัดการโปรไฟล์ »</a></p>
-            <%
-            } else {
-            %>
-            <p><a class="btn btn-primary btn-lg" href="<%= RouteUtils.generateURL(request, "login") %>" role="button">เข้าสู่ระบบศิษย์เก่า »</a></p>
-            <%
-                }
-            %>
+            <c:if test="${Authorization.isLogin()}">
+                <p><a class="btn btn-success btn-lg" href="<%= RouteHelper.generateURL( "profile") %>" role="button">จัดการโปรไฟล์ »</a></p>
+            </c:if>
+            <c:if test="${!Authorization.isLogin()}">
+                <p><a class="btn btn-primary btn-lg" href="<%= RouteHelper.generateURL( "login") %>" role="button">เข้าสู่ระบบศิษย์เก่า »</a></p>
+            </c:if>
         </div>
     </div>
 

@@ -1,15 +1,13 @@
 package com.alumnisystem.page.profile;
 
-import com.alumnisystem.database.Database;
 import com.alumnisystem.factory.AlumniFactory;
 import com.alumnisystem.model.Alumni;
 import com.alumnisystem.model.Track;
 import com.alumnisystem.model.User;
 import com.alumnisystem.utility.Authorization;
-import com.alumnisystem.utility.RouteUtils;
+import com.alumnisystem.utility.RouteHelper;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
@@ -31,10 +29,10 @@ public class AlumniTrack extends SimpleTagSupport {
     public void doTag() throws JspException, IOException {
         HttpServletRequest request = (HttpServletRequest)((PageContext) getJspContext()).getRequest();
 
-        AlumniFactory alumniFactory = new AlumniFactory(Database.getConnection(request));
+        AlumniFactory alumniFactory = new AlumniFactory();
 
         Alumni alumni = alumniFactory.findByUserId(user.getId());
-        User currentUser = Authorization.getAuthInstance(request).getCurrentUser();
+        User currentUser = Authorization.getCurrentUser();
 
         boolean editable = (currentUser.isAdmin() ||
                 (currentUser.getType() == User.Type.ALUMNI && alumni.getAlumni_id() == alumniFactory.findByUserId(currentUser.getId()).getAlumni_id()));
@@ -71,7 +69,7 @@ public class AlumniTrack extends SimpleTagSupport {
                 "</table>"
         );
         if(editable) {
-            out.println("<a href=\"" + RouteUtils.generateURL(request, "track/edit") + "\" class=\"btn btn-primary\">แก้ไขข้อมูล</a>");
+            out.println("<a href=\"" + RouteHelper.generateURL("track/edit") + "\" class=\"btn btn-primary\">แก้ไขข้อมูล</a>");
         }
     }
 

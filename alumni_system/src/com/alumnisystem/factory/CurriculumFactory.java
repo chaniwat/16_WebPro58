@@ -12,8 +12,8 @@ import java.util.ArrayList;
  */
 public class CurriculumFactory extends ModelFactory<Curriculum> {
 
-    public CurriculumFactory(@NotNull Connection connection) {
-        super(connection);
+    public CurriculumFactory() {
+        super();
     }
 
     /**
@@ -82,7 +82,7 @@ public class CurriculumFactory extends ModelFactory<Curriculum> {
 
             ArrayList<Curriculum> curricula = new ArrayList<>();
             while (result.next()) {
-                curricula.add(setObject(new Curriculum(), result));
+                curricula.add(buildObject(new Curriculum(), result));
             }
             return curricula;
         } catch (SQLException ex) {
@@ -106,7 +106,7 @@ public class CurriculumFactory extends ModelFactory<Curriculum> {
             ResultSet result = statement.executeQuery();
 
             if(result.next()) {
-                return setObject(new Curriculum(), result);
+                return buildObject(new Curriculum(), result);
             }
             else {
                 throw new CurriculumNotFound();
@@ -125,7 +125,7 @@ public class CurriculumFactory extends ModelFactory<Curriculum> {
      * @throws SQLException
      */
     @Override
-    Curriculum setObject(Curriculum model, ResultSet result) throws SQLException {
+    Curriculum buildObject(Curriculum model, ResultSet result) throws SQLException {
         model.setId(result.getInt("curriculum.id"));
         model.setCname_th(result.getString("curriculum.cname_th"));
         model.setCname_en(result.getString("curriculum.cname_en"));

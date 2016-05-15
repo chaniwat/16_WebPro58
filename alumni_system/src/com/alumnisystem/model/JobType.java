@@ -1,11 +1,8 @@
 package com.alumnisystem.model;
 
-import com.alumnisystem.annotation.Model;
-
 /**
  * JobType Model
  */
-@Model(factory = "JobTypeFactory")
 public class JobType extends BaseModel {
 
     private int id;

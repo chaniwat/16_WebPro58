@@ -1,13 +1,10 @@
 package com.alumnisystem.model;
 
-import com.alumnisystem.annotation.Model;
-
 import java.util.Date;
 
 /**
  * Event Model
  */
-@Model(factory = "EventFactory")
 public class Event extends BaseModel {
 
     private int id;

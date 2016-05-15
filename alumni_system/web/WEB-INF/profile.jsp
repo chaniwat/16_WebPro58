@@ -1,4 +1,4 @@
-<%@ page import="com.alumnisystem.utility.ResponseCodeUtils" %>
+<%@ page import="com.alumnisystem.utility.ResponseHelper" %>
 <%@ page import="com.alumnisystem.utility.Authorization" %>
 <%@ page import="com.alumnisystem.model.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -6,7 +6,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%
-    User currentUser = Authorization.getAuthInstance(request).getCurrentUser();
+    User currentUser = Authorization.getCurrentUser();
     User viewUser = (User)request.getAttribute("user");
 %>
 
@@ -23,23 +23,23 @@
         </div>
 
         <%
-            if(ResponseCodeUtils.hasCodeInRequest(request)) {
-                if(ResponseCodeUtils.getRequestCode(request) == ResponseCodeUtils.NOT_ENOUGH_PERMISSION) { %>
+            if(ResponseHelper.hasCodeInRequest()) {
+                if(ResponseHelper.getRequestCode() == ResponseHelper.NOT_ENOUGH_PERMISSION) { %>
                     <div class="alert alert-danger alert-dismissible" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         NOT_ENOUGH_PERMISSION
                     </div>
-                <% } else if(ResponseCodeUtils.getRequestCode(request) == ResponseCodeUtils.FORM_INPUT_NOT_COMPLETE) { %>
+                <% } else if(ResponseHelper.getRequestCode() == ResponseHelper.FORM_INPUT_NOT_COMPLETE) { %>
                     <div class="alert alert-danger alert-dismissible" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         FORM_INPUT_NOT_COMPLETE
                     </div>
-                <% } else if(ResponseCodeUtils.getRequestCode(request) == ResponseCodeUtils.PROFILE_UPDATED_COMPLETE) { %>
+                <% } else if(ResponseHelper.getRequestCode() == ResponseHelper.PROFILE_UPDATED_COMPLETE) { %>
                     <div class="alert alert-success alert-dismissible" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         PROFILE_UPDATED_COMPLETE
                     </div>
-                <% } else if(ResponseCodeUtils.getRequestCode(request) == ResponseCodeUtils.NO_USER_MODEL_FOUND) { %>
+                <% } else if(ResponseHelper.getRequestCode() == ResponseHelper.NO_USER_MODEL_FOUND) { %>
                     <div class="alert alert-warning alert-dismissible" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         NO_USER_MODEL_FOUND

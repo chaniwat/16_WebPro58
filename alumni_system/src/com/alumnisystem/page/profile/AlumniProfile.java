@@ -1,21 +1,18 @@
 package com.alumnisystem.page.profile;
 
-import com.alumnisystem.database.Database;
 import com.alumnisystem.factory.AlumniFactory;
 import com.alumnisystem.model.Alumni;
 import com.alumnisystem.model.User;
 import com.alumnisystem.utility.Authorization;
-import com.alumnisystem.utility.RouteUtils;
+import com.alumnisystem.utility.RouteHelper;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 
 /**
  * Created by meranote on 4/10/2016 AD.
@@ -32,10 +29,10 @@ public class AlumniProfile extends SimpleTagSupport {
     public void doTag() throws JspException, IOException {
         HttpServletRequest request = (HttpServletRequest)((PageContext) getJspContext()).getRequest();
 
-        AlumniFactory alumniFactory = new AlumniFactory(Database.getConnection(request));
+        AlumniFactory alumniFactory = new AlumniFactory();
 
         Alumni alumni = alumniFactory.findByUserId(user.getId());
-        User currentUser = Authorization.getAuthInstance(request).getCurrentUser();
+        User currentUser = Authorization.getCurrentUser();
 
         boolean editable = (currentUser.isAdmin() ||
                 (currentUser.getType() == User.Type.ALUMNI && alumni.getAlumni_id() == alumniFactory.findByUserId(currentUser.getId()).getAlumni_id()));
@@ -50,7 +47,7 @@ public class AlumniProfile extends SimpleTagSupport {
         JspWriter out = getJspContext().getOut();
         out.println(
                 "<h2>ประวัติส่วนตัว</h2>\n" +
-                "<form action=\"" + RouteUtils.generateURL(request, "profile/edit") + "\" method=\"POST\" id=\"alumni-form\" class=\"form-horizontal\">\n" +
+                "<form action=\"" + RouteHelper.generateURL("profile/edit") + "\" method=\"POST\" id=\"alumni-form\" class=\"form-horizontal\">\n" +
                 "<input type=\"hidden\" id=\"profilepage-usertype\" name=\"profilepage-usertype\" value=\"" + user.getType() + "\"/>\n" +
                 "<input type=\"hidden\" id=\"alumni-form-id\" name=\"alumni-form-id\" value=\"" + alumni.getAlumni_id() + "\"/>\n" +
                 "<div class=\"form-group\">\n" +

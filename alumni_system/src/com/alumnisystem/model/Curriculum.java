@@ -1,11 +1,8 @@
 package com.alumnisystem.model;
 
-import com.alumnisystem.annotation.Model;
-
 /**
  * Curriculum Model
  */
-@Model(factory = "CurriculumFactory")
 public class Curriculum extends BaseModel {
 
     public enum Degree {

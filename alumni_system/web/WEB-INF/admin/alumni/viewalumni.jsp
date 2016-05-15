@@ -1,4 +1,4 @@
-<%@ page import="com.alumnisystem.utility.RouteUtils" %>
+<%@ page import="com.alumnisystem.utility.RouteHelper" %>
 <%@ page import="com.alumnisystem.model.Curriculum" %>
 <%@ page import="com.alumnisystem.model.Alumni" %>
 <%@ page import="java.util.ArrayList" %>
@@ -64,8 +64,8 @@
                 <td><%= alumni.getNickname() %></td>
                 <td><%= alumni.getEmail() %></td>
                 <td><%= alumni.getPhone() %></td>
-                <td><a href="<%= RouteUtils.generateURL(request, "admin/alumni/" + degree + "/" + student_id)%>" class="btn btn-success">ดูข้อมูล</a></td>
-                <td><a href="<%= RouteUtils.generateURL(request, "admin/alumni/" + degree + "/" + student_id + "?edit=true")%>" class="btn btn-warning">แก้ไขข้อมูล</a></td>
+                <td><a href="<%= RouteHelper.generateURL( "admin/alumni/" + degree + "/" + student_id)%>" class="btn btn-success">ดูข้อมูล</a></td>
+                <td><a href="<%= RouteHelper.generateURL( "admin/alumni/" + degree + "/" + student_id + "?edit=true")%>" class="btn btn-warning">แก้ไขข้อมูล</a></td>
             </tr>
             <% } %>
             </tbody>

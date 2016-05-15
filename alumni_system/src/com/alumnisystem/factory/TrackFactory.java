@@ -13,8 +13,8 @@ import java.util.ArrayList;
  */
 public class TrackFactory extends ModelFactory<Track> {
 
-    public TrackFactory(@NotNull Connection connection) {
-        super(connection);
+    public TrackFactory() {
+        super();
     }
 
     /**
@@ -78,7 +78,7 @@ public class TrackFactory extends ModelFactory<Track> {
 
             ResultSet result = statement.executeQuery();
             if(result.next()) {
-                return setObject(new Track(), result);
+                return buildObject(new Track(), result);
             } else {
                 throw new TrackNotFound();
             }
@@ -100,7 +100,7 @@ public class TrackFactory extends ModelFactory<Track> {
             ResultSet result = statement.executeQuery();
             ArrayList<Track> tracks = new ArrayList<>();
             while (result.next()) {
-                tracks.add(setObject(new Track(), result));
+                tracks.add(buildObject(new Track(), result));
             }
 
             return tracks;
@@ -118,12 +118,12 @@ public class TrackFactory extends ModelFactory<Track> {
      * @throws SQLException
      */
     @Override
-    Track setObject(Track model, ResultSet result) throws SQLException {
+    Track buildObject(Track model, ResultSet result) throws SQLException {
         model.setId(result.getInt("track.id"));
         model.setName_th(result.getString("track.name_th"));
         model.setName_en(result.getString("track.name_en"));
 
-        model.setCurriculum(new CurriculumFactory(connection).setObject(new Curriculum(), result));
+        model.setCurriculum(new CurriculumFactory().buildObject(new Curriculum(), result));
 
         return model;
     }

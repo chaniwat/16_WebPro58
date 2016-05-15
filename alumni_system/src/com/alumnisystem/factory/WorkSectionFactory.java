@@ -12,8 +12,8 @@ import java.util.ArrayList;
  */
 public class WorkSectionFactory extends ModelFactory<Work.Section> {
 
-    public WorkSectionFactory(@NotNull Connection connection) {
-        super(connection);
+    public WorkSectionFactory() {
+        super();
     }
 
     @Override
@@ -24,7 +24,7 @@ public class WorkSectionFactory extends ModelFactory<Work.Section> {
 
             ArrayList<Work.Section> sections = new ArrayList<>();
             while (result.next()) {
-                sections.add(setObject(new Work.Section(), result));
+                sections.add(buildObject(new Work.Section(), result));
             }
             return sections;
         } catch (SQLException ex) {
@@ -89,7 +89,7 @@ public class WorkSectionFactory extends ModelFactory<Work.Section> {
 
             ResultSet result = statement.executeQuery();
 
-            if(result.next()) return setObject(new Work.Section(), result);
+            if(result.next()) return buildObject(new Work.Section(), result);
             else throw new WorkSectionNotFound();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -104,7 +104,7 @@ public class WorkSectionFactory extends ModelFactory<Work.Section> {
      * @throws SQLException
      */
     @Override
-    Work.Section setObject(Work.Section section, ResultSet result) throws SQLException {
+    Work.Section buildObject(Work.Section section, ResultSet result) throws SQLException {
         section.setId(result.getInt("work_section.id"));
         section.setName_th(result.getString("work_section.name_th"));
         section.setName_en(result.getString("work_section.name_en"));

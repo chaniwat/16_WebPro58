@@ -1,11 +1,8 @@
 package com.alumnisystem.model;
 
-import com.alumnisystem.annotation.Model;
-
 /**
  * Track Model
  */
-@Model(factory = "TrackFactory")
 public class Track extends BaseModel {
 
     private int id, student_id, generation, starteduyear, endeduyear;

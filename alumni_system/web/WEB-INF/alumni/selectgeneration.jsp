@@ -1,4 +1,4 @@
-<%@ page import="com.alumnisystem.utility.RouteUtils" %>
+<%@ page import="com.alumnisystem.utility.RouteHelper" %>
 <%@ page import="java.util.TreeSet" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="template" uri="/WEB-INF/tlds/TemplateTag.tld" %>
@@ -22,14 +22,14 @@
             <h1>เลือกรุ่นการศึกษา <small><%= degreeth %></small></h1>
         </div>
 
-        <a href="<%= RouteUtils.generateURL(request, "alumni/" + degree + "/all") %>" class="btn btn-info btn-lg btn-block">แสดงทุกรุ่น</a>
+        <a href="<%= RouteHelper.generateURL( "alumni/" + degree + "/all") %>" class="btn btn-info btn-lg btn-block">แสดงทุกรุ่น</a>
 
         <%
             TreeSet<Integer> generations = (TreeSet<Integer>)request.getAttribute("generations");
             if(generations != null) {
                 for(Integer i : generations) {
         %>
-        <a href="<%= RouteUtils.generateURL(request, "alumni/" + degree + "/" + i) %>" class="btn btn-success btn-lg btn-block">รุ่นที่ <%= i %></a>
+        <a href="<%= RouteHelper.generateURL( "alumni/" + degree + "/" + i) %>" class="btn btn-success btn-lg btn-block">รุ่นที่ <%= i %></a>
         <%
                 }
             }

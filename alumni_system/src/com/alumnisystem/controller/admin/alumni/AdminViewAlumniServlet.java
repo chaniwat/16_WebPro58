@@ -1,10 +1,9 @@
 package com.alumnisystem.controller.admin.alumni;
 
-import com.alumnisystem.database.Database;
 import com.alumnisystem.factory.AlumniFactory;
 import com.alumnisystem.model.Curriculum;
-import com.alumnisystem.utility.ResponseCodeUtils;
-import com.alumnisystem.utility.RouteUtils;
+import com.alumnisystem.utility.ResponseHelper;
+import com.alumnisystem.utility.RouteHelper;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,14 +22,14 @@ public class AdminViewAlumniServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
 
-        response.sendError(ResponseCodeUtils.PAGE_NOT_FOUND);
+        response.sendError(ResponseHelper.PAGE_NOT_FOUND);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
 
-        String uriNoContext = RouteUtils.getURINoContext(request);
+        String uriNoContext = RouteHelper.getURINoContext();
         uriNoContext = uriNoContext.substring("admin/alumni/".length());
 
         String[] uriSlashSplit = uriNoContext.split("/");
@@ -39,12 +38,12 @@ public class AdminViewAlumniServlet extends HttpServlet {
         if(uriSlashSplitLength == 1) {
             if(Arrays.asList("bachelor", "master", "doctoral").contains(uriSlashSplit[0])) {
                 request.setAttribute("degree", uriSlashSplit[0]);
-                request.setAttribute("alumnis", new AlumniFactory(Database.getConnection(request)).getAlumniWithinDegree(Curriculum.Degree.valueOf(uriSlashSplit[0].toUpperCase())));
+                request.setAttribute("alumnis", new AlumniFactory().getAlumniWithinDegree(Curriculum.Degree.valueOf(uriSlashSplit[0].toUpperCase())));
                 request.getRequestDispatcher("/WEB-INF/admin/alumni/viewalumni.jsp").forward(request, response);
                 return;
             }
         }
 
-        response.sendError(ResponseCodeUtils.PAGE_NOT_FOUND);
+        response.sendError(ResponseHelper.PAGE_NOT_FOUND);
     }
 }

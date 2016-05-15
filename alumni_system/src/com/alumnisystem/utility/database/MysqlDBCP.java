@@ -1,12 +1,9 @@
-package com.alumnisystem.database;
+package com.alumnisystem.utility.database;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.SQLException;
 
-/**
- * Created by meranote on 4/28/2016 AD.
- */
 public class MysqlDBCP extends BasicDataSource {
 
 //    private static final String DB_URL = "localhost";
@@ -22,9 +19,6 @@ public class MysqlDBCP extends BasicDataSource {
     private static final String DB_SCHEMA = "it_16";
 
     public MysqlDBCP() throws SQLException {
-        /*
-            Initialize Datasource
-         */
         this.setDriver(new com.mysql.jdbc.Driver());
         this.setUrl("jdbc:mysql://" + DB_URL + ":" + DB_PORT + "/" + DB_SCHEMA + "?characterEncoding=utf8");
         this.setUsername(DB_USERNAME);

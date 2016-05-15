@@ -1,16 +1,14 @@
 package com.alumnisystem.page.profile;
 
-import com.alumnisystem.database.Database;
 import com.alumnisystem.factory.StaffFactory;
 import com.alumnisystem.factory.WorkSectionFactory;
 import com.alumnisystem.model.Staff;
 import com.alumnisystem.model.User;
 import com.alumnisystem.model.Work;
 import com.alumnisystem.utility.Authorization;
-import com.alumnisystem.utility.RouteUtils;
+import com.alumnisystem.utility.RouteHelper;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
@@ -33,20 +31,20 @@ public class StaffProfile extends SimpleTagSupport {
     public void doTag() throws JspException, IOException {
         HttpServletRequest request = (HttpServletRequest)((PageContext) getJspContext()).getRequest();
 
-        StaffFactory staffFactory = new StaffFactory(Database.getConnection(request));
+        StaffFactory staffFactory = new StaffFactory();
 
         Staff staff = staffFactory.findByUserId(user.getId());
-        User currentUser = Authorization.getAuthInstance(request).getCurrentUser();
+        User currentUser = Authorization.getCurrentUser();
 
         boolean editable = (currentUser.isAdmin() ||
                 (currentUser.getType() == User.Type.STAFF && staff.getStaff_id() == staffFactory.findByUserId(currentUser.getId()).getStaff_id()));
 
-        ArrayList<Work.Section> sections = new WorkSectionFactory(Database.getConnection(request)).all();
+        ArrayList<Work.Section> sections = new WorkSectionFactory().all();
 
         JspWriter out = getJspContext().getOut();
         out.println(
                 "<h2>ประวัติส่วนตัว</h2>\n" +
-                "<form action=\"" + RouteUtils.generateURL(request, "profile/edit") + "\" method=\"POST\" id=\"staff-form\" class=\"form-horizontal\">\n" +
+                "<form action=\"" + RouteHelper.generateURL("profile/edit") + "\" method=\"POST\" id=\"staff-form\" class=\"form-horizontal\">\n" +
                 "<input type=\"hidden\" id=\"profilepage-usertype\" name=\"profilepage-usertype\" value=\"" + user.getType() + "\"/>\n" +
                 "<div class=\"form-group\">\n" +
                 "<label for=\"staff-form-id\" class=\"col-md-3 control-label\">รหัส</label>\n" +

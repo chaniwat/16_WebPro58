@@ -1,12 +1,12 @@
 <%@ page import="java.sql.Connection" %>
-<%@ page import="com.alumnisystem.database.Database" %>
+<%@ page import="com.alumnisystem.utility.database.Database" %>
 <%@ page import="java.sql.PreparedStatement" %>
 <%@ page import="java.sql.ResultSet" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="template" uri="/WEB-INF/tlds/TemplateTag.tld" %>
 
 <%
-    Connection connection = Database.getConnection(request);
+    Connection connection = Database.getConnection();
 
     String sql;
     PreparedStatement stmt;

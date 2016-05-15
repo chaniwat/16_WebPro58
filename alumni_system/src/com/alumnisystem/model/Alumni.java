@@ -1,14 +1,11 @@
 package com.alumnisystem.model;
 
-import com.alumnisystem.annotation.Model;
-
 import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * Alumni Model
  */
-@Model(factory = "AlumniFactory")
 public class Alumni extends User {
 
     private int alumni_id;
