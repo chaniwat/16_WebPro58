@@ -7,16 +7,15 @@ import FormBuilderPage from "./page/admin/survey/FormBuilderPage";
 class Main {
 
     constructor() {
-        var siteDataContextElem = $("sitedata");
-        var contextPath = siteDataContextElem.attr("contextPath");
+        let sitedataElem = $("sitedata");
 
-        this.route(contextPath);
+        this.route(sitedataElem.attr("contextPath"));
 
-        siteDataContextElem.remove();
+        sitedataElem.remove();
     }
 
-    route(contextPath) {
-        var route = new Route(contextPath);
+    route(contextURL) {
+        var route = new Route(contextURL);
 
         route.doRoute("login/", function() {
             new LoginPage();
@@ -96,10 +95,10 @@ class Main {
             $("<script src=\"/AlumniSystem/assets/js/lib/bootstrap3-wysihtml5.all.min.js\"></script>").insertAfter("script:last");
             $("<script>$(\".textarea\").wysihtml5();</script>").insertAfter("script:last");
 
-        })
+        });
 
         route.doRoute("admin/survey/create", function() {
-            new FormBuilderPage(contextPath);
+            new FormBuilderPage(contextURL);
         });
 
         route.execute();

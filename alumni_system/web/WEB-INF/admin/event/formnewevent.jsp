@@ -3,6 +3,8 @@
 
 <template:pageadmin title="Alumni System - New event">
 
+    <template:navbar />
+
     <div class="container-admin">
 
         <div class="page-header">

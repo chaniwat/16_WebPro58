@@ -4,6 +4,8 @@
 
 <template:pageadmin title="Alumni System - Admin - Survey Form Builder" skipBootstrapJsLoad="${true}">
 
+    <template:navbar />
+
     <div class="container-admin">
 
         <div class="page-header">

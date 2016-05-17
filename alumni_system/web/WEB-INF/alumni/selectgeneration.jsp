@@ -16,6 +16,8 @@
 
 <template:page title="Alumni System - View Alumni">
 
+    <template:navbar />
+
     <div class="container">
 
         <div class="page-header">
@@ -35,7 +37,7 @@
             }
         %>
 
-        <template:footerpage/>
+        <template:footer/>
     </div>
 
 </template:page>

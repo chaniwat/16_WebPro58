@@ -10,6 +10,8 @@ import java.util.HashMap;
  */
 public class RouteHelper {
 
+    private static final String[] STATIC_RESOURCE = {"/assets/", ".js", ".css", ".jpg", ".png", ".gif"};
+
     private static ThreadLocal<HttpServletRequest> requestThreadLocal = new ThreadLocal<>();
     private static ThreadLocal<HttpSession> sessionThreadLocal = new ThreadLocal<>();
 
@@ -22,16 +24,22 @@ public class RouteHelper {
 
     /**
      * Generate the path
-     * @param path
-     * @return
+     * @param urlPath url (with no "/" at start)
      */
-    public static String generateURL(String path) {
+    public static String generateURL(String urlPath) {
         String uri = requestThreadLocal.get().getScheme() + "://" +
                 requestThreadLocal.get().getServerName() +
                 ("http".equals(requestThreadLocal.get().getScheme()) && requestThreadLocal.get().getServerPort() == 80 || "https".equals(requestThreadLocal.get().getScheme()) && requestThreadLocal.get().getServerPort() == 443 ? "" : ":" + requestThreadLocal.get().getServerPort() ) +
                 requestThreadLocal.get().getContextPath();
 
-        return uri + "/" + path;
+        return uri + "/" + urlPath;
+    }
+
+    /**
+     * Generate home path
+     */
+    public static String generateHomeURL() {
+        return generateURL("");
     }
 
     /**
@@ -39,32 +47,32 @@ public class RouteHelper {
      * @return
      */
     public static String pullLastPathURL() {
-        String tmp = (String) sessionThreadLocal.get().getAttribute("lastpathurl");
-        sessionThreadLocal.get().setAttribute("lastpathurl", "");
+        String tmp = (String) sessionThreadLocal.get().getAttribute("route.lastpathurl");
+        sessionThreadLocal.get().setAttribute("route.lastpathurl", "");
         return tmp != null ? tmp : "";
     }
 
     /**
      * Push last user path url to session
-     * @param lastpathurl
+     * @param lastPathUrl
      */
-    public static void pushLastPathURL(String lastpathurl) {
-        sessionThreadLocal.get().setAttribute("lastpathurl", lastpathurl);
+    public static void pushLastPathURL(String lastPathUrl) {
+        sessionThreadLocal.get().setAttribute("route.lastpathurl", lastPathUrl);
     }
 
     public static HashMap<String, String> convertParamsToHashMap(String prefix) {
-        Enumeration<String> paramnames = requestThreadLocal.get().getParameterNames();
+        Enumeration<String> paramsName = requestThreadLocal.get().getParameterNames();
         HashMap<String, String> params = new HashMap<>();
 
-        while (paramnames.hasMoreElements()) {
-            String paramname = paramnames.nextElement();
-            if(!paramname.startsWith(prefix)) {
+        while (paramsName.hasMoreElements()) {
+            String paramName = paramsName.nextElement();
+            if(!paramName.startsWith(prefix)) {
                 continue;
             } else {
-                if(requestThreadLocal.get().getParameter(paramname).trim() == "" || requestThreadLocal.get().getParameter(paramname) == "null") {
-                    params.put(paramname, null);
+                if(requestThreadLocal.get().getParameter(paramName).trim().equals("") || requestThreadLocal.get().getParameter(paramName).equals("null")) {
+                    params.put(paramName, null);
                 } else {
-                    params.put(paramname, requestThreadLocal.get().getParameter(paramname));
+                    params.put(paramName, requestThreadLocal.get().getParameter(paramName));
                 }
             }
         }
@@ -74,10 +82,6 @@ public class RouteHelper {
 
     public static HashMap<String, String> convertParamsToHashMap() {
         return convertParamsToHashMap("");
-    }
-
-    public static String generateHomeURL() {
-        return generateURL("");
     }
 
     public static String getURINoContext() {
@@ -114,6 +118,25 @@ public class RouteHelper {
             if(c == pattern.length() - 1 && String.format("%c%c", pattern.charAt(c - 1), pattern.charAt(c)).equals("/*")) return true;
             else return false;
         else return true;
+    }
+
+    public static boolean isRequestStaticResource() {
+        return isPathStaticResource(requestThreadLocal.get().getRequestURI());
+    }
+
+    public static boolean isPathStaticResource(String uri) {
+        for(String ext : STATIC_RESOURCE) {
+            if(uri.contains(ext)) return true;
+        }
+        return false;
+    }
+
+    public static boolean isAjaxRequest() {
+        return requestThreadLocal.get().getHeader("X-Requested-With") != null || requestThreadLocal.get().getHeader("X-Requested-With").equals("XMLHttpRequest");
+    }
+
+    public static boolean isAdminPage() {
+        return requestThreadLocal.get().getRequestURI().contains("/admin/") || requestThreadLocal.get().getRequestURI().endsWith("/admin");
     }
 
 }

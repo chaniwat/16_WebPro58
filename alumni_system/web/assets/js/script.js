@@ -31,18 +31,17 @@ var Main = function () {
     function Main() {
         _classCallCheck(this, Main);
 
-        var siteDataContextElem = $("sitedata");
-        var contextPath = siteDataContextElem.attr("contextPath");
+        var sitedataElem = $("sitedata");
 
-        this.route(contextPath);
+        this.route(sitedataElem.attr("contextPath"));
 
-        siteDataContextElem.remove();
+        sitedataElem.remove();
     }
 
     _createClass(Main, [{
         key: "route",
-        value: function route(contextPath) {
-            var route = new _Route2.default(contextPath);
+        value: function route(contextURL) {
+            var route = new _Route2.default(contextURL);
 
             route.doRoute("login/", function () {
                 new _LoginPage2.default();
@@ -122,7 +121,7 @@ var Main = function () {
             });
 
             route.doRoute("admin/survey/create", function () {
-                new _FormBuilderPage2.default(contextPath);
+                new _FormBuilderPage2.default(contextURL);
             });
 
             route.execute();
@@ -143,36 +142,26 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _RouteUtils = require("./ultility/RouteUtils");
-
-var _RouteUtils2 = _interopRequireDefault(_RouteUtils);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var _class = function () {
-    function _class(contextPath) {
+    function _class(contextURL) {
         _classCallCheck(this, _class);
 
-        this.contextPath = contextPath[0] == "/" ? contextPath.substring(1) : contextPath;
-        this.currentPath = _RouteUtils2.default.getCurrentPath(this.contextPath);
-        this.routeMapping = [];
+        this.contextURL = contextURL[0] == "/" ? contextURL.substring(1) : contextURL;
 
-        console.log(this.contextPath);
-        console.log(this.currentPath);
+        this.routeMapping = [];
     }
 
     _createClass(_class, [{
         key: "doRoute",
         value: function doRoute(path, fn) {
-            var temp;
+            var temp = [];
             var fixPath = function fixPath(path) {
                 return path[path.length - 1] != "/" && path[path.length - 1] != "*" ? path + "/" : path;
             };
 
             if (path instanceof Array) {
-                temp = [];
                 for (var i = 0; i < path.length; i++) {
                     temp.push(fixPath(path[i]));
                 }
@@ -183,20 +172,17 @@ var _class = function () {
     }, {
         key: "execute",
         value: function execute() {
+            var currentPath = this.getCurrentPath(this.contextURL);
             var match = [];
 
-            var isMatchToCurrentPath = function isMatchToCurrentPath(path, currentpath) {
-                if (currentpath.length == 0) if (path == "" || path == "*") return true;else return false;
-                if (currentpath.length == path.length && currentpath == path) return true;
+            var isMatchToCurrentPath = function isMatchToCurrentPath(path) {
+                if (currentPath.length == 0) return !!(path == "" || path == "*");
+                if (currentPath.length == path.length && currentPath == path) return true;
 
-                var c = 0;
-                for (c; c < path.length; c++) {
-                    if (c < currentpath.length && path[c] != currentpath[c]) {
-                        if (c == path.length - 1 && path[c - 1] + path[c] == "/*") return true;else return false;
-                    } else if (c >= currentpath.length) break;
-                }if (currentpath.length - 1 > c) return false;else if (path.length > currentpath.length) {
-                    if (c == path.length - 1 && path[c - 1] + path[c] == "/*") return true;else return false;
-                } else return true;
+                var c = void 0;
+                for (c = 0; c < path.length; c++) {
+                    if (c < currentPath.length && path[c] != currentPath[c]) return !!(c == path.length - 1 && path[c - 1] + path[c] == "/*");else if (c >= currentPath.length) break;
+                }if (currentPath.length - 1 > c) return false;else if (path.length > currentPath.length) return !!(c == path.length - 1 && path[c - 1] + path[c] == "/*");else return true;
             };
 
             for (var i = 0; i < this.routeMapping.length; i++) {
@@ -211,28 +197,41 @@ var _class = function () {
                 }
             }
 
-            var actionroute = match.sort().reverse()[0];
-            console.log(match);
+            var actionRoute = match.sort().reverse()[0];
 
-            for (var i = 0; i < this.routeMapping.length; i++) {
-                var currentRoute = this.routeMapping[i];
+            for (var _i = 0; _i < this.routeMapping.length; _i++) {
+                var _currentRoute = this.routeMapping[_i];
 
-                if (currentRoute.path instanceof Array) {
-                    for (var j = 0; j < currentRoute.path.length; j++) {
-                        if (currentRoute.path[j] == actionroute) {
-                            console.log("do route : " + currentRoute.path);
-                            currentRoute.fn();
+                if (_currentRoute.path instanceof Array) {
+                    for (var _j = 0; _j < _currentRoute.path.length; _j++) {
+                        if (_currentRoute.path[_j] == actionRoute) {
+                            console.log("do route : " + _currentRoute.path);
+                            _currentRoute.fn();
                             return;
                         }
                     }
                 } else {
-                    if (currentRoute.path == actionroute) {
-                        console.log("do route : " + currentRoute.path);
-                        currentRoute.fn();
+                    if (_currentRoute.path == actionRoute) {
+                        console.log("do route : " + _currentRoute.path);
+                        _currentRoute.fn();
                         return;
                     }
                 }
             }
+        }
+    }, {
+        key: "getCurrentPath",
+        value: function getCurrentPath(contextURL) {
+            var currentPath = window.location.pathname[window.location.pathname.length - 1] != "/" ? window.location.pathname + "/" : window.location.pathname;
+            var split = currentPath.split("/");
+            var a = [];
+
+            for (var i = split.length - 1; i >= 0; i--) {
+                if (split[i] == contextURL) break;
+                a.push(split[i]);
+            }
+
+            return a.reverse().join("/");
         }
     }]);
 
@@ -241,7 +240,7 @@ var _class = function () {
 
 exports.default = _class;
 
-},{"./ultility/RouteUtils":9}],3:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -406,26 +405,20 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _RouteUtils = require("./../../../ultility/RouteUtils");
-
-var _RouteUtils2 = _interopRequireDefault(_RouteUtils);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var _class = function _class(contextPath) {
+var _class = function _class(contextURL) {
     _classCallCheck(this, _class);
 
-    this.contextPath = contextPath[0] == "/" ? contextPath.substring(1) : contextPath;
+    this.contextURL = contextURL[0] == "/" ? contextURL.substring(1) : contextURL;
 
-    $("<link href=\"/" + this.contextPath + "/assets/css/bootstrap-form-builder.css\" rel=\"stylesheet\">").insertAfter("link:last");
-    $("<script data-main=\"/" + this.contextPath + "/assets/js/bootstrap-form-builder.min.js\" src=\"/" + this.contextPath + "/assets/js/lib/require.js\"></script>").insertAfter("script:last");
+    $("<link href=\"/" + this.contextURL + "/assets/css/bootstrap-form-builder.css\" rel=\"stylesheet\">").insertAfter("link:last");
+    $("<script data-main=\"/" + this.contextURL + "/assets/js/bootstrap-form-builder.min.js\" src=\"/" + this.contextURL + "/assets/js/lib/require.js\"></script>").insertAfter("script:last");
 };
 
 exports.default = _class;
 
-},{"./../../../ultility/RouteUtils":9}],7:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -637,46 +630,6 @@ var _class = function () {
             } else {
                 elemGroup.removeClass("has-error");
             }
-        }
-    }]);
-
-    return _class;
-}();
-
-exports.default = _class;
-
-},{}],9:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var _class = function () {
-    function _class() {
-        _classCallCheck(this, _class);
-    }
-
-    _createClass(_class, null, [{
-        key: "getCurrentPath",
-        value: function getCurrentPath(contextPath) {
-            var currentpath = window.location.pathname[window.location.pathname.length - 1] != "/" ? window.location.pathname + "/" : window.location.pathname;
-            var split = currentpath.split("/");
-            var a = [];
-
-            for (var i = split.length - 1; i >= 0; i--) {
-                if (split[i] == contextPath) {
-                    break;
-                }
-                a.push(split[i]);
-            }
-
-            a.reverse();
-            return a.join("/");
         }
     }]);
 

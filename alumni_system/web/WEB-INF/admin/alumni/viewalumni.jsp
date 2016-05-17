@@ -20,6 +20,8 @@
 
 <template:pageadmin>
 
+    <template:navbar />
+
     <div class="container-admin">
 
         <% if(alumnis != null && alumnis.size() > 0) { %>

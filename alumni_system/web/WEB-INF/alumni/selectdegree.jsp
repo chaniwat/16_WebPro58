@@ -5,6 +5,8 @@
 
 <template:page title="Alumni System - View Alumni">
 
+    <template:navbar />
+
     <div class="container">
 
         <div class="page-header">
@@ -15,7 +17,7 @@
         <a href="<%= RouteHelper.generateURL( "alumni/master") %>" class="btn btn-primary btn-lg btn-block">ปริญญาโท</a>
         <a href="<%= RouteHelper.generateURL( "alumni/doctoral") %>" class="btn btn-primary btn-lg btn-block">ปริญญาเอก</a>
 
-        <template:footerpage/>
+        <template:footer/>
     </div>
 
 </template:page>

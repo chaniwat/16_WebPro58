@@ -20,8 +20,6 @@ public class LoginServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
 
-        HttpSession session = request.getSession();
-
         if(Authorization.isLogin()) {
             response.sendRedirect(RouteHelper.generateHomeURL());
             return;
@@ -41,8 +39,6 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-
-        HttpSession session = request.getSession();
 
         if(Authorization.isLogin()) {
             response.sendRedirect(RouteHelper.generateHomeURL());

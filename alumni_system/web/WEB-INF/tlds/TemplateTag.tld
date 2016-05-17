@@ -6,15 +6,49 @@
         version="2.1">
 
     <tlib-version>1.0</tlib-version>
-    <short-name>Template Tag lib</short-name>
+    <short-name>template</short-name>
+
     <tag>
         <name>page</name>
-        <tag-class>com.alumnisystem.page.Page</tag-class>
+        <tag-class>com.alumnisystem.page.PageTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>adminPage</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>head</name>
+        <tag-class>com.alumnisystem.page.HeadTag</tag-class>
         <body-content>JSP</body-content>
         <attribute>
             <name>title</name>
         </attribute>
     </tag>
+
+    <tag>
+        <name>style</name>
+        <tag-class>com.alumnisystem.page.StyleTag</tag-class>
+        <body-content>JSP</body-content>
+    </tag>
+
+    <tag>
+        <name>body</name>
+        <tag-class>com.alumnisystem.page.BodyTag</tag-class>
+        <body-content>JSP</body-content>
+    </tag>
+
+    <tag>
+        <name>script</name>
+        <tag-class>com.alumnisystem.page.ScriptTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>skipBootstrap</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
     <tag>
         <name>alumniProfile</name>
         <tag-class>com.alumnisystem.page.profile.AlumniProfile</tag-class>
@@ -25,6 +59,7 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
+
     <tag>
         <name>alumniTrack</name>
         <tag-class>com.alumnisystem.page.profile.AlumniTrack</tag-class>
@@ -35,6 +70,7 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
+
     <tag>
         <name>staffProfile</name>
         <tag-class>com.alumnisystem.page.profile.StaffProfile</tag-class>
@@ -45,6 +81,7 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
+
     <tag>
         <name>teacherProfile</name>
         <tag-class>com.alumnisystem.page.profile.TeacherProfile</tag-class>
@@ -55,24 +92,21 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
-    <tag>
-        <name>footerpage</name>
-        <tag-class>com.alumnisystem.page.FooterPage</tag-class>
-        <body-content>empty</body-content>
-    </tag>
-    <tag>
-        <name>pageadmin</name>
-        <tag-class>com.alumnisystem.page.PageAdmin</tag-class>
-        <body-content>JSP</body-content>
-        <attribute>
-            <name>title</name>
-        </attribute>
-        <attribute>
-            <name>skipBootstrapJsLoad</name>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-    </tag>
 
+    <tag-file>
+        <name>errorPage</name>
+        <path>/WEB-INF/tags/errorpage.tag</path>
+    </tag-file>
+
+    <tag-file>
+        <name>navbar</name>
+        <path>/WEB-INF/tags/navbar.tag</path>
+    </tag-file>
+
+    <tag-file>
+        <name>footer</name>
+        <path>/WEB-INF/tags/footer.tag</path>
+    </tag-file>
 
     <!-- Invoke 'Generate' action to add tags or functions -->
 

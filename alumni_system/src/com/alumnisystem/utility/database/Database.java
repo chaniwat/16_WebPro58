@@ -17,9 +17,7 @@ public class Database {
     public static void closeConnection() {
         try {
             connectionThreadLocal.get().close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+        } catch (SQLException ex) { }
     }
 
     public static void setConnectionThreadLocal(Connection connection) {

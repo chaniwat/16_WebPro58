@@ -43,7 +43,7 @@ public class ResponseHelper {
      * @return true if have, false if not.
      */
     public static boolean hasCodeInSession() {
-        return sessionThreadLocal.get().getAttribute("error") != null && (int)sessionThreadLocal.get().getAttribute("error") != NO_ERR;
+        return sessionThreadLocal.get().getAttribute("response.code") != null && (int)sessionThreadLocal.get().getAttribute("response.code") != NO_ERR;
     }
 
     /**
@@ -51,32 +51,40 @@ public class ResponseHelper {
      * @return true if have, false if not.
      */
     public static boolean hasCodeInRequest() {
-        return requestThreadLocal.get().getAttribute("error") != null && (int)requestThreadLocal.get().getAttribute("error") != NO_ERR;
+        return requestThreadLocal.get().getAttribute("response.code") != null && (int)requestThreadLocal.get().getAttribute("response.code") != NO_ERR;
     }
 
     /**
      * Push error attribute in session scope.
-     * @param errorcode
+     * @param responseCode
      */
-    public static void pushSessionCode(int errorcode) {
-        sessionThreadLocal.get().setAttribute("error", errorcode);
+    public static void pushSessionCode(int responseCode) {
+        sessionThreadLocal.get().setAttribute("response.code", responseCode);
     }
 
     /**
      * Push error in request scope.
-     * @param errorcode
+     * @param responseCode
      */
-    public static void pushRequestCode(int errorcode) {
-        requestThreadLocal.get().setAttribute("error", errorcode);
+    public static void pushRequestCode(int responseCode) {
+        requestThreadLocal.get().setAttribute("response.code", responseCode);
     }
 
     /**
      * Pull and clear error in session scope.
-     * @return true if match, false if not.
      */
     public static int pullSessionCode() {
-        int code = (int)sessionThreadLocal.get().getAttribute("error");
+        int code = (int)sessionThreadLocal.get().getAttribute("response.code");
         pushSessionCode(NO_ERR);
+        return code;
+    }
+
+    /**
+     * Pull and clear error in request scope.
+     */
+    public static int pullRequestCode() {
+        int code = (int) requestThreadLocal.get().getAttribute("response.code");
+        pushRequestCode(NO_ERR);
         return code;
     }
 
@@ -85,7 +93,7 @@ public class ResponseHelper {
      * @return
      */
     public static int getSessionCode() {
-        return (int)sessionThreadLocal.get().getAttribute("error");
+        return (int)sessionThreadLocal.get().getAttribute("response.code");
     }
 
     /**
@@ -93,7 +101,7 @@ public class ResponseHelper {
      * @return
      */
     public static int getRequestCode() {
-        return (int)requestThreadLocal.get().getAttribute("error");
+        return (int)requestThreadLocal.get().getAttribute("response.code");
     }
 
 }

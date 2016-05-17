@@ -24,7 +24,7 @@ public class AdminCheckFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest)req;
         HttpServletResponse response = (HttpServletResponse)resp;
 
-        request.getSession().setAttribute("errorfromadmin", true);
+        request.getSession().setAttribute("route.errorFromAdmin", true);
 
         User currentUser = Authorization.getCurrentUser();
         if(!currentUser.isAdmin()) {

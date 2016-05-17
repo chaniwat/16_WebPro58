@@ -3,6 +3,8 @@
 
 <template:pageadmin>
 
+    <template:navbar />
+
     <div class="container-admin">
 
         <div class="page-header">

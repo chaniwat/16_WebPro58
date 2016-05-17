@@ -12,6 +12,8 @@
 
 <template:page title="Alumni System - Profile">
 
+    <template:navbar />
+
     <div class="container">
 
         <div class="page-header">
@@ -75,7 +77,7 @@
             </c:if>
         </div>
 
-        <template:footerpage/>
+        <template:footer/>
     </div>
 
 </template:page>

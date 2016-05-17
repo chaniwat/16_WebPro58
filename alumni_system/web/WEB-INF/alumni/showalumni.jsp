@@ -20,6 +20,8 @@
 
 <template:page title="Alumni System - View Alumni">
 
+    <template:navbar />
+
     <div class="container">
 
         <% if(alumnis != null && alumnis.size() > 0) { %>
@@ -64,7 +66,7 @@
             <h1>ไม่มีข้อมูลศิษย์เก่า</h1>
         <% } %>
 
-        <template:footerpage/>
+        <template:footer/>
     </div>
 
 </template:page>
