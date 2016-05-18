@@ -5,22 +5,27 @@ import com.alumnisystem.utility.ResponseHelper;
 import com.alumnisystem.utility.RouteHelper;
 import com.alumnisystem.utility.TransportHelper;
 import com.alumnisystem.utility.database.Database;
-import com.alumnisystem.utility.database.MysqlDBCP;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.sql.DataSource;
 import java.sql.SQLException;
 
 @WebListener()
 public class InitialRequestListener implements ServletRequestListener {
 
-    private MysqlDBCP datasource;
+    private DataSource dataSource;
 
     public InitialRequestListener() throws SQLException {
-        datasource = new MysqlDBCP();
+        try {
+            InitialContext initialContext = new InitialContext();
+            dataSource = (DataSource) initialContext.lookup("java:/comp/env/jdbc/AlumniDB");
+        } catch (NamingException e) { }
     }
 
     @Override
@@ -37,7 +42,7 @@ public class InitialRequestListener implements ServletRequestListener {
         }
 
         try {
-            Database.setConnectionThreadLocal(datasource.getConnection());
+            Database.setConnectionThreadLocal(dataSource.getConnection());
             Authorization.setSessionThreadLocal(session);
         } catch (Exception e) {
             e.printStackTrace();
