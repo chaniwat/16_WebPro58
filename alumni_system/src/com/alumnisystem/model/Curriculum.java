@@ -6,19 +6,26 @@ package com.alumnisystem.model;
 public class Curriculum extends BaseModel {
 
     public enum Degree {
-        BACHELOR(1),
-        MASTER(2),
-        DOCTORAL(3);
+        BACHELOR(1, "ปริญญาตรี"),
+        MASTER(2, "ปริญญาโท"),
+        DOCTORAL(3, "ปริญญาเอก");
 
         private int _value;
+        private String _nameth;
 
-        Degree(int _value) {
+        Degree(int _value, String _nameth) {
             this._value = _value;
+            this._nameth = _nameth;
         }
 
         public int getValue() {
             return _value;
         }
+
+        public String getNameTH() {
+            return _nameth;
+        }
+
     }
 
     private int id, cyear;

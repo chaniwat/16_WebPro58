@@ -19,10 +19,6 @@ var _AlumniViewPage = require("./page/AlumniViewPage");
 
 var _AlumniViewPage2 = _interopRequireDefault(_AlumniViewPage);
 
-var _FormBuilderPage = require("./page/admin/survey/FormBuilderPage");
-
-var _FormBuilderPage2 = _interopRequireDefault(_FormBuilderPage);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -115,13 +111,7 @@ var Main = function () {
 
             route.doRoute("admin/event/create", function () {
 
-                $("<link href=\"https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-wysiwyg/0.3.3/bootstrap3-wysihtml5.min.css\" rel=\"stylesheet\" />").insertAfter("link:last");
-                $("<script src=\"/AlumniSystem/assets/js/lib/bootstrap3-wysihtml5.all.min.js\"></script>").insertAfter("script:last");
-                $("<script>$(\".textarea\").wysihtml5();</script>").insertAfter("script:last");
-            });
-
-            route.doRoute("admin/survey/create", function () {
-                new _FormBuilderPage2.default(contextURL);
+                $(".textarea").wysihtml5();
             });
 
             route.execute();
@@ -133,7 +123,7 @@ var Main = function () {
 
 new Main();
 
-},{"./Route":2,"./page/AlumniViewPage":3,"./page/LoginPage":4,"./page/ProfilePage":5,"./page/admin/survey/FormBuilderPage":6}],2:[function(require,module,exports){
+},{"./Route":2,"./page/AlumniViewPage":3,"./page/LoginPage":4,"./page/ProfilePage":5}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -190,10 +180,10 @@ var _class = function () {
 
                 if (currentRoute.path instanceof Array) {
                     for (var j = 0; j < currentRoute.path.length; j++) {
-                        if (isMatchToCurrentPath(currentRoute.path[j], this.currentPath)) match.push(currentRoute.path[j]);
+                        if (isMatchToCurrentPath(currentRoute.path[j])) match.push(currentRoute.path[j]);
                     }
                 } else {
-                    if (isMatchToCurrentPath(currentRoute.path, this.currentPath)) match.push(currentRoute.path);
+                    if (isMatchToCurrentPath(currentRoute.path)) match.push(currentRoute.path);
                 }
             }
 
@@ -316,7 +306,7 @@ var _class = function () {
 
 exports.default = _class;
 
-},{"./../ultility/FormUtils":8}],5:[function(require,module,exports){
+},{"./../ultility/FormUtils":7}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -398,27 +388,7 @@ var _class = function () {
 
 exports.default = _class;
 
-},{"./../ultility/DateSelectionBuilder":7,"./../ultility/FormUtils":8}],6:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var _class = function _class(contextURL) {
-    _classCallCheck(this, _class);
-
-    this.contextURL = contextURL[0] == "/" ? contextURL.substring(1) : contextURL;
-
-    $("<link href=\"/" + this.contextURL + "/assets/css/bootstrap-form-builder.css\" rel=\"stylesheet\">").insertAfter("link:last");
-    $("<script data-main=\"/" + this.contextURL + "/assets/js/bootstrap-form-builder.min.js\" src=\"/" + this.contextURL + "/assets/js/lib/require.js\"></script>").insertAfter("script:last");
-};
-
-exports.default = _class;
-
-},{}],7:[function(require,module,exports){
+},{"./../ultility/DateSelectionBuilder":6,"./../ultility/FormUtils":7}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -496,7 +466,7 @@ var _class = function () {
 
 exports.default = _class;
 
-},{"./FormUtils":8}],8:[function(require,module,exports){
+},{"./FormUtils":7}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

@@ -6,8 +6,7 @@
         version="2.1">
 
     <tlib-version>1.0</tlib-version>
-    <short-name>myshortname</short-name>
-    <uri>http://mycompany.com</uri>
+    <short-name>RouteHelperClassFunction</short-name>
 
     <function>
         <name>generateURL</name>

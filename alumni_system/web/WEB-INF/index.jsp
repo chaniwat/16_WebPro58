@@ -1,5 +1,4 @@
 <%@ include file="/WEB-INF/importlib.jsp" %>
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <template:page>
@@ -18,10 +17,10 @@
             <div class="container">
                 <h1>ยินดีต้อนรับ</h1>
                 <p>ระบบศิษย์เก่า คณะเทคโนโลยีสารสนเทศ สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง</p>
-                <c:if test="${Authorization.isLogin()}">
+                <c:if test="${Authorization:isLogin()}">
                     <p><a class="btn btn-success btn-lg" href="<%= RouteHelper.generateURL("profile") %>" role="button">จัดการโปรไฟล์ »</a></p>
                 </c:if>
-                <c:if test="${!Authorization.isLogin()}">
+                <c:if test="${!Authorization:isLogin()}">
                     <p><a class="btn btn-primary btn-lg" href="<%= RouteHelper.generateURL("login") %>" role="button">เข้าสู่ระบบศิษย์เก่า »</a></p>
                 </c:if>
             </div>

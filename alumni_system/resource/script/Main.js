@@ -2,7 +2,6 @@ import Route from "./Route";
 import LoginPage from "./page/LoginPage";
 import ProfilePage from "./page/ProfilePage";
 import AlumniViewPage from "./page/AlumniViewPage";
-import FormBuilderPage from "./page/admin/survey/FormBuilderPage";
 
 class Main {
 
@@ -91,14 +90,8 @@ class Main {
 
         route.doRoute("admin/event/create", function() {
 
-            $("<link href=\"https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-wysiwyg/0.3.3/bootstrap3-wysihtml5.min.css\" rel=\"stylesheet\" />").insertAfter("link:last");
-            $("<script src=\"/AlumniSystem/assets/js/lib/bootstrap3-wysihtml5.all.min.js\"></script>").insertAfter("script:last");
-            $("<script>$(\".textarea\").wysihtml5();</script>").insertAfter("script:last");
+            $(".textarea").wysihtml5();
 
-        });
-
-        route.doRoute("admin/survey/create", function() {
-            new FormBuilderPage(contextURL);
         });
 
         route.execute();

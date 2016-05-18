@@ -24,8 +24,7 @@ export default class {
         let match = [];
 
         let isMatchToCurrentPath = (path) => {
-            if(currentPath.length == 0)
-                return !!(path == "" || path == "*");
+            if(currentPath.length == 0) return !!(path == "" || path == "*");
             if(currentPath.length == path.length && currentPath == path) return true;
 
             let c;
@@ -45,9 +44,9 @@ export default class {
 
             if(currentRoute.path instanceof Array) {
                 for(let j = 0; j < currentRoute.path.length; j++)
-                    if(isMatchToCurrentPath(currentRoute.path[j], this.currentPath)) match.push(currentRoute.path[j]);
+                    if(isMatchToCurrentPath(currentRoute.path[j])) match.push(currentRoute.path[j]);
             } else {
-                if(isMatchToCurrentPath(currentRoute.path, this.currentPath)) match.push(currentRoute.path);
+                if(isMatchToCurrentPath(currentRoute.path)) match.push(currentRoute.path);
             }
         }
 

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+        version="2.1">
+
+    <tlib-version>1.0</tlib-version>
+    <short-name>ResponseClassFunction</short-name>
+
+    <function>
+        <name>hasCodeInRequest</name>
+        <function-class>com.alumnisystem.utility.ResponseHelper</function-class>
+        <function-signature>boolean hasCodeInRequest()</function-signature>
+    </function>
+
+    <function>
+        <name>hasCodeInSession</name>
+        <function-class>com.alumnisystem.utility.ResponseHelper</function-class>
+        <function-signature>boolean hasCodeInSession()</function-signature>
+    </function>
+
+    <function>
+        <name>getRequestCode</name>
+        <function-class>com.alumnisystem.utility.ResponseHelper</function-class>
+        <function-signature>int getRequestCode()</function-signature>
+    </function>
+
+    <function>
+        <name>getSessionCode</name>
+        <function-class>com.alumnisystem.utility.ResponseHelper</function-class>
+        <function-signature>int getSessionCode()</function-signature>
+    </function>
+
+    <function>
+        <name>pushRequestCode</name>
+        <function-class>com.alumnisystem.utility.ResponseHelper</function-class>
+        <function-signature>void pushRequestCode(int)</function-signature>
+    </function>
+
+    <function>
+        <name>pushSessionCode</name>
+        <function-class>com.alumnisystem.utility.ResponseHelper</function-class>
+        <function-signature>void pushSessionCode(int)</function-signature>
+    </function>
+
+    <function>
+        <name>pullRequestCode</name>
+        <function-class>com.alumnisystem.utility.ResponseHelper</function-class>
+        <function-signature>int pullRequestCode()</function-signature>
+    </function>
+
+    <function>
+        <name>pullSesssionCode</name>
+        <function-class>com.alumnisystem.utility.ResponseHelper</function-class>
+        <function-signature>int pullSessionCode()</function-signature>
+    </function>
+
+    <!-- Invoke 'Generate' action to add tags or functions -->
+
+</taglib>

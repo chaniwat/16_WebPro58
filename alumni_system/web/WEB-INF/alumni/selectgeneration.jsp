@@ -1,43 +1,39 @@
-<%@ page import="com.alumnisystem.utility.RouteHelper" %>
-<%@ page import="java.util.TreeSet" %>
+<%@ include file="/WEB-INF/importlib.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="template" uri="/WEB-INF/tlds/TemplateTag.tld" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%
-    String degree = (String)request.getAttribute("degree");
-    String degreeth = "";
-    switch (degree) {
-        case "bachelor": degreeth = "ปริญญาตรี"; break;
-        case "master": degreeth = "ปริญญาโท"; break;
-        case "doctoral": degreeth = "ปริญญาเอก"; break;
-    }
-%>
+<% pageContext.setAttribute("degree", Curriculum.Degree.valueOf(((String) request.getAttribute("degree")).toUpperCase())); %>
 
-<template:page title="Alumni System - View Alumni">
+<template:page>
 
-    <template:navbar />
+    <template:head title="Alumni System - View Alumni">
 
-    <div class="container">
+        <template:style />
 
-        <div class="page-header">
-            <h1>เลือกรุ่นการศึกษา <small><%= degreeth %></small></h1>
+    </template:head>
+
+    <template:body>
+
+        <template:navbar />
+
+        <div class="container">
+
+            <div class="page-header">
+                <h1>เลือกรุ่นการศึกษา <small>${pageScope.degree.getNameTH()}</small></h1>
+            </div>
+
+            <a href="${RouteHelper:generateURL("alumni/".concat(requestScope.degree).concat("/all"))}" class="btn btn-info btn-lg btn-block">แสดงทุกรุ่น</a>
+
+            <c:if test="${requestScope.generations != null}">
+                <c:forEach items="${requestScope.generations}" var="generation">
+                    <a href="${RouteHelper:generateURL("alumni/".concat(requestScope.degree).concat("/").concat(generation))}" class="btn btn-success btn-lg btn-block">รุ่นที่ ${generation}</a>
+                </c:forEach>
+            </c:if>
+
+            <template:footer/>
         </div>
 
-        <a href="<%= RouteHelper.generateURL( "alumni/" + degree + "/all") %>" class="btn btn-info btn-lg btn-block">แสดงทุกรุ่น</a>
+        <template:script />
 
-        <%
-            TreeSet<Integer> generations = (TreeSet<Integer>)request.getAttribute("generations");
-            if(generations != null) {
-                for(Integer i : generations) {
-        %>
-        <a href="<%= RouteHelper.generateURL( "alumni/" + degree + "/" + i) %>" class="btn btn-success btn-lg btn-block">รุ่นที่ <%= i %></a>
-        <%
-                }
-            }
-        %>
-
-        <template:footer/>
-    </div>
+    </template:body>
 
 </template:page>

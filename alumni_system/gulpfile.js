@@ -9,9 +9,10 @@ var buffer = require('vinyl-buffer');
 var browserify = require('browserify');
 var watchify = require('watchify');
 var babelify = require('babelify');
+var uglify = require('gulp-uglify');
 var exit = require('gulp-exit');
 
-var resourcesDir = "./resource"
+var resourcesDir = "./resource";
 var assetsDir = "./web/assets";
 
 var es6Main = resourcesDir + '/script/Main.js';
@@ -30,6 +31,9 @@ function compilees6(watch) {
             .pipe(sourcemaps.init({ loadMaps: true }))
             .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest(assetsDir + "/js"));
+        // return gulp.src(assetsDir + "/js/script.js")
+        //     .pipe(uglify())
+        //     .pipe(gulp.dest(assetsDir + "/js"));
     }
 
     if (watch) {

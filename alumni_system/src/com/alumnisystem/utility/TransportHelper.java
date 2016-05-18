@@ -15,6 +15,4 @@ public class TransportHelper {
         sessionThreadLocal.set(session);
     }
 
-
-
 }
