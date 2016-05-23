@@ -25,25 +25,25 @@
             </div>
 
             <c:if test="${ResponseHelper:hasCodeInRequest()}">
-                <c:if test="${ResponseHelper:getRequestCode() == ResponseHelper.NOT_ENOUGH_PERMISSION}">
+                <c:if test="${ResponseHelper:getRequestCode() == 'NOT_ENOUGH_PERMISSION'}">
                     <div class="alert alert-danger alert-dismissible" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         NOT_ENOUGH_PERMISSION
                     </div>
                 </c:if>
-                <c:if test="${ResponseHelper:getRequestCode() == ResponseHelper.FORM_INPUT_NOT_COMPLETE}">
+                <c:if test="${ResponseHelper:getRequestCode() == 'FORM_INPUT_NOT_COMPLETE'}">
                     <div class="alert alert-danger alert-dismissible" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         FORM_INPUT_NOT_COMPLETE
                     </div>
                 </c:if>
-                <c:if test="${ResponseHelper:getRequestCode() == ResponseHelper.PROFILE_UPDATED_COMPLETE}">
+                <c:if test="${ResponseHelper:getRequestCode() == 'PROFILE_UPDATED_COMPLETE'}">
                     <div class="alert alert-success alert-dismissible" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         PROFILE_UPDATED_COMPLETE
                     </div>
                 </c:if>
-                <c:if test="${ResponseHelper:getRequestCode() == ResponseHelper.NO_USER_MODEL_FOUND}">
+                <c:if test="${ResponseHelper:getRequestCode() == 'NO_USER_MODEL_FOUND'}">
                     <div class="alert alert-warning alert-dismissible" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         NO_USER_MODEL_FOUND

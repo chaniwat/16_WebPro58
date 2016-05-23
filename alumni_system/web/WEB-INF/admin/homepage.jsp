@@ -32,6 +32,7 @@
             </div>
 
             <div class="row">
+
                 <div class="col-md-3 col-sm-6 col-xs-12">
                     <div class="info-box bg-aqua">
                         <span class="info-box-icon"><i class="ion ion-android-person-add"></i></span>
@@ -50,11 +51,9 @@
                                 %>
                             </span>
                         </div>
-                        <!-- /.info-box-content -->
                     </div>
-                    <!-- /.info-box -->
                 </div>
-                <!-- /.col -->
+
                 <div class="col-md-3 col-sm-6 col-xs-12">
                     <div class="info-box bg-red">
                         <span class="info-box-icon"><i class="ion ion-person-stalker"></i></span>
@@ -73,11 +72,8 @@
                                 %>
                             </span>
                         </div>
-                        <!-- /.info-box-content -->
                     </div>
-                    <!-- /.info-box -->
                 </div>
-                <!-- /.col -->
 
                 <!-- fix for small devices only -->
                 <div class="clearfix visible-sm-block"></div>
@@ -100,11 +96,9 @@
                                 %>
                             </span>
                         </div>
-                        <!-- /.info-box-content -->
                     </div>
-                    <!-- /.info-box -->
                 </div>
-                <!-- /.col -->
+
                 <div class="col-md-3 col-sm-6 col-xs-12">
                     <div class="info-box bg-yellow">
                         <span class="info-box-icon"><i class="ion ion-ios-body"></i></span>
@@ -123,11 +117,8 @@
                                 %>
                             </span>
                         </div>
-                        <!-- /.info-box-content -->
                     </div>
-                    <!-- /.info-box -->
                 </div>
-                <!-- /.col -->
             </div>
 
             <div class="row">
@@ -137,13 +128,13 @@
                             <h3 class="box-title">ข้อมูลศิษย์เก่า</h3>
                             <div class="box-tools pull-right">
                                 <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                            </div><!-- /.box-tools -->
-                        </div><!-- /.box-header -->
+                            </div>
+                        </div>
                         <div class="box-body">
                             <div class="chart">
                                 <canvas id="alumniChart" width="720" height="500"></canvas>
                             </div>
-                        </div><!-- /.box-body -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -152,7 +143,6 @@
         
         <template:script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.0.2/Chart.min.js"></script>
-            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/holder/2.9.3/holder.min.js"></script>
         </template:script>
 
     </template:body>

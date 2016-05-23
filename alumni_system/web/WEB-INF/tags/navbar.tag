@@ -52,8 +52,8 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <c:if test="${Authorization.isLogin()}">
-                        <c:set var="user" scope="page" value="${Authorization.getCurrentUser()}" />
+                    <c:if test="${Authorization:isLogin()}">
+                        <c:set var="user" scope="page" value="${Authorization:getCurrentUser()}" />
                         <li><p class="navbar-text">ยินดีต้อนรับผู้ดูแลระบบ, ${pageScope.user.fname_th}</p></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-triangle-bottom"></span></a>
@@ -64,7 +64,7 @@
                             </ul>
                         </li>
                     </c:if>
-                    <c:if test="${!Authorization.isLogin()}">
+                    <c:if test="${!Authorization:isLogin()}">
                         <li><a href="${RouteHelper:generateURL("login")}">เข้าสู่ระบบ</a></li>
                     </c:if>
                 </ul>
@@ -82,8 +82,8 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <c:if test="${Authorization.isLogin()}">
-                        <c:set var="user" scope="page" value="${Authorization.getCurrentUser()}" />
+                    <c:if test="${Authorization:isLogin()}">
+                        <c:set var="user" scope="page" value="${Authorization:getCurrentUser()}" />
                         <li><p class="navbar-text">ยินดีต้อนรับ, ${pageScope.user.fname_th}</p></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-triangle-bottom"></span></a>
@@ -97,7 +97,7 @@
                             </ul>
                         </li>
                     </c:if>
-                    <c:if test="${!Authorization.isLogin()}">
+                    <c:if test="${!Authorization:isLogin()}">
                         <li><a href="${RouteHelper:generateURL("login")}">เข้าสู่ระบบ</a></li>
                     </c:if>
                 </ul>

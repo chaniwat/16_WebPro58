@@ -6,5 +6,7 @@
 
 <%@ taglib prefix="template" uri="/WEB-INF/tlds/TemplateTag.tld" %>
 <%@ taglib prefix="RouteHelper" uri="/WEB-INF/tlds/RouteHelperFunction.tld" %>
+<%@ taglib prefix="ResponseHelper" uri="/WEB-INF/tlds/ResponseHelper.tld" %>
+<%@ taglib prefix="Authorization" uri="/WEB-INF/tlds/AuthorizationFunction.tld" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>

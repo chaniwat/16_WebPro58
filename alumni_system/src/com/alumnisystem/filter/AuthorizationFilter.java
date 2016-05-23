@@ -11,6 +11,10 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -19,7 +23,21 @@ import java.util.TreeMap;
 @WebFilter(filterName = "AuthorizationFilter")
 public class AuthorizationFilter implements Filter {
 
-    public void init(FilterConfig config) throws ServletException {}
+    private static HashMap<String, AuthGuard> guardURL;
+
+    public void init(FilterConfig config) throws ServletException {
+        /** Pre-Mapping AuthGuard */
+        guardURL = new HashMap<>();
+
+        for (Class c : new Reflections().getTypesAnnotatedWith(WebServlet.class)) {
+            AuthGuard authGuardAnnotation = (AuthGuard) c.getAnnotation(AuthGuard.class);
+            if(authGuardAnnotation != null) {
+                for (String uriPattern : ((WebServlet) c.getAnnotation(WebServlet.class)).urlPatterns()) {
+                    guardURL.put(uriPattern, authGuardAnnotation);
+                }
+            }
+        }
+    }
 
     public void destroy() {}
 
@@ -33,19 +51,17 @@ public class AuthorizationFilter implements Filter {
             return;
         }
 
-        TreeMap<String, Class<?>> matchPath = new TreeMap<>();
-        for (Class c : new Reflections().getTypesAnnotatedWith(WebServlet.class)) {
-            for (String uriPattern : ((WebServlet) c.getAnnotation(WebServlet.class)).urlPatterns()) {
-                if(RouteHelper.checkMatchPatternPath(uriPattern, "/" + uriNoContext)) {
-                    matchPath.put(uriPattern, c);
-                }
+        TreeMap<String, AuthGuard> matchPath = new TreeMap<>();
+
+        for(Map.Entry<String, AuthGuard> entry : guardURL.entrySet()) {
+            if(RouteHelper.checkMatchPatternPath(entry.getKey(), "/" + uriNoContext)) {
+                matchPath.put(entry.getKey(), entry.getValue());
             }
         }
 
         AuthGuard authGuardAnnotation = null;
         if(matchPath.size() > 0) {
-            Class c = matchPath.get(matchPath.lastKey());
-            authGuardAnnotation = (AuthGuard) c.getAnnotation(AuthGuard.class);
+            authGuardAnnotation = matchPath.get(matchPath.lastKey());
         }
 
         if(authGuardAnnotation != null) {
