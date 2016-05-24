@@ -1,4 +1,4 @@
-package com.alumnisystem.page;
+package com.alumnisystem.tag;
 
 import com.alumnisystem.utility.RouteHelper;
 

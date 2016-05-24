@@ -73,7 +73,7 @@ public class TrackFactory extends ModelFactory<Track> {
         try {
             statement.setStatement("SELECT * FROM track " +
                     "JOIN curriculum ON track.curriculum_id = curriculum.id " +
-                    "WHERE id = ?")
+                    "WHERE track.id = ?")
                     .setInt(id);
 
             ResultSet result = statement.executeQuery();

@@ -20,7 +20,7 @@ class Main {
         });
 
         route.doRoute(["profile/*"], () => {
-            new ProfilePage();
+            new ProfilePage(contextURL);
         });
 
         route.doRoute(["alumni/*"], () => {

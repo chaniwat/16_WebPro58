@@ -42,7 +42,7 @@ var Main = function () {
             });
 
             route.doRoute(["profile/*"], function () {
-                new _ProfilePage2.default();
+                new _ProfilePage2.default(contextURL);
             });
 
             route.doRoute(["alumni/*"], function () {
@@ -270,17 +270,28 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var ProfilePage = function () {
-    function ProfilePage() {
+    function ProfilePage(contextURL) {
+        var _this = this;
+
         _classCallCheck(this, ProfilePage);
 
+        this.contextURL = contextURL;
         this.usertype = $("#profilepage-usertype").val();
-        //
+
         if (this.usertype == "ALUMNI") {
             this.profileform = $("#alumni-form");
             this.profileformbtn = this.profileform.find("button#alumni-form-btn");
 
             new _DateSelectionBuilder2.default(this.profileform.find("#alumni-form-birthdate-year"), this.profileform.find("#alumni-form-birthdate-month"), this.profileform.find("#alumni-form-birthdate-day"));
+
+            this.profileform.find("#alumni-form-jobtype").change(this, this.jobTypeChange);
+            this.profileform.find("#alumni-form-jobname").change(this, this.jobChange);
+
             _FormUtils2.default.setValToDefault(this.profileform.find("#alumni-form-province"));
+            _FormUtils2.default.setValToDefault(this.profileform.find("#alumni-form-jobtype"));
+            this.profileform.find("#alumni-form-jobtype").trigger("change", function () {
+                _FormUtils2.default.setValToDefault(_this.profileform.find("#alumni-form-jobname"));
+            });
         } else if (this.usertype == "TEACHER") {
             this.profileform = $("#teacher-form");
             this.profileformbtn = this.profileform.find("button#teacher-form-btn");
@@ -300,6 +311,55 @@ var ProfilePage = function () {
     }
 
     _createClass(ProfilePage, [{
+        key: "jobTypeChange",
+        value: function jobTypeChange(e, callback) {
+            var o = e.data;
+            var jobtype_id = o.profileform.find("#alumni-form-jobtype").val();
+            if (jobtype_id > 0) {
+                o.profileform.find("#alumni-form-jobtypeother").attr("readonly", true);
+                o.profileform.find("#alumni-form-jobtypeother").val("");
+                o.profileform.find("#alumni-form-jobname").removeAttr("readonly");
+                o.profileform.find("#alumni-form-jobname").val("null");
+                o.profileform.find("#alumni-form-jobnameother").val("");
+                o.profileform.find("#alumni-form-jobnameother").attr("readonly", true);
+
+                $.get(o.contextURL + "/ajax/job?jobtype_id=" + jobtype_id, function (data) {
+                    var insideElem = "<option value=\"null\">โปรดเลือก</option>\n";
+                    $.each(data, function (i, data) {
+                        insideElem += "<option value=\"" + data.id + "\">" + data.name_th + "</option>";
+                    });
+                    insideElem += "<option value=\"0\">อื่นๆ</option>";
+                    o.profileform.find("#alumni-form-jobname").html(insideElem);
+
+                    if (callback) callback();
+                }, "json");
+            } else if (jobtype_id == 0) {
+                o.profileform.find("#alumni-form-jobtypeother").removeAttr("readonly");
+                o.profileform.find("#alumni-form-jobname").attr("readonly", true);
+                o.profileform.find("#alumni-form-jobname").val("0");
+                o.profileform.find("#alumni-form-jobnameother").removeAttr("readonly");
+            } else {
+                o.profileform.find("#alumni-form-jobtypeother").attr("readonly", true);
+                o.profileform.find("#alumni-form-jobtypeother").val("");
+                o.profileform.find("#alumni-form-jobname").attr("readonly", true);
+                o.profileform.find("#alumni-form-jobname").val("null");
+                o.profileform.find("#alumni-form-jobnameother").val("");
+                o.profileform.find("#alumni-form-jobnameother").attr("readonly", true);
+            }
+        }
+    }, {
+        key: "jobChange",
+        value: function jobChange(e) {
+            var o = e.data;
+            var job_id = o.profileform.find("#alumni-form-jobname").val();
+            if (job_id == "null" || job_id > 0) {
+                o.profileform.find("#alumni-form-jobnameother").val("");
+                o.profileform.find("#alumni-form-jobnameother").attr("readonly", true);
+            } else if (job_id == 0) {
+                o.profileform.find("#alumni-form-jobnameother").removeAttr("readonly");
+            }
+        }
+    }, {
         key: "submitForm",
         value: function submitForm(e) {
             var o = e.data;
@@ -427,13 +487,12 @@ var FormUtils = function () {
     }, {
         key: "enableAllWithException",
         value: function enableAllWithException(formElem) {
-            var _this = this;
-
             $.each(FormUtils.queryFormElems(formElem), function (key, data) {
                 $.each(data, function (i, data) {
                     if ($(data).attr("type") == "hidden") return;
-                    if (!($(data).data("lock") != null && $(_this).data("lock") == true)) {
-                        $(data).removeAttr("disabled");
+                    $(data).removeAttr("disabled");
+                    if ($(data).data("lock") != null && $(data).data("lock") == true) {
+                        $(data).attr("readonly", true);
                     }
                 });
             });
@@ -488,7 +547,7 @@ var FormUtils = function () {
         value: function bindNotEmptyForm(formElem) {
             $.each(FormUtils.queryFormElems(formElem), function (key, data) {
                 $.each(data, function (i, data) {
-                    if (!$(data).data("empty")) {
+                    if ($(data).data("empty") != null && !$(data).data("empty")) {
                         $(data).blur(FormUtils.updateNotEmptyInput);
                     }
                 });

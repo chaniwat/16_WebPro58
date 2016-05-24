@@ -5,6 +5,7 @@ import com.alumnisystem.model.Alumni;
 import com.alumnisystem.model.Curriculum;
 import com.alumnisystem.model.Job;
 import com.alumnisystem.model.Track;
+import com.alumnisystem.utility.database.Database;
 import com.sun.istack.internal.NotNull;
 
 import java.sql.*;
@@ -36,30 +37,27 @@ public class AlumniFactory extends ModelFactory<Alumni> {
                 model.getUsernames().add(String.valueOf(track.getStudent_id()));
             }
         }
-
-        new UserFactory().createUser(model, model.getUsernames(), "ITKMITL");
+        new UserFactory().createUser(model, model.getUsernames(), "itkmitl");
 
         try {
             statement.setStatement("INSERT INTO alumni VALUES (0, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)
                     .setInt(model.getId());
 
-            if(model.getJob() == null) {
-                statement.setNull(Types.INTEGER);
-            } else {
-                statement.setInt(model.getJob().getId());
-            }
+            if(model.getJob() == null) statement.setNull(Types.INTEGER);
+            else statement.setInt(model.getJob().getId());
 
             statement.setString(model.getNickname());
 
-            if(model.getBirthdate() != null) {
-                statement.setDate(new java.sql.Date(model.getBirthdate().getTime()));
-            } else {
-                statement.setNull(Types.DATE);
-            }
+            if(model.getBirthdate() != null) statement.setDate(new java.sql.Date(model.getBirthdate().getTime()));
+            else statement.setNull(Types.DATE);
 
             statement.setString(model.getWork_name());
 
-            model.setAlumni_id(statement.executeUpdate());
+            statement.executeUpdate();
+            result = statement.getStatement().getGeneratedKeys();
+            if(result.next()) {
+                model.setAlumni_id(result.getInt(1));
+            }
 
             statement.setStatement("INSERT INTO alumni_address VALUES (?, ?, ?, ?, ?, ?)")
                     .setInt(model.getAlumni_id())
@@ -127,24 +125,17 @@ public class AlumniFactory extends ModelFactory<Alumni> {
                     "WHERE id = ?")
                     .setString(model.getNickname());
 
-            if(model.getBirthdate() != null) {
-                statement.setDate(new java.sql.Date(model.getBirthdate().getTime()));
-            } else {
-                statement.setNull(Types.DATE);
-            }
+            if(model.getBirthdate() != null) statement.setDate(new java.sql.Date(model.getBirthdate().getTime()));
+            else statement.setNull(Types.DATE);
 
             statement.setString(model.getWork_name());
 
-            if(model.getJob() == null) {
-                statement.setNull(Types.INTEGER);
-            } else {
-                statement.setInt(model.getJob().getId());
-            }
+            if(model.getJob() == null) statement.setNull(Types.INTEGER);
+            else statement.setInt(model.getJob().getId());
 
             statement.setInt(model.getAlumni_id());
 
             int result = statement.executeUpdate();
-
             if(result == 0) throw new AlumniNotFound();
 
             statement.setStatement("UPDATE alumni_address " +
@@ -181,8 +172,8 @@ public class AlumniFactory extends ModelFactory<Alumni> {
                     .setInt(track.getStarteduyear())
                     .setInt(track.getEndeduyear())
                     .setInt(track.getStudent_id());
-            int result = statement.executeUpdate();
 
+            int result = statement.executeUpdate();
             if(result <= 0) throw new RuntimeException();
 
             return track;

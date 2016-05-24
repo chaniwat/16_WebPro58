@@ -1,4 +1,4 @@
-package com.alumnisystem.page;
+package com.alumnisystem.tag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -6,16 +6,20 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 import java.io.IOException;
 
 /**
- * Head HTML Tag
+ * Normal Page Template
  */
-public class HeadTag extends BodyTagSupport {
+public class PageTag extends BodyTagSupport {
 
     private JspWriter out;
 
-    private String title;
+    private boolean adminPage = false;
 
-    public void setTitle(String title) {
-        this.title = title;
+    public boolean isAdminPage() {
+        return adminPage;
+    }
+
+    public void setAdminPage(boolean adminPage) {
+        this.adminPage = adminPage;
     }
 
     @Override
@@ -24,14 +28,11 @@ public class HeadTag extends BodyTagSupport {
 
         try {
             out.println(
-                    "<head>\n" +
-                        "<title>" + title + "</title>\n" +
-
-                        "<meta charset='UTF-8' />\n" +
-                        "<meta http-equiv='X-UA-Compatible' content='IE=edge' />\n" +
-                        "<meta name='viewport' content='width=device-width, initial-scale=1' />\n"
+                    "<!DOCTYPE html>\n" +
+                    "<html>\n" +
+                    "\n"
             );
-        } catch (IOException e) {
+        }  catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -44,7 +45,7 @@ public class HeadTag extends BodyTagSupport {
             pageContext.getOut().print(bodyContent.getString());
 
             out.print(
-                    "</head>"
+                "</html>"
             );
         } catch (IOException e) {
             e.printStackTrace();
@@ -52,4 +53,5 @@ public class HeadTag extends BodyTagSupport {
 
         return EVAL_PAGE;
     }
+
 }

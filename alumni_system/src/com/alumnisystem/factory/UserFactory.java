@@ -158,7 +158,13 @@ public class UserFactory extends ModelFactory<User> {
                     .setString(model.getEmail())
                     .setString(BCrypt.hashpw(password, BCrypt.gensalt()));
 
-            model.setId(statement.executeUpdate());
+            statement.executeUpdate();
+
+            result = statement.getStatement().getGeneratedKeys();
+
+            if(result.next()) {
+                model.setId(result.getInt(1));
+            }
 
             for(String username : usernames) {
                 addUsernameAlias(model, username);

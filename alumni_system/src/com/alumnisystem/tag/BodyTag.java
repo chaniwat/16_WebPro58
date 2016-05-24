@@ -1,4 +1,4 @@
-package com.alumnisystem.page;
+package com.alumnisystem.tag;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;

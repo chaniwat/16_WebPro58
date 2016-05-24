@@ -10,7 +10,7 @@
 
     <tag>
         <name>page</name>
-        <tag-class>com.alumnisystem.page.PageTag</tag-class>
+        <tag-class>com.alumnisystem.tag.PageTag</tag-class>
         <body-content>JSP</body-content>
         <attribute>
             <name>adminPage</name>
@@ -20,7 +20,7 @@
 
     <tag>
         <name>head</name>
-        <tag-class>com.alumnisystem.page.HeadTag</tag-class>
+        <tag-class>com.alumnisystem.tag.HeadTag</tag-class>
         <body-content>JSP</body-content>
         <attribute>
             <name>title</name>
@@ -29,66 +29,22 @@
 
     <tag>
         <name>style</name>
-        <tag-class>com.alumnisystem.page.StyleTag</tag-class>
+        <tag-class>com.alumnisystem.tag.StyleTag</tag-class>
         <body-content>JSP</body-content>
     </tag>
 
     <tag>
         <name>body</name>
-        <tag-class>com.alumnisystem.page.BodyTag</tag-class>
+        <tag-class>com.alumnisystem.tag.BodyTag</tag-class>
         <body-content>JSP</body-content>
     </tag>
 
     <tag>
         <name>script</name>
-        <tag-class>com.alumnisystem.page.ScriptTag</tag-class>
+        <tag-class>com.alumnisystem.tag.ScriptTag</tag-class>
         <body-content>JSP</body-content>
         <attribute>
             <name>skipBootstrap</name>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-    </tag>
-
-    <tag>
-        <name>alumniProfile</name>
-        <tag-class>com.alumnisystem.page.profile.AlumniProfile</tag-class>
-        <body-content>empty</body-content>
-        <attribute>
-            <name>user</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-    </tag>
-
-    <tag>
-        <name>alumniTrack</name>
-        <tag-class>com.alumnisystem.page.profile.AlumniTrack</tag-class>
-        <body-content>empty</body-content>
-        <attribute>
-            <name>user</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-    </tag>
-
-    <tag>
-        <name>staffProfile</name>
-        <tag-class>com.alumnisystem.page.profile.StaffProfile</tag-class>
-        <body-content>empty</body-content>
-        <attribute>
-            <name>user</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-    </tag>
-
-    <tag>
-        <name>teacherProfile</name>
-        <tag-class>com.alumnisystem.page.profile.TeacherProfile</tag-class>
-        <body-content>empty</body-content>
-        <attribute>
-            <name>user</name>
-            <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
@@ -106,6 +62,26 @@
     <tag-file>
         <name>footer</name>
         <path>/WEB-INF/tags/footer.tag</path>
+    </tag-file>
+
+    <tag-file>
+        <name>alumniProfile</name>
+        <path>/WEB-INF/tags/page/profile/alumni.tag</path>
+    </tag-file>
+
+    <tag-file>
+        <name>alumniTrack</name>
+        <path>/WEB-INF/tags/page/profile/alumnitrack.tag</path>
+    </tag-file>
+
+    <tag-file>
+        <name>staffProfile</name>
+        <path>/WEB-INF/tags/page/profile/staff.tag</path>
+    </tag-file>
+
+    <tag-file>
+        <name>teacherProfile</name>
+        <path>/WEB-INF/tags/page/profile/teacher.tag</path>
     </tag-file>
 
     <!-- Invoke 'Generate' action to add tags or functions -->

@@ -58,11 +58,16 @@ public class JobTypeFactory extends ModelFactory<JobType> {
     public JobType create(@NotNull JobType model) {
         try {
             statement.setStatement("INSERT INTO jobtype VALUES (0, ?, ?)", Statement.RETURN_GENERATED_KEYS)
-                    .setInt(model.getId())
                     .setString(model.getName_th())
-                    .setStatement(model.getName_en());
+                    .setString(model.getName_en());
 
-            model.setId(statement.executeUpdate());
+            statement.executeUpdate();
+
+            result = statement.getStatement().getGeneratedKeys();
+
+            if(result.next()) {
+                model.setId(result.getInt(1));
+            }
 
             return model;
         } catch (SQLException ex) {

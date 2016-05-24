@@ -13,8 +13,9 @@ export default class FormUtils {
         $.each(FormUtils.queryFormElems(formElem), (key, data) => {
             $.each(data, (i, data) => {
                 if($(data).attr("type") == "hidden") return;
-                if(!($(data).data("lock") != null && $(this).data("lock") == true)) {
-                    $(data).removeAttr("disabled");
+                $(data).removeAttr("disabled");
+                if($(data).data("lock") != null && $(data).data("lock") == true) {
+                    $(data).attr("readonly", true);
                 }
             });
         });
@@ -63,7 +64,7 @@ export default class FormUtils {
     static bindNotEmptyForm(formElem) {
         $.each(FormUtils.queryFormElems(formElem), (key, data) => {            
             $.each(data, (i, data) => {
-                if(!$(data).data("empty")) {
+                if($(data).data("empty") != null && !$(data).data("empty")) {
                     $(data).blur(FormUtils.updateNotEmptyInput);
                 }
             });

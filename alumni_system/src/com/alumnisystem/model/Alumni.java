@@ -14,6 +14,10 @@ public class Alumni extends User {
     private Job job = new Job();
     private ArrayList<Track> tracks = new ArrayList<>();
 
+    public Alumni() {
+        type = Type.ALUMNI;
+    }
+
     public int getAlumni_id() {
         return alumni_id;
     }

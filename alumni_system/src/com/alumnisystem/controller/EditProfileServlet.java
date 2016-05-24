@@ -168,9 +168,9 @@ public class EditProfileServlet extends HttpServlet {
         alumni.setLname_en(params.get("alumni-form-lnameen"));
         alumni.setNickname(params.get("alumni-form-nickname"));
 
-        if(!params.get("alumni-form-birthdate-year").equals("null") &&
-                !params.get("alumni-form-birthdate-month").equals("null") &&
-                !params.get("alumni-form-birthdate-day").equals("null")) {
+        if(params.get("alumni-form-birthdate-year") != null &&
+                params.get("alumni-form-birthdate-month") != null &&
+                params.get("alumni-form-birthdate-day") != null) {
 
             String birthdate = String.format("%04d", Integer.parseInt(params.get("alumni-form-birthdate-year"))) + "-"
                     + String.format("%02d", Integer.parseInt(params.get("alumni-form-birthdate-month"))) + "-"
@@ -188,9 +188,33 @@ public class EditProfileServlet extends HttpServlet {
         alumni.setEmail(params.get("alumni-form-email"));
         alumni.setPhone(params.get("alumni-form-phone"));
 
-        // FIXME set job
-        alumni.setJob(null);
+        JobTypeFactory jobTypeFactory = new JobTypeFactory();
+        JobFactory jobFactory = new JobFactory();
 
+        Job job = null;
+        if(params.get("alumni-form-jobname") != null) {
+            if(params.get("alumni-form-jobname") == null || params.get("alumni-form-jobname").equals("0")) {
+                JobType jobType;
+                if(params.get("alumni-form-jobtype").equals("0")) {
+                    jobType = new JobType();
+                    jobType.setName_th(params.get("alumni-form-jobtypeother"));
+
+                    jobType = jobTypeFactory.create(jobType);
+                } else {
+                    jobType = jobTypeFactory.find(Integer.parseInt(params.get("alumni-form-jobtype")));
+                }
+
+                job = new Job();
+                job.setName_th(params.get("alumni-form-jobnameother"));
+                job.setJobType(jobType);
+
+                jobFactory.create(job);
+            } else {
+                job = jobFactory.find(Integer.parseInt(params.get("alumni-form-jobname")));
+            }
+        }
+
+        alumni.setJob(job);
         alumni.setWork_name(params.get("alumni-form-workname"));
 
         alumni.setAddress(params.get("alumni-form-address"));

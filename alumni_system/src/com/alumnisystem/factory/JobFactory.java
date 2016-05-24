@@ -54,15 +54,38 @@ public class JobFactory extends ModelFactory<Job> {
         }
     }
 
+    public ArrayList<Job> findAllByJobTypeID(int jobtype_id) throws JobNotFound {
+        try {
+            statement.setStatement("SELECT * FROM job LEFT JOIN jobtype ON job.jobtype_id = jobtype.id WHERE jobtype.id = ?")
+                    .setInt(jobtype_id);
+
+            result = statement.executeQuery();
+            ArrayList<Job> jobs = new ArrayList<>();
+            while (result.next()) {
+                jobs.add(buildObject(new Job(), result));
+            }
+            return jobs;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
     @Override
     public Job create(@NotNull Job model) {
         try {
             statement.setStatement("INSERT INTO job VALUES (0, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)
                     .setInt(model.getJobType().getId())
                     .setString(model.getName_th())
-                    .setStatement(model.getName_en());
+                    .setString(model.getName_en());
 
-            model.setId(statement.executeUpdate());
+            statement.executeUpdate();
+
+            result = statement.getStatement().getGeneratedKeys();
+
+            if(result.next()) {
+                model.setId(result.getInt(1));
+            }
 
             return model;
         } catch (SQLException ex) {
@@ -116,5 +139,4 @@ public class JobFactory extends ModelFactory<Job> {
 
         return model;
     }
-
 }
