@@ -62,30 +62,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 .form-group span.submit-alert {
   margin-left: 15px; }
 
-.login-page {
-  background: url("../images/itkmitl-1-blur.jpg") no-repeat center center;
-  background-size: cover; }
-  .login-page .login-container {
-    width: 500px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 15px 40px;
-    border-radius: 2px;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.9);
-    background-color: #FFFFFF;
-    text-align: right; }
-    .login-page .login-container h1 {
-      margin-bottom: 30px; }
-    .login-page .login-container div.alert {
-      margin-top: -15px;
-      text-align: center; }
-    .login-page .login-container form button {
-      margin-top: 15px;
-      margin-bottom: 15px; }
-
-body.admin-page .nav > li > a:hover, body.admin-page .nav > li > a:active, body.admin-page .nav > li > a:focus {
+body.admin-page #navbar .nav > li > a:hover, body.admin-page #navbar .nav > li > a:active, body.admin-page #navbar .nav > li > a:focus {
   color: #FFF; }
 
 body.admin-page .page-header {

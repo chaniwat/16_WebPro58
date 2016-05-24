@@ -1,62 +1,63 @@
 <%@ include file="/WEB-INF/importlib.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<!DOCTYPE html>
-<html>
+<template:page>
 
-    <head>
-        <title>Alumni System - Login</title>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <template:head title="Alumni System - Login">
+        <template:style />
+    </template:head>
 
-        <link href="${RouteHelper:generateURL("assets/css/bootstrap.min.theme.css")}" rel="stylesheet" />
-        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" />
-        <link href="${RouteHelper:generateURL("assets/fonts/ahtiti.css")}" rel="stylesheet" />
-        <link href="${RouteHelper:generateURL("assets/css/style.css")}" rel="stylesheet" />
-    </head>
+    <template:body>
 
-    <body class="login-page">
-        <sitedata contextPath="<%= request.getContextPath() %>"></sitedata>
+        <template:navbar />
 
-        <div class="login-container">
-            <center><h1>Login | เข้าสู่ระบบสมาชิก</h1></center>
+        <div class="container">
+
+            <h1>เข้าสู่ระบบ</h1>
 
             <c:if test="${ResponseHelper:hasCodeInRequest()}">
                 <c:if test="${ResponseHelper:getRequestCode() == ResponseHelper.UNAUTHORIZED}">
-                    <div class="alert alert-info" role="alert">เข้าสู่ระบบ</div>
+                    <div class="alert alert-info alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        เข้าสู่ระบบ
+                    </div>
                 </c:if>
                 <c:if test="${ResponseHelper:getRequestCode() == ResponseHelper.BAD_LOGIN}">
-                    <div class="alert alert-danger" role="alert">ชื่อผู้ใช้หรือรหัสผ่านผิด</div>
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        ชื่อผู้ใช้หรือรหัสผ่านผิด
+                    </div>
                 </c:if>
             </c:if>
 
             <form action="${RouteHelper:generateURL("login")}" method="POST" id="login-form">
-                <div class="form-group username-group">
+                <div class="form-group" id="username-group">
                     <div class="input-group">
-                        <span class="input-group-addon" id="username-addon">
-                            <span class="fa fa-user"></span>
-                        </span>
+                            <span class="input-group-addon" id="username-addon">
+                                <span class="fa fa-user"></span>
+                            </span>
                         <input type="text" class="form-control" id="username" name="username" placeholder="Username" aria-describedby="username-addon" data-empty="false" />
                     </div>
                 </div>
 
-                <div class="form-group password-group">
+                <div class="form-group" id="password-group">
                     <div class="input-group">
-                        <span class="input-group-addon" id="password-addon">
-                            <span class="fa fa-unlock-alt"></span>
-                        </span>
+                            <span class="input-group-addon" id="password-addon">
+                                <span class="fa fa-unlock-alt"></span>
+                            </span>
                         <input type="password" class="form-control" id="password" name="password" placeholder="Password" aria-describedby="password-addon" data-empty="false" />
                     </div>
                 </div>
 
                 <button type="submit" class="btn btn-success">Login</button>
             </form>
+
+            <template:footer />
+
         </div>
 
-        <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-        <script src="${RouteHelper:generateURL("assets/js/script.js")}"></script>
-    </body>
+        <template:script />
 
-</html>
+    </template:body>
+
+</template:page>

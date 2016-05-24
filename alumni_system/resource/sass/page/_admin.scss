@@ -1,0 +1,23 @@
+body.admin-page {
+
+  #navbar {
+    .nav>li>a:hover, .nav>li>a:active, .nav>li>a:focus {
+      color: #FFF;
+    }
+  }
+
+  .page-header {
+    border-bottom: 1px solid #d6dadb;
+  }
+
+  #navbar {
+    .navbar-right {
+      margin-right: 0;
+    }
+  }
+
+  .container-admin {
+    padding: 0 15px;
+  }
+
+}

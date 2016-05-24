@@ -1,7 +1,6 @@
 import Route from "./Route";
 import LoginPage from "./page/LoginPage";
 import ProfilePage from "./page/ProfilePage";
-import AlumniViewPage from "./page/AlumniViewPage";
 
 class Main {
 
@@ -16,19 +15,23 @@ class Main {
     route(contextURL) {
         var route = new Route(contextURL);
 
-        route.doRoute("login/", function() {
+        route.doRoute("login/", () => {
             new LoginPage();
         });
 
-        route.doRoute(["profile/*"], function() {
+        route.doRoute(["profile/*"], () => {
             new ProfilePage();
         });
 
-        route.doRoute(["alumni/*"], function() {
-            new AlumniViewPage();
+        route.doRoute(["alumni/*"], () => {
+            this.alumnitable = $("#alumni-table");
+
+            if(this.alumnitable.length > 0) {
+                this.alumnitable.DataTable();
+            }
         });
 
-        route.doRoute("admin/", function() {
+        route.doRoute("admin/", () => {
             var data = {
                 labels: ["ปริญญาตรี", "ปริญญาโท", "ปริญญาเอก"],
                 datasets: [
@@ -50,7 +53,7 @@ class Main {
             });
         });
 
-        route.doRoute("admin/alumni/*", function() {
+        route.doRoute("admin/alumni/*", () => {
             this.alumnitable = $("#alumni-table");
 
             if(this.alumnitable.length > 0) {
@@ -67,4 +70,6 @@ class Main {
 
 }
 
-new Main();
+$(document).ready(() => {
+    new Main();
+});

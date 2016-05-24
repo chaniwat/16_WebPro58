@@ -6,7 +6,7 @@
     <template:head title="Alumni System - Admin - Survey Form Builder">
 
         <template:style>
-            <link href="${RouteHelper:generateURL("assets/css/bootstrap-form-builder.css")}"  rel="stylesheet">
+            <link href="${RouteHelper:generateURL("assets/css/bootstrap-form-builder.css")}" rel="stylesheet">
         </template:style>
 
     </template:head>

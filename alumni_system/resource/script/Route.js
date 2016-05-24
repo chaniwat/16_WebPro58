@@ -1,4 +1,4 @@
-export default class {
+export default class Route {
 
     constructor(contextURL) {
         this.contextURL = contextURL[0] == "/" ? contextURL.substring(1) : contextURL;

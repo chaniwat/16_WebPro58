@@ -1,0 +1,91 @@
+/* Override Bootstrap rule */
+body, html {
+  min-width: 750px;
+  width: 100%;
+  height: 100%;
+  font-family: 'athiti';
+}
+
+body.fixed-navbar {
+  padding-top: 60px;
+  padding-bottom: 20px;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: 'athiti';
+}
+
+.page-header {
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.jumbotron {
+  padding-top: 70px;
+  padding-bottom: 70px;
+
+  @media screen and (min-width: 768px) {
+    padding-top: 70px;
+    padding-bottom: 70px;
+  }
+}
+
+.navbar {
+  background-color: #52aeff;
+  color: #FFF;
+  a {
+    color: #FFF;
+    &.navbar-brand {
+      background: #2999e3;
+      padding: 9px 15px;
+      > img {
+        float: left;
+        margin-right: 12px;
+      }
+      > span {
+        float: left;
+        padding-top: 12px;
+      }
+    }
+  }
+  .navbar-toggle {
+    span.icon-bar {
+      background-color: #FFF;
+    }
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  li.active, li > a:hover, nav li.open, .nav .open > a {
+    background-color: #6dbdff;
+  }
+  p.navbar-text {
+    margin-right: 0px;
+  }
+  li.dropdown {
+    a.dropdown-toggle {
+      line-height: 23px;
+      height: 60px;
+      padding-left: 8px;
+      padding-right: 7px;
+      margin-left: 5px;
+      margin-right: 5px;
+      &:hover {
+        background-color: #6dbdff;
+      }
+    }
+    &.open {
+      a.dropdown-toggle {
+        background-color: #6dbdff;
+      }
+    }
+  }
+
+  #navbar.navbar-collapse.in ul.dropdown-menu li a {
+    color: #FFF;
+  }
+}
+
+.form-group span.submit-alert {
+  margin-left: 15px;
+}

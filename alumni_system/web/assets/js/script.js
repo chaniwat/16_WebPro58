@@ -15,10 +15,6 @@ var _ProfilePage = require("./page/ProfilePage");
 
 var _ProfilePage2 = _interopRequireDefault(_ProfilePage);
 
-var _AlumniViewPage = require("./page/AlumniViewPage");
-
-var _AlumniViewPage2 = _interopRequireDefault(_AlumniViewPage);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -37,6 +33,8 @@ var Main = function () {
     _createClass(Main, [{
         key: "route",
         value: function route(contextURL) {
+            var _this = this;
+
             var route = new _Route2.default(contextURL);
 
             route.doRoute("login/", function () {
@@ -48,53 +46,27 @@ var Main = function () {
             });
 
             route.doRoute(["alumni/*"], function () {
-                new _AlumniViewPage2.default();
+                _this.alumnitable = $("#alumni-table");
+
+                if (_this.alumnitable.length > 0) {
+                    _this.alumnitable.DataTable();
+                }
             });
 
             route.doRoute("admin/", function () {
-
                 var data = {
                     labels: ["ปริญญาตรี", "ปริญญาโท", "ปริญญาเอก"],
                     datasets: [{
                         label: "จำนวนศิษย์เก่า",
-
-                        // The properties below allow an array to be specified to change the value of the item at the given index
-                        // String or array - the bar color
                         backgroundColor: "rgba(16, 171, 234, 1)",
-
-                        // String or array - bar stroke color
-                        //borderColor: "rgba(220,220,220,1)",
-
-                        // Number or array - bar border width
                         borderWidth: 0,
-
-                        // String or array - fill color when hovered
                         hoverBackgroundColor: "rgba(89, 211, 234, 1)",
-
-                        // String or array - border color when hovered
-                        //hoverBorderColor: "rgba(220,220,220,1)",
-
-                        // The actual data
                         data: [881, 0, 0],
-
-                        // String - If specified, binds the dataset to a certain y-axis. If not specified, the first y-axis is used.
                         yAxisID: "y-axis-0"
-                    }
-                    //,
-                    //{
-                    //    label: "My Second dataset",
-                    //    backgroundColor: "rgba(220,220,220,0.2)",
-                    //    borderColor: "rgba(220,220,220,1)",
-                    //    borderWidth: 1,
-                    //    hoverBackgroundColor: "rgba(220,220,220,0.2)",
-                    //    hoverBorderColor: "rgba(220,220,220,1)",
-                    //    data: [28, 48, 40, 19, 86, 27, 90]
-                    //}
-                    ]
+                    }]
                 };
 
-                var ctx = $("#alumniChart").get(0).getContext("2d");
-                var alumniNewChart = new Chart(ctx, {
+                new Chart($("#alumniChart").get(0).getContext("2d"), {
                     type: 'bar',
                     data: data,
                     options: {}
@@ -102,15 +74,14 @@ var Main = function () {
             });
 
             route.doRoute("admin/alumni/*", function () {
-                this.alumnitable = $("#alumni-table");
+                _this.alumnitable = $("#alumni-table");
 
-                if (this.alumnitable.length > 0) {
-                    this.alumnitable.DataTable();
+                if (_this.alumnitable.length > 0) {
+                    _this.alumnitable.DataTable();
                 }
             });
 
             route.doRoute("admin/event/create", function () {
-
                 $(".textarea").wysihtml5();
             });
 
@@ -121,9 +92,11 @@ var Main = function () {
     return Main;
 }();
 
-new Main();
+$(document).ready(function () {
+    new Main();
+});
 
-},{"./Route":2,"./page/AlumniViewPage":3,"./page/LoginPage":4,"./page/ProfilePage":5}],2:[function(require,module,exports){
+},{"./Route":2,"./page/LoginPage":3,"./page/ProfilePage":4}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -134,16 +107,16 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var _class = function () {
-    function _class(contextURL) {
-        _classCallCheck(this, _class);
+var Route = function () {
+    function Route(contextURL) {
+        _classCallCheck(this, Route);
 
         this.contextURL = contextURL[0] == "/" ? contextURL.substring(1) : contextURL;
 
         this.routeMapping = [];
     }
 
-    _createClass(_class, [{
+    _createClass(Route, [{
         key: "doRoute",
         value: function doRoute(path, fn) {
             var temp = [];
@@ -225,33 +198,12 @@ var _class = function () {
         }
     }]);
 
-    return _class;
+    return Route;
 }();
 
-exports.default = _class;
+exports.default = Route;
 
 },{}],3:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var _class = function _class() {
-    _classCallCheck(this, _class);
-
-    this.alumnitable = $("#alumni-table");
-
-    if (this.alumnitable.length > 0) {
-        this.alumnitable.DataTable();
-    }
-};
-
-exports.default = _class;
-
-},{}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -268,9 +220,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var _class = function () {
-    function _class() {
-        _classCallCheck(this, _class);
+var LoginPage = function () {
+    function LoginPage() {
+        _classCallCheck(this, LoginPage);
 
         this.loginForm = $("form#login-form");
 
@@ -278,35 +230,25 @@ var _class = function () {
         this.loginForm.submit(this, this.checkSubmitForm);
     }
 
-    _createClass(_class, [{
+    _createClass(LoginPage, [{
         key: "checkSubmitForm",
         value: function checkSubmitForm(e) {
-            var o = e.data;
-            var showErrorfn = function showErrorfn() {
-                $("<div class=\"alert alert-danger uncomplete-field\" role=\"alert\">โปรดกรอกข้อมูลให้ครบ</div>").insertAfter(".login-page h1");
-                $(".login-page div.alert.uncomplete-field").hide().slideDown();
-            };
+            var alertElem = void 0;
 
-            if (!_FormUtils2.default.isFormComplete(o.loginForm)) {
+            if (!_FormUtils2.default.isFormComplete(e.data.loginForm)) {
                 e.preventDefault();
-                if ($(".login-page div.alert").not(".uncomplete-field").length) {
-                    $(".login-page div.alert").slideUp(function () {
-                        $(".login-page div.alert").remove();
-                        showErrorfn();
-                    });
-                } else if (!$(".login-page div.alert.uncomplete-field").length) {
-                    showErrorfn();
-                }
+                if ((alertElem = $("div.alert")).length) alertElem.remove();
+                $("<div class=\"alert alert-danger uncomplete-field\" role=\"alert\">\n" + "    <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" + "    โปรดกรอกข้อมูลให้ครบ\n" + "</div>").insertAfter("h1");
             }
         }
     }]);
 
-    return _class;
+    return LoginPage;
 }();
 
-exports.default = _class;
+exports.default = LoginPage;
 
-},{"./../ultility/FormUtils":7}],5:[function(require,module,exports){
+},{"./../ultility/FormUtils":6}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -327,18 +269,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var _class = function () {
-    function _class() {
-        _classCallCheck(this, _class);
+var ProfilePage = function () {
+    function ProfilePage() {
+        _classCallCheck(this, ProfilePage);
 
         this.usertype = $("#profilepage-usertype").val();
-
+        //
         if (this.usertype == "ALUMNI") {
             this.profileform = $("#alumni-form");
             this.profileformbtn = this.profileform.find("button#alumni-form-btn");
 
             new _DateSelectionBuilder2.default(this.profileform.find("#alumni-form-birthdate-year"), this.profileform.find("#alumni-form-birthdate-month"), this.profileform.find("#alumni-form-birthdate-day"));
-
             _FormUtils2.default.setValToDefault(this.profileform.find("#alumni-form-province"));
         } else if (this.usertype == "TEACHER") {
             this.profileform = $("#teacher-form");
@@ -358,7 +299,7 @@ var _class = function () {
         _FormUtils2.default.disableAll(this.profileform);
     }
 
-    _createClass(_class, [{
+    _createClass(ProfilePage, [{
         key: "submitForm",
         value: function submitForm(e) {
             var o = e.data;
@@ -383,12 +324,12 @@ var _class = function () {
         }
     }]);
 
-    return _class;
+    return ProfilePage;
 }();
 
-exports.default = _class;
+exports.default = ProfilePage;
 
-},{"./../ultility/DateSelectionBuilder":6,"./../ultility/FormUtils":7}],6:[function(require,module,exports){
+},{"./../ultility/DateSelectionBuilder":5,"./../ultility/FormUtils":6}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -405,9 +346,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var _class = function () {
-    function _class(yearElem, monthElem, dayElem) {
-        _classCallCheck(this, _class);
+var DateSelectionBuilder = function () {
+    function DateSelectionBuilder(yearElem, monthElem, dayElem) {
+        _classCallCheck(this, DateSelectionBuilder);
 
         this.yearElem = yearElem;
         this.monthElem = monthElem;
@@ -420,53 +361,44 @@ var _class = function () {
 
         var month = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
         var monthElem_default = this.monthElem.find("option").first();
-        for (var i = 11; i >= 0; i--) {
-            monthElem_default.after("<option value=\"" + (i + 1) + "\">" + month[i] + "</option>");
+        for (var _i = 11; _i >= 0; _i--) {
+            monthElem_default.after("<option value=\"" + (_i + 1) + "\">" + month[_i] + "</option>");
         }
 
-        this.yearElem.change(this, this.refreshForm);
-        this.monthElem.change(this, this.refreshForm);
+        this.yearElem.change(this.doRefreshForm());
+        this.monthElem.change(this.doRefreshForm());
 
         if (_FormUtils2.default.getDefaultVal(this.yearElem) != null && _FormUtils2.default.getDefaultVal(this.monthElem) != null && _FormUtils2.default.getDefaultVal(this.dayElem) != null) {
             _FormUtils2.default.setValToDefault(this.yearElem);
             _FormUtils2.default.setValToDefault(this.monthElem);
-
-            this.doRefreshForm(this);
-
+            this.doRefreshForm();
             _FormUtils2.default.setValToDefault(this.dayElem);
         }
     }
 
-    _createClass(_class, [{
-        key: "refreshForm",
-        value: function refreshForm(e) {
-            var o = e.data;
-
-            o.doRefreshForm(o);
-        }
-    }, {
+    _createClass(DateSelectionBuilder, [{
         key: "doRefreshForm",
-        value: function doRefreshForm(o) {
-            var yData = o.yearElem.val();
-            var mData = o.monthElem.val();
+        value: function doRefreshForm() {
+            var yData = this.yearElem.val();
+            var mData = this.monthElem.val();
 
-            o.dayElem.html("<option value=\"null\">Day</option>");
-            var defaultday = o.dayElem.find("option").first();
+            this.dayElem.html("<option value=\"null\">Day</option>");
+            var defaultDay = this.dayElem.find("option").first();
 
             if ((yData != null || yData != "null") && (mData != null || mData != "null")) {
                 for (var i = mData == 2 ? yData % 4 == 0 && yData % 100 != 0 || yData % 400 == 0 ? 29 : 28 : $.inArray(mData, [1, 3, 5, 7, 8, 10, 12]) ? 31 : 30; i >= 1; i--) {
-                    $("<option value='" + i + "'>" + i + "</option>").insertAfter(defaultday);
+                    $("<option value='" + i + "'>" + i + "</option>").insertAfter(defaultDay);
                 }
             }
         }
     }]);
 
-    return _class;
+    return DateSelectionBuilder;
 }();
 
-exports.default = _class;
+exports.default = DateSelectionBuilder;
 
-},{"./FormUtils":7}],7:[function(require,module,exports){
+},{"./FormUtils":6}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -477,87 +409,59 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var _class = function () {
-    function _class() {
-        _classCallCheck(this, _class);
+var FormUtils = function () {
+    function FormUtils() {
+        _classCallCheck(this, FormUtils);
     }
 
-    _createClass(_class, null, [{
+    _createClass(FormUtils, null, [{
         key: "disableAll",
         value: function disableAll(formElem) {
-            var elems = this.queryFormElems(formElem);
-
-            elems.inputs.each(function () {
-                if ($(this).attr("type") == "hidden") return;
-                $(this).attr("readonly", "true");
-            });
-
-            elems.selects.each(function () {
-                $(this).attr("disabled", "true");
-            });
-
-            elems.textareas.each(function () {
-                $(this).attr("readonly", "true");
+            $.each(FormUtils.queryFormElems(formElem), function (key, data) {
+                $.each(data, function (i, data) {
+                    if ($(data).attr("type") == "hidden") return;
+                    $(data).attr("disabled", true);
+                });
             });
         }
     }, {
         key: "enableAllWithException",
         value: function enableAllWithException(formElem) {
-            var elems = this.queryFormElems(formElem);
+            var _this = this;
 
-            elems.inputs.each(function () {
-                if ($(this).attr("type") == "hidden") return;
-                if (!($(this).data("lock") != null && $(this).data("lock") == true)) {
-                    $(this).removeAttr("readonly");
-                }
-            });
-
-            elems.selects.each(function () {
-                if (!($(this).data("lock") != null && $(this).data("lock") == true)) {
-                    $(this).removeAttr("disabled");
-                }
-            });
-
-            elems.textareas.each(function () {
-                if (!($(this).data("lock") != null && $(this).data("lock") == true)) {
-                    $(this).removeAttr("readonly");
-                }
+            $.each(FormUtils.queryFormElems(formElem), function (key, data) {
+                $.each(data, function (i, data) {
+                    if ($(data).attr("type") == "hidden") return;
+                    if (!($(data).data("lock") != null && $(_this).data("lock") == true)) {
+                        $(data).removeAttr("disabled");
+                    }
+                });
             });
         }
     }, {
         key: "enableAllBypassException",
         value: function enableAllBypassException(formElem) {
-            var elems = this.queryFormElems(formElem);
-
-            elems.inputs.each(function () {
-                if ($(this).attr("type") == "hidden") return;
-                $(this).removeAttr("readonly");
-            });
-
-            elems.selects.each(function () {
-                $(this).removeAttr("disabled");
-            });
-
-            elems.textareas.each(function () {
-                $(this).removeAttr("readonly");
+            $.each(FormUtils.queryFormElems(formElem), function (key, data) {
+                $.each(data, function (i, data) {
+                    if ($(data).attr("type") == "hidden") return;
+                    $(data).removeAttr("disabled");
+                });
             });
         }
     }, {
         key: "isFormComplete",
         value: function isFormComplete(formElem) {
-            var elems = this.queryFormElems(formElem);
             var flag = true;
-            var checkfn = function checkfn() {
-                if ($(this).attr("type") != null && $(this).attr("type") == "hidden") return;
-                if ($(this).data("empty") != null && $(this).data("empty") == false && $(this).val().trim() == "") {
-                    $(this).parent().parent().addClass("has-error");
-                    flag = false;
-                }
-            };
 
-            elems.inputs.each(checkfn);
-            elems.selects.each(checkfn);
-            elems.textareas.each(checkfn);
+            $.each(FormUtils.queryFormElems(formElem), function (key, data) {
+                $.each(data, function (i, data) {
+                    if ($(data).attr("type") != null && $(data).attr("type") == "hidden") return;
+                    if ($(data).data("empty") != null && $(data).data("empty") == false && $(data).val().trim() == "") {
+                        $(data).parent().parent().addClass("has-error");
+                        flag = false;
+                    }
+                });
+            });
 
             return flag;
         }
@@ -568,32 +472,31 @@ var _class = function () {
         }
     }, {
         key: "getDefaultVal",
-        value: function getDefaultVal(elem) {
-            return elem.data("default");
+        value: function getDefaultVal(inputElem) {
+            return inputElem.data("default");
         }
     }, {
         key: "setValToDefault",
-        value: function setValToDefault(elem) {
-            var defVal = this.getDefaultVal(elem);
-            if (defVal != null && defVal != "null") {
-                elem.val(defVal);
+        value: function setValToDefault(inputElem) {
+            var defVal = void 0;
+            if ((defVal = FormUtils.getDefaultVal(inputElem)) != null && defVal != "null") {
+                inputElem.val(defVal);
             }
         }
     }, {
         key: "bindNotEmptyForm",
         value: function bindNotEmptyForm(formElem) {
-            var notEmptyElems = [];
-            $("input[data-empty=false]").each(function () {
-                notEmptyElems.push($(this));
+            $.each(FormUtils.queryFormElems(formElem), function (key, data) {
+                $.each(data, function (i, data) {
+                    if (!$(data).data("empty")) {
+                        $(data).blur(FormUtils.updateNotEmptyInput);
+                    }
+                });
             });
-
-            for (var i = 0; i < notEmptyElems.length; i++) {
-                notEmptyElems[i].blur(this, this.updateNotEmptyInput);
-            }
         }
     }, {
         key: "updateNotEmptyInput",
-        value: function updateNotEmptyInput(e) {
+        value: function updateNotEmptyInput() {
             var elemGroup = $(this).parent().parent();
             if ($(this).val().trim() == "") {
                 elemGroup.addClass("has-error");
@@ -603,10 +506,10 @@ var _class = function () {
         }
     }]);
 
-    return _class;
+    return FormUtils;
 }();
 
-exports.default = _class;
+exports.default = FormUtils;
 
 },{}]},{},[1])
 
