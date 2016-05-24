@@ -1,6 +1,7 @@
 package com.alumnisystem.factory;
 
 import com.alumnisystem.exception.AlumniNotFound;
+import com.alumnisystem.exception.AlumniTrackNotFound;
 import com.alumnisystem.model.Alumni;
 import com.alumnisystem.model.Curriculum;
 import com.alumnisystem.model.Job;
@@ -42,18 +43,13 @@ public class AlumniFactory extends ModelFactory<Alumni> {
         try {
             statement.setStatement("INSERT INTO alumni VALUES (0, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)
                     .setInt(model.getId());
-
-            if(model.getJob() == null) statement.setNull(Types.INTEGER);
-            else statement.setInt(model.getJob().getId());
-
+            if(model.getJob() == null) statement.setNull(Types.INTEGER); else statement.setInt(model.getJob().getId());
             statement.setString(model.getNickname());
-
-            if(model.getBirthdate() != null) statement.setDate(new java.sql.Date(model.getBirthdate().getTime()));
-            else statement.setNull(Types.DATE);
-
+            if(model.getBirthdate() != null) statement.setDate(new java.sql.Date(model.getBirthdate().getTime())); else statement.setNull(Types.DATE);
             statement.setString(model.getWork_name());
 
             statement.executeUpdate();
+
             result = statement.getStatement().getGeneratedKeys();
             if(result.next()) {
                 model.setAlumni_id(result.getInt(1));
@@ -91,9 +87,7 @@ public class AlumniFactory extends ModelFactory<Alumni> {
                     .setString(String.valueOf(track.getStudent_id()));
 
             ResultSet result = statement.executeQuery();
-            if(!result.next()) {
-                new UserFactory().addUsernameAlias(alumni, String.valueOf(track.getStudent_id()));
-            }
+            if(!result.next()) new UserFactory().addUsernameAlias(alumni, String.valueOf(track.getStudent_id()));
 
             statement.setStatement("INSERT INTO alumni_track VALUES (?, ?, ?, ?, ?, ?)")
                     .setInt(alumni.getAlumni_id())
@@ -125,14 +119,9 @@ public class AlumniFactory extends ModelFactory<Alumni> {
                     "WHERE id = ?")
                     .setString(model.getNickname());
 
-            if(model.getBirthdate() != null) statement.setDate(new java.sql.Date(model.getBirthdate().getTime()));
-            else statement.setNull(Types.DATE);
-
+            if(model.getBirthdate() != null) statement.setDate(new java.sql.Date(model.getBirthdate().getTime())); else statement.setNull(Types.DATE);
             statement.setString(model.getWork_name());
-
-            if(model.getJob() == null) statement.setNull(Types.INTEGER);
-            else statement.setInt(model.getJob().getId());
-
+            if(model.getJob() == null) statement.setNull(Types.INTEGER); else statement.setInt(model.getJob().getId());
             statement.setInt(model.getAlumni_id());
 
             int result = statement.executeUpdate();
@@ -174,7 +163,7 @@ public class AlumniFactory extends ModelFactory<Alumni> {
                     .setInt(track.getStudent_id());
 
             int result = statement.executeUpdate();
-            if(result <= 0) throw new RuntimeException();
+            if(result == 0) throw new AlumniTrackNotFound();
 
             return track;
         } catch (SQLException ex) {

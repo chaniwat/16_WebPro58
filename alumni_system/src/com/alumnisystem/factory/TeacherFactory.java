@@ -30,7 +30,7 @@ public class TeacherFactory extends ModelFactory<Teacher> {
                 model.getUsernames().add(model.getFname_en());
             }
 
-            new UserFactory().createUser(model, model.getUsernames(), "ITKMITL");
+            new UserFactory().createUser(model, model.getUsernames(), "itkmitl");
 
             statement.setStatement("INSERT INTO teacher VALUES (?, ?, ?)")
                     .setInt(model.getTeacher_id())

@@ -44,7 +44,13 @@ public class WorkSectionFactory extends ModelFactory<Work.Section> {
                     .setString(section.getName_th())
                     .setString(section.getName_en());
 
-            section.setId(statement.executeUpdate());
+            statement.executeUpdate();
+
+            result = statement.getStatement().getGeneratedKeys();
+
+            if(result.next()) {
+                section.setId(result.getInt(1));
+            }
 
             return section;
         } catch (SQLException ex) {

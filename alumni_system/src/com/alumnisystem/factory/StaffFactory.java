@@ -27,7 +27,7 @@ public class StaffFactory extends ModelFactory<Staff> {
             model.getUsernames().add(model.getFname_en());
         }
         
-        new UserFactory().createUser(model, model.getUsernames(), "ITKMITL");
+        new UserFactory().createUser(model, model.getUsernames(), "itkmitl");
         
         try {
             statement.setStatement("INSERT INTO staff VALUES (?, ?, ?)")

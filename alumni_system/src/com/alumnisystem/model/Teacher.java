@@ -8,6 +8,10 @@ public class Teacher extends User {
     private int teacher_id;
     private Work.Status work_status;
 
+    public Teacher() {
+        type = Type.TEACHER;
+    }
+
     public int getTeacher_id() {
         return teacher_id;
     }

@@ -31,7 +31,13 @@ public class CurriculumFactory extends ModelFactory<Curriculum> {
                     .setInt(curriculum.getCyear())
                     .setString(String.valueOf(curriculum.getDegree()));
 
-            curriculum.setId(statement.executeUpdate());
+            statement.executeUpdate();
+
+            result = statement.getStatement().getGeneratedKeys();
+
+            if(result.next()) {
+                curriculum.setId(result.getInt(1));
+            }
             
             return curriculum;
         } catch (SQLException ex) {
@@ -107,8 +113,7 @@ public class CurriculumFactory extends ModelFactory<Curriculum> {
 
             if(result.next()) {
                 return buildObject(new Curriculum(), result);
-            }
-            else {
+            } else {
                 throw new CurriculumNotFound();
             }
         } catch (SQLException ex) {

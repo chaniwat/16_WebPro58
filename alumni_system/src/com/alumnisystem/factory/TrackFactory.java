@@ -29,7 +29,13 @@ public class TrackFactory extends ModelFactory<Track> {
                     .setString(track.getName_en())
                     .setInt(track.getCurriculum().getId());
 
-            track.setId(statement.executeUpdate());
+            statement.executeUpdate();
+
+            result = statement.getStatement().getGeneratedKeys();
+
+            if(result.next()) {
+                track.setId(result.getInt(1));
+            }
 
             return track;
         } catch (SQLException ex) {
