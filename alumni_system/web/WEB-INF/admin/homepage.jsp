@@ -1,16 +1,47 @@
 <%@ include file="/WEB-INF/importlib.jsp" %>
 <%@ page import="com.alumnisystem.utility.database.Database" %>
 <%@ page import="java.sql.Connection" %>
-<%@ page import="java.sql.PreparedStatement" %>
 <%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.SQLException" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
     Connection connection = Database.getConnection();
 
-    String sql;
-    PreparedStatement stmt;
-    ResultSet result;
+    String sql = "SELECT\n" +
+            "  (SELECT COUNT(*) FROM user) AS 'user_count',\n" +
+            "  (SELECT COUNT(*) FROM alumni) AS 'alumni_count',\n" +
+            "  (SELECT COUNT(*) FROM teacher) AS 'teacher_count',\n" +
+            "  (SELECT COUNT(*) FROM staff) AS 'staff_count',\n" +
+            "  (SELECT COUNT(*) FROM alumni_track\n" +
+            "    JOIN track ON alumni_track.track_id = track.id\n" +
+            "    JOIN curriculum ON track.curriculum_id = curriculum.id\n" +
+            "  WHERE curriculum.degree = 'BACHELOR') AS 'bachelor_count',\n" +
+            "  (SELECT COUNT(*) FROM alumni_track\n" +
+            "    JOIN track ON alumni_track.track_id = track.id\n" +
+            "    JOIN curriculum ON track.curriculum_id = curriculum.id\n" +
+            "  WHERE curriculum.degree = 'MASTER') AS 'master_count',\n" +
+            "  (SELECT COUNT(*) FROM alumni_track\n" +
+            "    JOIN track ON alumni_track.track_id = track.id\n" +
+            "    JOIN curriculum ON track.curriculum_id = curriculum.id\n" +
+            "  WHERE curriculum.degree = 'DOCTORAL') AS 'doctoral_count';";
+
+    ResultSet result = null;
+    try {
+        result = connection.prepareStatement(sql).executeQuery();
+
+        if(result.next()) {
+            pageContext.setAttribute("usercount", result.getInt("user_count"));
+            pageContext.setAttribute("alumnicount", result.getInt("alumni_count"));
+            pageContext.setAttribute("teachercount", result.getInt("teacher_count"));
+            pageContext.setAttribute("staffcount", result.getInt("staff_count"));
+            pageContext.setAttribute("bachelorcount", result.getInt("bachelor_count"));
+            pageContext.setAttribute("mastercount", result.getInt("master_count"));
+            pageContext.setAttribute("doctoralcount", result.getInt("doctoral_count"));
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
 %>
 
 <template:page adminPage="${true}">
@@ -39,17 +70,7 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text">จำนวนสมาชิกในระบบ</span>
-                            <span class="info-box-number">
-                                <%
-                                    sql = "SELECT COUNT(*) AS \"count\" FROM user";
-                                    stmt = connection.prepareStatement(sql);
-
-                                    result = stmt.executeQuery();
-                                    result.next();
-
-                                    out.println(result.getInt("count"));
-                                %>
-                            </span>
+                            <span class="info-box-number">${usercount}</span>
                         </div>
                     </div>
                 </div>
@@ -60,17 +81,7 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text">จำนวนศิษย์เก่า</span>
-                            <span class="info-box-number">
-                                <%
-                                    sql = "SELECT COUNT(*) AS \"count\" FROM alumni";
-                                    stmt = connection.prepareStatement(sql);
-
-                                    result = stmt.executeQuery();
-                                    result.next();
-
-                                    out.println(result.getInt("count"));
-                                %>
-                            </span>
+                            <span class="info-box-number">${alumnicount}</span>
                         </div>
                     </div>
                 </div>
@@ -84,17 +95,7 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text">จำนวนอาจารย์</span>
-                            <span class="info-box-number">
-                                <%
-                                    sql = "SELECT COUNT(*) AS \"count\" FROM teacher";
-                                    stmt = connection.prepareStatement(sql);
-
-                                    result = stmt.executeQuery();
-                                    result.next();
-
-                                    out.println(result.getInt("count"));
-                                %>
-                            </span>
+                            <span class="info-box-number">${teachercount}</span>
                         </div>
                     </div>
                 </div>
@@ -105,17 +106,7 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text">จำนวนเจ้าหน้าที่/พนักงาน</span>
-                            <span class="info-box-number">
-                                <%
-                                    sql = "SELECT COUNT(*) AS \"count\" FROM staff";
-                                    stmt = connection.prepareStatement(sql);
-
-                                    result = stmt.executeQuery();
-                                    result.next();
-
-                                    out.println(result.getInt("count"));
-                                %>
-                            </span>
+                            <span class="info-box-number">${staffcount}</span>
                         </div>
                     </div>
                 </div>
@@ -143,6 +134,21 @@
         
         <template:script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.0.2/Chart.min.js"></script>
+            <script>
+                var data = {
+                    labels: ["ปริญญาตรี", "ปริญญาโท", "ปริญญาเอก"],
+                    datasets: [
+                        {
+                            label: "จำนวนศิษย์เก่า",
+                            backgroundColor: "rgba(16, 171, 234, 1)",
+                            borderWidth: 0,
+                            hoverBackgroundColor: "rgba(89, 211, 234, 1)",
+                            data: [${bachelorcount}, ${mastercount}, ${doctoralcount}],
+                            yAxisID: "y-axis-0"
+                        }
+                    ]
+                };
+            </script>
         </template:script>
 
     </template:body>

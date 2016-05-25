@@ -13,6 +13,12 @@
 
     </template:head>
 
+    <style>
+        table td {
+            vertical-align: middle !important;
+        }
+    </style>
+
     <template:body>
 
         <template:navbar />
@@ -23,6 +29,26 @@
                 <div class="page-header">
                     <h1>ข้อมูลศิษย์เก่าระดับการศึกษา${pageScope.degree.getNameTH()}</h1>
                 </div>
+
+                <form class="form-inline" id="table-searchform" onsubmit="javascript:;">
+                    <div class="form-group">
+                        <label for="table-searchtype">Search by </label>
+                        <select class="form-control input-sm" id="table-searchtype" style="width: 140px;">
+                            <option value="0">Student ID</option>
+                            <option value="1">Generation</option>
+                            <option value="2">First Name</option>
+                            <option value="3">Last Name</option>
+                            <option value="4">Nickname</option>
+                            <option value="5">Email</option>
+                            <option value="6">Phone</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="table-searchinput">Search</label>
+                        <input type="text" class="form-control input-sm" id="table-searchinput" placeholder="Search" style="width: 200px;">
+                    </div>
+                </form>
+                <br />
 
                 <table class="table table-bordered" id="alumni-table">
 
@@ -36,7 +62,6 @@
                             <th>Email</th>
                             <th>Phone</th>
                             <th>View</th>
-                            <th>Edit</th>
                         </tr>
                     </thead>
 
@@ -53,10 +78,9 @@
                                 <td>${alumni.pname_th.concat(alumni.fname_th)}</td>
                                 <td>${alumni.lname_th}</td>
                                 <td>${alumni.nickname}</td>
-                                <td>${alumni.email}/td>
+                                <td>${alumni.email}</td>
                                 <td>${alumni.phone}</td>
-                                <td><a href="${RouteHelper:generateURL("admin/alumni/".concat(requestScope.degree).concat("/").concat(student_id))}" class="btn btn-success">ดูข้อมูล</a></td>
-                                <td><a href="${RouteHelper:generateURL("admin/alumni/".concat(requestScope.degree).concat("/").concat(student_id).concat("?edit=true"))}" class="btn btn-warning">แก้ไขข้อมูล</a></td>
+                                <td width="1"><a href="${RouteHelper:generateURL("admin/alumni")}/${student_id}" class="btn btn-info btn-xs">ดูข้อมูล</a></td>
                             </tr>
                         </c:forEach>
                     </tbody>

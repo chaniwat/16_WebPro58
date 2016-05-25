@@ -19,6 +19,10 @@ var _AlumniTrackPage = require("./page/AlumniTrackPage");
 
 var _AlumniTrackPage2 = _interopRequireDefault(_AlumniTrackPage);
 
+var _ViewAlumniPage = require("./page/ViewAlumniPage");
+
+var _ViewAlumniPage2 = _interopRequireDefault(_ViewAlumniPage);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -37,8 +41,6 @@ var Main = function () {
     _createClass(Main, [{
         key: "route",
         value: function route(contextURL) {
-            var _this = this;
-
             var route = new _Route2.default(contextURL);
 
             route.doRoute("login/", function () {
@@ -49,12 +51,8 @@ var Main = function () {
                 new _ProfilePage2.default(contextURL);
             });
 
-            route.doRoute(["alumni/*"], function () {
-                _this.alumnitable = $("#alumni-table");
-
-                if (_this.alumnitable.length > 0) {
-                    _this.alumnitable.DataTable();
-                }
+            route.doRoute(["alumni/*", "admin/alumni/*"], function () {
+                new _ViewAlumniPage2.default();
             });
 
             route.doRoute("track/edit/*", function () {
@@ -62,31 +60,35 @@ var Main = function () {
             });
 
             route.doRoute("admin/", function () {
-                var data = {
-                    labels: ["ปริญญาตรี", "ปริญญาโท", "ปริญญาเอก"],
-                    datasets: [{
-                        label: "จำนวนศิษย์เก่า",
-                        backgroundColor: "rgba(16, 171, 234, 1)",
-                        borderWidth: 0,
-                        hoverBackgroundColor: "rgba(89, 211, 234, 1)",
-                        data: [881, 0, 0],
-                        yAxisID: "y-axis-0"
-                    }]
-                };
+                var flag = true;
+
+                try {
+                    if (window.data == null) {
+                        flag = false;
+                    }
+                } catch (ReferenceError) {
+                    flag = false;
+                }
+
+                if (!flag) {
+                    window.data = {
+                        labels: ["ปริญญาตรี", "ปริญญาโท", "ปริญญาเอก"],
+                        datasets: [{
+                            label: "จำนวนศิษย์เก่า",
+                            backgroundColor: "rgba(16, 171, 234, 1)",
+                            borderWidth: 0,
+                            hoverBackgroundColor: "rgba(89, 211, 234, 1)",
+                            data: [0, 0, 0],
+                            yAxisID: "y-axis-0"
+                        }]
+                    };
+                }
 
                 new Chart($("#alumniChart").get(0).getContext("2d"), {
                     type: 'bar',
-                    data: data,
+                    data: window.data,
                     options: {}
                 });
-            });
-
-            route.doRoute("admin/alumni/*", function () {
-                _this.alumnitable = $("#alumni-table");
-
-                if (_this.alumnitable.length > 0) {
-                    _this.alumnitable.DataTable();
-                }
             });
 
             route.doRoute("admin/event/create", function () {
@@ -104,7 +106,7 @@ $(document).ready(function () {
     new Main();
 });
 
-},{"./Route":2,"./page/AlumniTrackPage":3,"./page/LoginPage":4,"./page/ProfilePage":5}],2:[function(require,module,exports){
+},{"./Route":2,"./page/AlumniTrackPage":3,"./page/LoginPage":4,"./page/ProfilePage":5,"./page/ViewAlumniPage":6}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -249,36 +251,6 @@ var AlumniTrackPage = function () {
                 _FormUtils2.default.disableAll(data.form);
             }
         });
-
-        // if(this.bachelor.form != null) {
-        //     this.bachelor.formbtn = this.bachelor.form.find("button#bachelor-form-btn");
-        //     FormUtils.setValToDefault(this.bachelor.form.find("#bachelor-form-trackid"));
-        //   
-        //     this.bachelor.formstate = "VIEW";
-        //     this.bachelor.formbtn.click(this.bachelor, this.submitForm);
-        //     FormUtils.bindNotEmptyForm(this.bachelor.form);
-        //     FormUtils.disableAll(this.bachelor.form);
-        // }
-        //
-        // if(this.master.form != null) {
-        //     this.master.formbtn = this.master.form.find("button#master-form-btn");
-        //     FormUtils.setValToDefault(this.bachelor.form.find("#master-form-trackid"));
-        //
-        //     this.master.formstate = "VIEW";
-        //     this.master.formbtn.click(this.master, this.submitForm);
-        //     FormUtils.bindNotEmptyForm(this.master.form);
-        //     FormUtils.disableAll(this.master.form);
-        // }
-        //
-        // if(this.doctoral.form != null) {
-        //     this.doctoral.formbtn = this.doctoral.form.find("button#doctoral-form-btn");
-        //     FormUtils.setValToDefault(this.bachelor.form.find("#doctoral-form-trackid"));
-        //
-        //     this.doctoral.formstate = "VIEW";
-        //     this.doctoral.formbtn.click(this.doctoral, this.submitForm);
-        //     FormUtils.bindNotEmptyForm(this.doctoral.form);
-        //     FormUtils.disableAll(this.doctoral.form);
-        // }
     }
 
     _createClass(AlumniTrackPage, [{
@@ -311,7 +283,7 @@ var AlumniTrackPage = function () {
 
 exports.default = AlumniTrackPage;
 
-},{"../ultility/FormUtils":7}],4:[function(require,module,exports){
+},{"../ultility/FormUtils":8}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -356,7 +328,7 @@ var LoginPage = function () {
 
 exports.default = LoginPage;
 
-},{"./../ultility/FormUtils":7}],5:[function(require,module,exports){
+},{"./../ultility/FormUtils":8}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -497,7 +469,46 @@ var ProfilePage = function () {
 
 exports.default = ProfilePage;
 
-},{"./../ultility/DateSelectionBuilder":6,"./../ultility/FormUtils":7}],6:[function(require,module,exports){
+},{"./../ultility/DateSelectionBuilder":7,"./../ultility/FormUtils":8}],6:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ViewAlumniPage = function ViewAlumniPage() {
+    var _this = this;
+
+    _classCallCheck(this, ViewAlumniPage);
+
+    this.alumnitable = $("#alumni-table");
+    this.searchform = $("#table-searchform");
+
+    if (this.alumnitable.length > 0) {
+        (function () {
+            _this.datatable = _this.alumnitable.DataTable();
+
+            var searchtype = _this.searchform.find("#table-searchtype");
+            var searchinput = _this.searchform.find("#table-searchinput");
+
+            searchinput.keyup(function () {
+                _this.datatable.columns(searchtype.val()).search(searchinput.val()).draw();
+            });
+
+            searchtype.change(function () {
+                searchinput.trigger('keyup');
+            });
+
+            $("#alumni-table_filter").html(_this.searchform);
+        })();
+    }
+};
+
+exports.default = ViewAlumniPage;
+
+},{}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -566,7 +577,7 @@ var DateSelectionBuilder = function () {
 
 exports.default = DateSelectionBuilder;
 
-},{"./FormUtils":7}],7:[function(require,module,exports){
+},{"./FormUtils":8}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

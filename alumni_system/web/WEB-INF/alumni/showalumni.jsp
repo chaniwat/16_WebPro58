@@ -29,6 +29,23 @@
                     </h1>
                 </div>
 
+                <form class="form-inline" id="table-searchform" onsubmit="javascript:;">
+                    <div class="form-group">
+                        <label for="table-searchtype">Search by </label>
+                        <select class="form-control input-sm" id="table-searchtype" style="width: 140px;">
+                            <option value="0">Student ID</option>
+                            <option value="1">Generation</option>
+                            <option value="2">First Name</option>
+                            <option value="3">Last Name</option>
+                            <option value="4">Nickname</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="table-searchinput">Search</label>
+                        <input type="text" class="form-control input-sm" id="table-searchinput" placeholder="Search" style="width: 200px;">
+                    </div>
+                </form>
+
                 <table class="table table-bordered" id="alumni-table">
 
                     <thead>

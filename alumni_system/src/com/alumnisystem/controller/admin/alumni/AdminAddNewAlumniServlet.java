@@ -1,5 +1,6 @@
 package com.alumnisystem.controller.admin.alumni;
 
+import com.alumnisystem.annotation.AuthGuard;
 import com.alumnisystem.utility.ResponseHelper;
 
 import javax.servlet.ServletException;
@@ -9,10 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
- * Created by meranote on 4/20/2016 AD.
- */
 @WebServlet(name = "AdminAddNewAlumniServlet", urlPatterns = {"/admin/alumni/add", "/admin/alumni/add/"})
+@AuthGuard
 public class AdminAddNewAlumniServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -25,6 +24,6 @@ public class AdminAddNewAlumniServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
 
-        request.getRequestDispatcher("/WEB-INF/admin/alumni/fromnewalumni.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/admin/alumni/formnewfindalumni.jsp").forward(request, response);
     }
 }

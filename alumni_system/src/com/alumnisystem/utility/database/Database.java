@@ -17,11 +17,11 @@ public class Database {
     public static void closeConnection() {
         try {
             connectionThreadLocal.get().close();
-        } catch (SQLException ex) { }
+        } catch (SQLException ignored) { }
     }
 
     public static void setConnectionThreadLocal(Connection connection) {
-        Database.connectionThreadLocal.set(connection);
+        connectionThreadLocal.set(connection);
     }
 
     public static Connection getDatabaseConnectionForTest() throws SQLException {
