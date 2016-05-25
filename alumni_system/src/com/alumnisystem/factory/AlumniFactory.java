@@ -173,6 +173,35 @@ public class AlumniFactory extends ModelFactory<Alumni> {
     }
 
     /**
+     * Update track data
+     * @param track Update {@link Track} object
+     * @throws RuntimeException
+     */
+    public Track updateAlumniTrackID(Track track, int track_id) throws RuntimeException {
+        try {
+            statement.setStatement("UPDATE alumni_track " +
+                    "SET track_id = ? " +
+                    "WHERE student_id = ?")
+                    .setInt(track_id)
+                    .setInt(track.getStudent_id());
+
+            int result = statement.executeUpdate();
+            if(result == 0) throw new AlumniTrackNotFound();
+
+            Track swapTrack = new TrackFactory().find(track_id);
+            track.setId(track_id);
+            track.setCurriculum(swapTrack.getCurriculum());
+            track.setName_th(swapTrack.getName_th());
+            track.setName_en(swapTrack.getName_en());
+
+            return track;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
      * Get All alumni object.
      * @return {@link ArrayList}&lt;{@link Alumni}&gt;
      */
@@ -487,5 +516,19 @@ public class AlumniFactory extends ModelFactory<Alumni> {
             return null;
         }
     }
+
+//    public static void main(String[] args) throws SQLException {
+//        Database.setConnectionThreadLocal(Database.getDatabaseConnectionForTest());
+//
+//        AlumniFactory alumniFactory = new AlumniFactory();
+//
+//        Alumni alumni = alumniFactory.findByStudentId(57070029);
+//        Track track = new TrackFactory().find(8);
+//        track.setStudent_id(50706001);
+//        track.setStarteduyear(2016);
+//        track.setEndeduyear(2020);
+//
+//        alumni.getTracks().add(alumniFactory.addTrack(alumni, track));
+//    }
 
 }

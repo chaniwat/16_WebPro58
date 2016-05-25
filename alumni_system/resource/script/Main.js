@@ -1,6 +1,7 @@
 import Route from "./Route";
 import LoginPage from "./page/LoginPage";
 import ProfilePage from "./page/ProfilePage";
+import AlumniTrackPage from "./page/AlumniTrackPage";
 
 class Main {
 
@@ -29,6 +30,10 @@ class Main {
             if(this.alumnitable.length > 0) {
                 this.alumnitable.DataTable();
             }
+        });
+        
+        route.doRoute("track/edit/*", () => {
+            new AlumniTrackPage(contextURL);
         });
 
         route.doRoute("admin/", () => {

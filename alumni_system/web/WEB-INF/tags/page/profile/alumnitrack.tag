@@ -1,6 +1,8 @@
 <%@ tag import="com.alumnisystem.factory.AlumniFactory" %>
 <%@ tag import="com.alumnisystem.model.Alumni" %>
 <%@ tag import="com.alumnisystem.model.User" %>
+<%@ tag import="com.alumnisystem.model.Track" %>
+<%@ tag import="com.alumnisystem.exception.AlumniNotFound" %>
 <%@ include file="/WEB-INF/tags/importlib.tag" %>
 <%@tag pageEncoding="UTF-8" body-content="empty" %>
 
@@ -12,11 +14,21 @@
     Alumni alumni = alumniFactory.findByUserId(user.getId());
     User currentUser = Authorization.getCurrentUser();
 
-    boolean editable = (currentUser.isAdmin() ||
-            (currentUser.getType() == User.Type.ALUMNI && alumni.getAlumni_id() == alumniFactory.findByUserId(currentUser.getId()).getAlumni_id()));
+    boolean self = false;
+    if(currentUser.getType() == User.Type.ALUMNI) {
+        try {
+            Alumni currentAlumni = alumniFactory.findByUserId(currentUser.getId());
+            self = currentUser.getType() == User.Type.ALUMNI && alumni.getAlumni_id() == currentAlumni.getAlumni_id();
+        } catch (AlumniNotFound ignored) { }
+    }
 
-    request.setAttribute("alumni", alumni);
+    boolean editable = (currentUser.isAdmin() || self);
+    for(Track track : alumni.getTracks()) {
+        request.setAttribute(track.getCurriculum().getDegree().toString().toLowerCase(), track);
+    }
+
     request.setAttribute("editable", editable);
+    request.setAttribute("self", self);
 %>
 
 <table class="table table-bordered">
@@ -27,24 +39,53 @@
             <th>รุ่น</th>
             <th>แขนงวิชา</th>
             <th>หลักสูตร</th>
+            <th>ระดับการศึกษา</th>
             <th>ปีที่เข้าการศึกษา</th>
             <th>ปีที่จบการศึกษา</th>
         </tr>
     </thead>
 
     <tbody>
-        <c:forEach var="track" items="${alumni.tracks}">
+        <c:if test="${requestScope.bachelor != null}">
             <tr>
-                <td>${track.student_id}</td>
-                <td>${track.generation}</td>
-                <td>${track.name_th}</td>
-                <td>${track.curriculum.cname_th}</td>
-                <td>${track.starteduyear}</td>
-                <td>${track.endeduyear}</td>
+                <td>${bachelor.student_id}</td>
+                <td>${bachelor.generation}</td>
+                <td>${bachelor.name_th}</td>
+                <td>${bachelor.curriculum.cname_th}</td>
+                <td>${bachelor.curriculum.degree.nameTH}</td>
+                <td>${bachelor.starteduyear}</td>
+                <td>${bachelor.endeduyear}</td>
             </tr>
-        </c:forEach>
+        </c:if>
+        <c:if test="${requestScope.master != null}">
+            <tr>
+                <td>${master.student_id}</td>
+                <td>${master.generation}</td>
+                <td>${master.name_th}</td>
+                <td>${master.curriculum.cname_th}</td>
+                <td>${master.curriculum.degree.nameTH}</td>
+                <td>${master.starteduyear}</td>
+                <td>${master.endeduyear}</td>
+            </tr>
+        </c:if>
+        <c:if test="${requestScope.doctoral != null}">
+            <tr>
+                <td>${doctoral.student_id}</td>
+                <td>${doctoral.generation}</td>
+                <td>${doctoral.name_th}</td>
+                <td>${doctoral.curriculum.cname_th}</td>
+                <td>${doctoral.curriculum.degree.nameTH}</td>
+                <td>${doctoral.starteduyear}</td>
+                <td>${doctoral.endeduyear}</td>
+            </tr>
+        </c:if>
     </tbody>
 
 </table>
 
-<a href="${RouteHelper:generateURL("track/edit")}" class="btn btn-primary">แก้ไขข้อมูล</a>
+<c:if test="${self}">
+    <a href="${RouteHelper:generateURL("track/edit")}" class="btn btn-primary">แก้ไขข้อมูล</a>
+</c:if>
+<c:if test="${!self}">
+    <a href="${RouteHelper:generateURL("track/edit")}/${alumni.alumni_id}" class="btn btn-primary">แก้ไขข้อมูล</a>
+</c:if>

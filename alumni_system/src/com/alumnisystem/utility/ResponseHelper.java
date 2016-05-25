@@ -37,6 +37,7 @@ public class ResponseHelper {
     public static final int FORM_INPUT_NOT_COMPLETE = 901;
 
     public static final int PROFILE_UPDATED_COMPLETE = 1001;
+    public static final int ALUMNI_TRACK_UPDATED_COMPLETE = 1002;
 
     /**
      * Check if have error in session.

@@ -15,6 +15,10 @@ var _ProfilePage = require("./page/ProfilePage");
 
 var _ProfilePage2 = _interopRequireDefault(_ProfilePage);
 
+var _AlumniTrackPage = require("./page/AlumniTrackPage");
+
+var _AlumniTrackPage2 = _interopRequireDefault(_AlumniTrackPage);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -51,6 +55,10 @@ var Main = function () {
                 if (_this.alumnitable.length > 0) {
                     _this.alumnitable.DataTable();
                 }
+            });
+
+            route.doRoute("track/edit/*", function () {
+                new _AlumniTrackPage2.default(contextURL);
             });
 
             route.doRoute("admin/", function () {
@@ -96,7 +104,7 @@ $(document).ready(function () {
     new Main();
 });
 
-},{"./Route":2,"./page/LoginPage":3,"./page/ProfilePage":4}],2:[function(require,module,exports){
+},{"./Route":2,"./page/AlumniTrackPage":3,"./page/LoginPage":4,"./page/ProfilePage":5}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -212,6 +220,106 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _FormUtils = require("../ultility/FormUtils");
+
+var _FormUtils2 = _interopRequireDefault(_FormUtils);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var AlumniTrackPage = function () {
+    function AlumniTrackPage(contextURL) {
+        var _this = this;
+
+        _classCallCheck(this, AlumniTrackPage);
+
+        this.contextURL = contextURL;
+
+        this.page = { bachelor: { form: $("#bachelor-form") }, master: { form: $("#master-form") }, doctoral: { form: $("#doctoral-form") } };
+
+        $.each(this.page, function (i, data) {
+            if (data.form != null) {
+                data.formbtn = data.form.find("button#" + i + "-form-btn");
+                _FormUtils2.default.setValToDefault(data.form.find("#" + i + "-form-trackid"));
+
+                data.formstate = "VIEW";
+                data.formbtn.click(data, _this.submitForm);
+                _FormUtils2.default.bindNotEmptyForm(data.form);
+                _FormUtils2.default.disableAll(data.form);
+            }
+        });
+
+        // if(this.bachelor.form != null) {
+        //     this.bachelor.formbtn = this.bachelor.form.find("button#bachelor-form-btn");
+        //     FormUtils.setValToDefault(this.bachelor.form.find("#bachelor-form-trackid"));
+        //   
+        //     this.bachelor.formstate = "VIEW";
+        //     this.bachelor.formbtn.click(this.bachelor, this.submitForm);
+        //     FormUtils.bindNotEmptyForm(this.bachelor.form);
+        //     FormUtils.disableAll(this.bachelor.form);
+        // }
+        //
+        // if(this.master.form != null) {
+        //     this.master.formbtn = this.master.form.find("button#master-form-btn");
+        //     FormUtils.setValToDefault(this.bachelor.form.find("#master-form-trackid"));
+        //
+        //     this.master.formstate = "VIEW";
+        //     this.master.formbtn.click(this.master, this.submitForm);
+        //     FormUtils.bindNotEmptyForm(this.master.form);
+        //     FormUtils.disableAll(this.master.form);
+        // }
+        //
+        // if(this.doctoral.form != null) {
+        //     this.doctoral.formbtn = this.doctoral.form.find("button#doctoral-form-btn");
+        //     FormUtils.setValToDefault(this.bachelor.form.find("#doctoral-form-trackid"));
+        //
+        //     this.doctoral.formstate = "VIEW";
+        //     this.doctoral.formbtn.click(this.doctoral, this.submitForm);
+        //     FormUtils.bindNotEmptyForm(this.doctoral.form);
+        //     FormUtils.disableAll(this.doctoral.form);
+        // }
+    }
+
+    _createClass(AlumniTrackPage, [{
+        key: "submitForm",
+        value: function submitForm(e) {
+            var o = e.data;
+
+            if (o.formstate == "VIEW") {
+                _FormUtils2.default.enableAllWithException(o.form);
+
+                o.formstate = "EDIT";
+                o.formbtn.attr("type", "submit");
+                o.formbtn.removeClass("btn-primary").addClass("btn-success");
+                o.formbtn.html("บันทึก");
+
+                e.preventDefault();
+            } else if (o.formstate == "EDIT") {
+                if (!_FormUtils2.default.isFormComplete(o.form)) {
+                    e.preventDefault();
+                    if ($("span.submit-alert").length <= 0) {
+                        $("<span class=\"submit-alert text-danger\">โปรดกรอกข้อมูลที่ต้องการให้ครบ</span>").insertAfter(o.formbtn);
+                    }
+                }
+            }
+        }
+    }]);
+
+    return AlumniTrackPage;
+}();
+
+exports.default = AlumniTrackPage;
+
+},{"../ultility/FormUtils":7}],4:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _FormUtils = require("./../ultility/FormUtils");
 
 var _FormUtils2 = _interopRequireDefault(_FormUtils);
@@ -248,7 +356,7 @@ var LoginPage = function () {
 
 exports.default = LoginPage;
 
-},{"./../ultility/FormUtils":6}],4:[function(require,module,exports){
+},{"./../ultility/FormUtils":7}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -389,7 +497,7 @@ var ProfilePage = function () {
 
 exports.default = ProfilePage;
 
-},{"./../ultility/DateSelectionBuilder":5,"./../ultility/FormUtils":6}],5:[function(require,module,exports){
+},{"./../ultility/DateSelectionBuilder":6,"./../ultility/FormUtils":7}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -458,7 +566,7 @@ var DateSelectionBuilder = function () {
 
 exports.default = DateSelectionBuilder;
 
-},{"./FormUtils":6}],6:[function(require,module,exports){
+},{"./FormUtils":7}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

@@ -95,6 +95,30 @@ public class TrackFactory extends ModelFactory<Track> {
     }
 
     /**
+     * Get track by id
+     * @param curriculum_id
+     * @return
+     */
+    public ArrayList<Track> findAllByCurriculumID(int curriculum_id) {
+        try {
+            statement.setStatement("SELECT * FROM track " +
+                    "JOIN curriculum ON track.curriculum_id = curriculum.id " +
+                    "WHERE curriculum.id = ?")
+                    .setInt(curriculum_id);
+
+            ResultSet result = statement.executeQuery();
+            ArrayList<Track> tracks = new ArrayList<>();
+            while (result.next()) {
+                tracks.add(buildObject(new Track(), result));
+            }
+            return tracks;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
      * Get all track
      * @return
      */

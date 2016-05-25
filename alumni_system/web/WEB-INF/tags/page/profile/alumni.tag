@@ -148,7 +148,7 @@
         </div>
     </c:if>
     <div class="form-group">
-        <label for="alumni-form-jobtype" class="col-md-3 control-label">ประเภทสายงาน ${alumni.job != null ? alumni.job.jobType.id : ""}</label>
+        <label for="alumni-form-jobtype" class="col-md-3 control-label">ประเภทสายงาน</label>
         <div class="col-md-9">
             <select class="form-control" name="alumni-form-jobtype" id="alumni-form-jobtype" ${alumni.job != null ? 'data-default=\"'.concat(alumni.job.jobType.id).concat('\"') : ""}>
                 <option value="null">โปรดเลือก</option>
@@ -161,7 +161,7 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="alumni-form-jobname" class="col-md-3 control-label">ตำแหน่งงาน ${alumni.job != null ? alumni.job.id : ""}</label>
+        <label for="alumni-form-jobname" class="col-md-3 control-label">ตำแหน่งงาน</label>
         <div class="col-md-9">
             <select class="form-control" name="alumni-form-jobname" id="alumni-form-jobname" ${alumni.job != null ? 'data-default=\"'.concat(alumni.job.id).concat('\"') : ""}>
                 <option value="null">โปรดเลือก</option>

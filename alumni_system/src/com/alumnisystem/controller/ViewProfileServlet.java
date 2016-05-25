@@ -32,13 +32,29 @@ public class ViewProfileServlet extends HttpServlet {
             }
         }
 
+        int flag = ResponseHelper.NO_ERR;
+
         User user;
         if((user = getUserByPath(request)) == null) {
-            ResponseHelper.pushSessionCode(ResponseHelper.NO_USER_MODEL_FOUND);
+            flag = ResponseHelper.NO_USER_MODEL_FOUND;
+        } else {
+            request.setAttribute("user", user);
+        }
+
+        User currentUser = Authorization.getCurrentUser();
+        if(!currentUser.isAdmin()) {
+            if(!(request.getRequestURI().endsWith("/profile") || request.getRequestURI().endsWith("/profile/")) && currentUser.getType() == User.Type.ALUMNI) {
+                if(user == null || user.getType() != User.Type.ALUMNI) {
+                    flag = ResponseHelper.NOT_ENOUGH_PERMISSION;
+                }
+            }
+        }
+
+        if (flag != ResponseHelper.NO_ERR) {
+            ResponseHelper.pushSessionCode(flag);
             response.sendRedirect(RouteHelper.generateURL("profile"));
             return;
-        } else request.setAttribute("user", user);
-
+        }
         if (ResponseHelper.hasCodeInSession()) ResponseHelper.pushRequestCode(ResponseHelper.pullSessionCode());
 
         session.setAttribute("profile.view.current.path", RouteHelper.getURINoContext());

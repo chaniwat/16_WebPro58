@@ -134,8 +134,8 @@ public class CurriculumFactory extends ModelFactory<Curriculum> {
         model.setId(result.getInt("curriculum.id"));
         model.setCname_th(result.getString("curriculum.cname_th"));
         model.setCname_en(result.getString("curriculum.cname_en"));
-        model.setCname_th(result.getString("curriculum.sname_th"));
-        model.setCname_en(result.getString("curriculum.sname_en"));
+        model.setSname_th(result.getString("curriculum.sname_th"));
+        model.setSname_en(result.getString("curriculum.sname_en"));
         model.setCyear(result.getInt("curriculum.cyear"));
         model.setDegree(Curriculum.Degree.valueOf(result.getString("curriculum.degree")));
 
