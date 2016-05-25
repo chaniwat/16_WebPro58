@@ -1,7 +1,9 @@
 package com.alumnisystem.ajax;
 
-import com.alumnisystem.factory.JobFactory;
-import com.alumnisystem.model.Job;
+import com.alumnisystem.factory.CurriculumFactory;
+import com.alumnisystem.factory.TrackFactory;
+import com.alumnisystem.model.Curriculum;
+import com.alumnisystem.model.Track;
 import com.alumnisystem.utility.RouteHelper;
 import com.google.gson.Gson;
 
@@ -13,21 +15,21 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-@WebServlet(name = "FetchJobServlet", urlPatterns = {"/ajax/job"})
-public class FetchJobServlet extends HttpServlet {
+@WebServlet(name = "FetchTrackServlet", urlPatterns = {"/ajax/track"})
+public class FetchTrackServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
 
         if(RouteHelper.isAjaxRequest()) {
-            if(request.getParameter("jobtype_id") != null) {
-                if(request.getParameter("jobtype_id").equals("0")) return;
+            if(request.getParameter("curriculum_id") != null) {
+                try {
+                    ArrayList<Track> tracks = new TrackFactory().findAllByCurriculumID(Integer.parseInt(request.getParameter("curriculum_id")));
 
-                ArrayList<Job> jobs = new JobFactory().findAllByJobTypeID(Integer.parseInt(request.getParameter("jobtype_id")));
-
-                response.getWriter().print(new Gson().toJson(jobs));
-                return;
+                    response.getWriter().print(new Gson().toJson(tracks));
+                    return;
+                } catch (IllegalArgumentException ignored) { }
             }
         }
 

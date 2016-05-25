@@ -37,7 +37,12 @@ export default class FormUtils {
             $.each(data, (i, data) => {
                 if(($(data).attr("type") != null && $(data).attr("type") == "hidden")) return;
                 if($(data).data("empty") != null && $(data).data("empty") == false && $(data).val().trim() == "") {
-                    $(data).parent().parent().addClass("has-error");
+                    let parent = $(data).parent();
+                    if(parent.is(".input-group")) {
+                        parent.parent().parent().addClass("has-error");
+                    } else {
+                        parent.parent().addClass("has-error");
+                    }
                     flag = false;
                 }
             });

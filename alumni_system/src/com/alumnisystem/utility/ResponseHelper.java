@@ -39,6 +39,9 @@ public class ResponseHelper {
     public static final int PROFILE_UPDATED_COMPLETE = 1001;
     public static final int ALUMNI_TRACK_UPDATED_COMPLETE = 1002;
 
+    public static final int ADD_NEW_ALUMNI_COMPLETE = 1101;
+    public static final int ADD_NEW_ALUMNITRACK_COMPLETE = 1102;
+
     /**
      * Check if have error in session.
      * @return true if have, false if not.

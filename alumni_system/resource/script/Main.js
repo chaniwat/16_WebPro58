@@ -3,6 +3,7 @@ import LoginPage from "./page/LoginPage";
 import ProfilePage from "./page/ProfilePage";
 import AlumniTrackPage from "./page/AlumniTrackPage";
 import ViewAlumniPage from "./page/ViewAlumniPage";
+import NewAlumni from "./page/admin/NewAlumni";
 
 class Main {
 
@@ -65,6 +66,10 @@ class Main {
                 data: window.data,
                 options: {}
             });
+        });
+
+        route.doRoute("admin/alumni/add", () => {
+            new NewAlumni(contextURL);
         });
 
         route.doRoute("admin/event/create", function() {

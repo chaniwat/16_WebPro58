@@ -193,7 +193,7 @@ public class EditProfileServlet extends HttpServlet {
 
         Job job = null;
         if(params.get("alumni-form-jobname") != null) {
-            if(params.get("alumni-form-jobname") == null || params.get("alumni-form-jobname").equals("0")) {
+            if(params.get("alumni-form-jobname").equals("0")) {
                 JobType jobType;
                 if(params.get("alumni-form-jobtype").equals("0")) {
                     jobType = new JobType();

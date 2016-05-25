@@ -1,5 +1,5 @@
+<%@ include file="/WEB-INF/importlib.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="template" uri="/WEB-INF/tlds/TemplateTag.tld" %>
 
 <template:page adminPage="${true}">
 
@@ -17,12 +17,33 @@
 
             <div class="page-header">
                 <h1>เพิ่มศิษย์เก่า</h1>
+
+                <c:if test="${ResponseHelper:hasCodeInRequest()}">
+                    <c:if test="${ResponseHelper:getRequestCode() == ResponseHelper.FORM_INPUT_NOT_COMPLETE}">
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            FORM_INPUT_NOT_COMPLETE
+                        </div>
+                    </c:if>
+                    <c:if test="${ResponseHelper:getRequestCode() == ResponseHelper.ADD_NEW_ALUMNI_COMPLETE}">
+                        <div class="alert alert-success alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            ADD_NEW_ALUMNI_COMPLETE
+                        </div>
+                    </c:if>
+                    <c:if test="${ResponseHelper:getRequestCode() == ResponseHelper.ADD_NEW_ALUMNITRACK_COMPLETE}">
+                        <div class="alert alert-success alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            ADD_NEW_ALUMNITRACK_COMPLETE
+                        </div>
+                    </c:if>
+                </c:if>
             </div>
 
             <div class="container">
 
-                <form action="" method="POST" id="alumni-find-form" class="form-horizontal" onsubmit="javascript:;">
-                    <input type="hidden" id="alumni-form-id" name="alumni-form-id" value="0">
+                <form action="${RouteHelper:generateURL("admin/alumni/add")}" method="POST" id="alumni-find-form" class="form-horizontal">
+                    <input type="hidden" name="mode" value="FIND">
                     <div class="form-group">
                         <label for="alumni-find-form-pnameth" class="col-md-3 control-label">คำนำหน้าชื่อ (ภาษาไทย)</label>
                         <div class="col-md-9">
@@ -43,7 +64,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-9">
-                            <button type="button" id="alumni-find-form-btn" class="btn btn-primary">ขั้นตอนต่อไป »</button>
+                            <button type="submit" id="alumni-find-form-btn" class="btn btn-primary">ขั้นตอนต่อไป »</button>
                         </div>
                     </div>
                 </form>

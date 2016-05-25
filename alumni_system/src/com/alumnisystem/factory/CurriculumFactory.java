@@ -122,6 +122,24 @@ public class CurriculumFactory extends ModelFactory<Curriculum> {
         }
     }
 
+    public ArrayList<Curriculum> findAllByDegree(Curriculum.Degree degree) {
+        try {
+            statement.setStatement("SELECT * FROM curriculum WHERE degree = ?")
+                    .setString(degree.toString());
+
+            ResultSet result = statement.executeQuery();
+
+            ArrayList<Curriculum> curricula = new ArrayList<>();
+            while (result.next()) {
+                curricula.add(buildObject(new Curriculum(), result));
+            }
+            return curricula;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
     /**
      * Build curriculum object
      * @param model
@@ -147,5 +165,4 @@ public class CurriculumFactory extends ModelFactory<Curriculum> {
     public Curriculum remove(int curriculum_id) {
         return null;
     }
-
 }

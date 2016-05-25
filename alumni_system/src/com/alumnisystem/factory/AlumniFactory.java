@@ -11,6 +11,8 @@ import com.sun.istack.internal.NotNull;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TreeSet;
 
 /**
@@ -43,9 +45,9 @@ public class AlumniFactory extends ModelFactory<Alumni> {
         try {
             statement.setStatement("INSERT INTO alumni VALUES (0, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)
                     .setInt(model.getId());
-            if(model.getJob() == null) statement.setNull(Types.INTEGER); else statement.setInt(model.getJob().getId());
             statement.setString(model.getNickname());
             if(model.getBirthdate() != null) statement.setDate(new java.sql.Date(model.getBirthdate().getTime())); else statement.setNull(Types.DATE);
+            if(model.getJob() == null) statement.setNull(Types.INTEGER); else statement.setInt(model.getJob().getId());
             statement.setString(model.getWork_name());
 
             statement.executeUpdate();
@@ -374,6 +376,42 @@ public class AlumniFactory extends ModelFactory<Alumni> {
                     "WHERE alumni.id = (" +
                     "SELECT alumni_id FROM alumni_track WHERE student_id = ?)")
                     .setInt(student_id);
+
+            ResultSet result = statement.executeQuery();
+            if(result.next()) {
+                return buildObject(new Alumni(), result);
+            } else {
+                throw new AlumniNotFound();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Get alumni by student_id
+     * @param pname_th
+     * @param fname_th
+     * @param lname_th
+     * @return {@link Alumni}
+     * @throws AlumniNotFound
+     */
+    public Alumni findByNameTH(String pname_th, String fname_th, String lname_th) throws AlumniNotFound {
+        try {
+            statement.setStatement("SELECT * " +
+                    "FROM alumni " +
+                    "LEFT JOIN user ON alumni.user_id = user.id " +
+                    "LEFT JOIN alumni_address ON alumni.id = alumni_address.alumni_id " +
+                    "LEFT JOIN alumni_track ON alumni.id = alumni_track.alumni_id " +
+                    "LEFT JOIN track ON alumni_track.track_id = track.id " +
+                    "LEFT JOIN curriculum ON track.curriculum_id = curriculum.id " +
+                    "LEFT JOIN job ON alumni.job_id = job.id " +
+                    "LEFT JOIN jobtype ON job.jobtype_id = jobtype.id " +
+                    "WHERE pname_th = ? AND fname_th = ? AND lname_th = ?")
+                    .setString(pname_th)
+                    .setString(fname_th)
+                    .setString(lname_th);
 
             ResultSet result = statement.executeQuery();
             if(result.next()) {

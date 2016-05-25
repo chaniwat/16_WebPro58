@@ -23,6 +23,10 @@ var _ViewAlumniPage = require("./page/ViewAlumniPage");
 
 var _ViewAlumniPage2 = _interopRequireDefault(_ViewAlumniPage);
 
+var _NewAlumni = require("./page/admin/NewAlumni");
+
+var _NewAlumni2 = _interopRequireDefault(_NewAlumni);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -91,6 +95,10 @@ var Main = function () {
                 });
             });
 
+            route.doRoute("admin/alumni/add", function () {
+                new _NewAlumni2.default(contextURL);
+            });
+
             route.doRoute("admin/event/create", function () {
                 $(".textarea").wysihtml5();
             });
@@ -106,7 +114,7 @@ $(document).ready(function () {
     new Main();
 });
 
-},{"./Route":2,"./page/AlumniTrackPage":3,"./page/LoginPage":4,"./page/ProfilePage":5,"./page/ViewAlumniPage":6}],2:[function(require,module,exports){
+},{"./Route":2,"./page/AlumniTrackPage":3,"./page/LoginPage":4,"./page/ProfilePage":5,"./page/ViewAlumniPage":6,"./page/admin/NewAlumni":7}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -283,7 +291,7 @@ var AlumniTrackPage = function () {
 
 exports.default = AlumniTrackPage;
 
-},{"../ultility/FormUtils":8}],4:[function(require,module,exports){
+},{"../ultility/FormUtils":9}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -328,7 +336,7 @@ var LoginPage = function () {
 
 exports.default = LoginPage;
 
-},{"./../ultility/FormUtils":8}],5:[function(require,module,exports){
+},{"./../ultility/FormUtils":9}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -469,7 +477,7 @@ var ProfilePage = function () {
 
 exports.default = ProfilePage;
 
-},{"./../ultility/DateSelectionBuilder":7,"./../ultility/FormUtils":8}],6:[function(require,module,exports){
+},{"./../ultility/DateSelectionBuilder":8,"./../ultility/FormUtils":9}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -509,6 +517,198 @@ var ViewAlumniPage = function ViewAlumniPage() {
 exports.default = ViewAlumniPage;
 
 },{}],7:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _FormUtils = require("../../ultility/FormUtils");
+
+var _FormUtils2 = _interopRequireDefault(_FormUtils);
+
+var _DateSelectionBuilder = require("../../ultility/DateSelectionBuilder");
+
+var _DateSelectionBuilder2 = _interopRequireDefault(_DateSelectionBuilder);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var NewAlumni = function () {
+    function NewAlumni(contextURL) {
+        _classCallCheck(this, NewAlumni);
+
+        this.contextURL = contextURL;
+
+        this.alumnifindform = $("#alumni-find-form");
+        this.alumninewform = $("#alumni-form");
+        this.alumnitrackform = $("#alumni-track-form");
+
+        if (this.alumnifindform.length > 0) {
+            _FormUtils2.default.bindNotEmptyForm(this.alumnifindform);
+
+            this.alumnifindform.submit(this, function (e) {
+                var o = e.data;
+                if (!_FormUtils2.default.isFormComplete(o.alumnifindform)) {
+                    e.preventDefault();
+                    if ($("span.submit-alert").length <= 0) {
+                        $("<span class=\"submit-alert text-danger\">โปรดกรอกข้อมูลที่ต้องการให้ครบ</span>").insertAfter(o.alumnifindform.find("#alumni-find-form-btn"));
+                    }
+                }
+            });
+        } else if (this.alumninewform.length > 0) {
+            this.doAlumniNewForm();
+        } else if (this.alumnitrackform.length > 0) {
+            this.doAlumniTrackForm();
+        }
+    }
+
+    _createClass(NewAlumni, [{
+        key: "doAlumniNewForm",
+        value: function doAlumniNewForm() {
+            var _this = this;
+
+            new _DateSelectionBuilder2.default(this.alumninewform.find("#alumni-form-birthdate-year"), this.alumninewform.find("#alumni-form-birthdate-month"), this.alumninewform.find("#alumni-form-birthdate-day"));
+
+            this.alumninewform.find("#alumni-form-jobtype").change(this, this.jobTypeChange);
+            this.alumninewform.find("#alumni-form-jobname").change(this, this.jobChange);
+
+            _FormUtils2.default.setValToDefault(this.alumninewform.find("#alumni-form-jobtype"));
+            this.alumninewform.find("#alumni-form-jobtype").trigger("change", function () {
+                _FormUtils2.default.setValToDefault(_this.alumninewform.find("#alumni-form-jobname"));
+            });
+        }
+    }, {
+        key: "jobTypeChange",
+        value: function jobTypeChange(e, callback) {
+            var o = e.data;
+            var jobtype_id = o.alumninewform.find("#alumni-form-jobtype").val();
+            if (jobtype_id > 0) {
+                o.alumninewform.find("#alumni-form-jobtypeother").attr("readonly", true);
+                o.alumninewform.find("#alumni-form-jobtypeother").val("");
+                o.alumninewform.find("#alumni-form-jobname").removeAttr("readonly");
+                o.alumninewform.find("#alumni-form-jobname").val("null");
+                o.alumninewform.find("#alumni-form-jobnameother").val("");
+                o.alumninewform.find("#alumni-form-jobnameother").attr("readonly", true);
+
+                $.get(o.contextURL + "/ajax/job?jobtype_id=" + jobtype_id, function (data) {
+                    var insideElem = "<option value=\"null\">โปรดเลือก</option>\n";
+                    $.each(data, function (i, data) {
+                        insideElem += "<option value=\"" + data.id + "\">" + data.name_th + "</option>";
+                    });
+                    insideElem += "<option value=\"0\">อื่นๆ</option>";
+                    o.alumninewform.find("#alumni-form-jobname").html(insideElem);
+
+                    if (callback) callback();
+                }, "json");
+            } else if (jobtype_id == 0) {
+                o.alumninewform.find("#alumni-form-jobtypeother").removeAttr("readonly");
+                o.alumninewform.find("#alumni-form-jobname").attr("readonly", true);
+                o.alumninewform.find("#alumni-form-jobname").val("0");
+                o.alumninewform.find("#alumni-form-jobnameother").removeAttr("readonly");
+            } else {
+                o.alumninewform.find("#alumni-form-jobtypeother").attr("readonly", true);
+                o.alumninewform.find("#alumni-form-jobtypeother").val("");
+                o.alumninewform.find("#alumni-form-jobname").attr("readonly", true);
+                o.alumninewform.find("#alumni-form-jobname").val("null");
+                o.alumninewform.find("#alumni-form-jobnameother").val("");
+                o.alumninewform.find("#alumni-form-jobnameother").attr("readonly", true);
+            }
+        }
+    }, {
+        key: "jobChange",
+        value: function jobChange(e) {
+            var o = e.data;
+            var job_id = o.alumninewform.find("#alumni-form-jobname").val();
+            if (job_id == "null" || job_id > 0) {
+                o.alumninewform.find("#alumni-form-jobnameother").val("");
+                o.alumninewform.find("#alumni-form-jobnameother").attr("readonly", true);
+            } else if (job_id == 0) {
+                o.alumninewform.find("#alumni-form-jobnameother").removeAttr("readonly");
+            }
+        }
+    }, {
+        key: "doAlumniTrackForm",
+        value: function doAlumniTrackForm() {
+            this.select = {
+                degreeElem: $("#alumni-track-degree"),
+                curriculumElem: $("#alumni-track-curriculumid"),
+                trackElem: $("#alumni-track-trackid")
+            };
+
+            this.select.curriculumElem.attr("disabled", true);
+            this.select.trackElem.attr("disabled", true);
+
+            this.select.degreeElem.change(this, function (e) {
+                var o = e.data;
+                if (o.select.degreeElem.val() != "") {
+                    $.get(o.contextURL + "/ajax/curriculum?degree=" + o.select.degreeElem.val(), function (data) {
+                        var insideElem = "<option value=\"\">โปรดเลือก</option>\n";
+                        $.each(data, function (i, data) {
+                            insideElem += "<option value=\"" + data.id + "\">" + data.cname_th + " " + data.sname_th + "(ปี " + data.cyear + ")</option>";
+                        });
+                        o.select.curriculumElem.html(insideElem);
+                        o.select.curriculumElem.removeAttr("disabled");
+                        o.select.curriculumElem.val("");
+                        o.select.trackElem.attr("disabled", true);
+                        o.select.trackElem.val("");
+                    }, "json");
+                } else {
+                    var insideElem = "<option value=\"\">โปรดเลือก</option>\n";
+                    o.select.curriculumElem.html(insideElem);
+                    o.select.trackElem.html(insideElem);
+
+                    o.select.curriculumElem.attr("disabled", true);
+                    o.select.curriculumElem.val("");
+                    o.select.trackElem.attr("disabled", true);
+                    o.select.trackElem.val("");
+                }
+            });
+
+            this.select.curriculumElem.change(this, function (e) {
+                var o = e.data;
+                if (o.select.curriculumElem.val() != "") {
+                    $.get(o.contextURL + "/ajax/track?curriculum_id=" + o.select.curriculumElem.val(), function (data) {
+                        var insideElem = "<option value=\"\">โปรดเลือก</option>\n";
+                        $.each(data, function (i, data) {
+                            insideElem += "<option value=\"" + data.id + "\">" + data.name_th + "</option>";
+                        });
+                        o.select.trackElem.html(insideElem);
+                        o.select.trackElem.removeAttr("disabled");
+                        o.select.trackElem.val("");
+                    }, "json");
+                } else {
+                    var insideElem = "<option value=\"\">โปรดเลือก</option>\n";
+                    o.select.trackElem.html(insideElem);
+
+                    o.select.trackElem.attr("disabled", true);
+                    o.select.trackElem.val("");
+                }
+            });
+
+            _FormUtils2.default.bindNotEmptyForm(this.alumnitrackform);
+
+            this.alumnitrackform.submit(this, function (e) {
+                var o = e.data;
+                if (!_FormUtils2.default.isFormComplete(o.alumnitrackform)) {
+                    e.preventDefault();
+                    if ($("span.submit-alert").length <= 0) {
+                        $("<span class=\"submit-alert text-danger\">โปรดกรอกข้อมูลที่ต้องการให้ครบ</span>").insertAfter(o.alumnitrackform.find("#alumni-track-form-btn"));
+                    }
+                }
+            });
+        }
+    }]);
+
+    return NewAlumni;
+}();
+
+exports.default = NewAlumni;
+
+},{"../../ultility/DateSelectionBuilder":8,"../../ultility/FormUtils":9}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -577,7 +777,7 @@ var DateSelectionBuilder = function () {
 
 exports.default = DateSelectionBuilder;
 
-},{"./FormUtils":8}],8:[function(require,module,exports){
+},{"./FormUtils":9}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -635,7 +835,12 @@ var FormUtils = function () {
                 $.each(data, function (i, data) {
                     if ($(data).attr("type") != null && $(data).attr("type") == "hidden") return;
                     if ($(data).data("empty") != null && $(data).data("empty") == false && $(data).val().trim() == "") {
-                        $(data).parent().parent().addClass("has-error");
+                        var parent = $(data).parent();
+                        if (parent.is(".input-group")) {
+                            parent.parent().parent().addClass("has-error");
+                        } else {
+                            parent.parent().addClass("has-error");
+                        }
                         flag = false;
                     }
                 });
