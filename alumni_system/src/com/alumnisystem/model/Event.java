@@ -1,5 +1,6 @@
 package com.alumnisystem.model;
 
+import java.sql.Time;
 import java.util.Date;
 
 /**
@@ -9,7 +10,8 @@ public class Event extends BaseModel {
 
     private int id;
     private String title, description, detail;
-    private Date datetime;
+    private Date date;
+    private Time time;
 
     public int getId() {
         return id;
@@ -43,12 +45,19 @@ public class Event extends BaseModel {
         this.detail = detail;
     }
 
-    public Date getDatetime() {
-        return datetime;
+    public Date getDate() {
+        return date;
     }
 
-    public void setDatetime(Date datetime) {
-        this.datetime = datetime;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
+    public Time getTime() {
+        return time;
+    }
+
+    public void setTime(Time time) {
+        this.time = time;
+    }
 }

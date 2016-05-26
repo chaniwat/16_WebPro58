@@ -64,6 +64,18 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 .form-group span.submit-alert {
   margin-left: 15px; }
 
+@media (min-width: 768px) {
+  .page-event img {
+    max-width: 720px; } }
+
+@media (min-width: 992px) {
+  .page-event img {
+    max-width: 940px; } }
+
+@media (min-width: 1200px) {
+  .page-event img {
+    max-width: 1130px; } }
+
 body.admin-page #navbar .nav > li > a:hover, body.admin-page #navbar .nav > li > a:active, body.admin-page #navbar .nav > li > a:focus {
   color: #FFF; }
 

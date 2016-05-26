@@ -31,6 +31,30 @@ class Main {
             new ViewDataPage();
         });
 
+        route.doRoute(["admin/event/all"], () => {
+            let alumnitable = $("#alumni-table");
+            let searchform = $("#table-searchform");
+
+            if(alumnitable.length > 0) {
+                let datatable = alumnitable.DataTable({
+                    "order": [[ 0, "desc" ]]
+                });
+
+                let searchtype = searchform.find("#table-searchtype");
+                let searchinput = searchform.find("#table-searchinput");
+
+                searchinput.keyup(() => {
+                    datatable.columns(searchtype.val()).search(searchinput.val()).draw();
+                });
+
+                searchtype.change(() => {
+                    searchinput.trigger('keyup');
+                });
+
+                $("#alumni-table_filter").html(searchform);
+            }
+        });
+
         route.doRoute(["admin/user/add"], () => {
             new NewUser();
         });

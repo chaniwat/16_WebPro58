@@ -92,3 +92,21 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 .form-group span.submit-alert {
   margin-left: 15px;
 }
+
+.page-event {
+  @media (min-width: 768px) {
+    img {
+      max-width: 720px;
+    }
+  }
+  @media (min-width: 992px) {
+    img {
+      max-width: 940px;
+    }
+  }
+  @media (min-width: 1200px) {
+    img {
+      max-width: 1130px;
+    }
+  }
+}

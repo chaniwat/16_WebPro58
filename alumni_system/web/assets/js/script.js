@@ -63,6 +63,32 @@ var Main = function () {
                 new _ViewDataPage2.default();
             });
 
+            route.doRoute(["admin/event/all"], function () {
+                var alumnitable = $("#alumni-table");
+                var searchform = $("#table-searchform");
+
+                if (alumnitable.length > 0) {
+                    (function () {
+                        var datatable = alumnitable.DataTable({
+                            "order": [[0, "desc"]]
+                        });
+
+                        var searchtype = searchform.find("#table-searchtype");
+                        var searchinput = searchform.find("#table-searchinput");
+
+                        searchinput.keyup(function () {
+                            datatable.columns(searchtype.val()).search(searchinput.val()).draw();
+                        });
+
+                        searchtype.change(function () {
+                            searchinput.trigger('keyup');
+                        });
+
+                        $("#alumni-table_filter").html(searchform);
+                    })();
+                }
+            });
+
             route.doRoute(["admin/user/add"], function () {
                 new _NewUser2.default();
             });
