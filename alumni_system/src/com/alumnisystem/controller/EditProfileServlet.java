@@ -56,7 +56,7 @@ public class EditProfileServlet extends HttpServlet {
 
         if(params.get("staff-form-pnameth") == null ||
                 params.get("staff-form-fnameth") == null || params.get("staff-form-lnameth") == null) {
-            redirectToProfilePage(request, response, ResponseHelper.FORM_INPUT_NOT_COMPLETE, true);
+            redirectToProfilePage(request, response, ResponseHelper.FORM_INPUT_NOT_COMPLETE);
             return;
         }
 
@@ -103,7 +103,7 @@ public class EditProfileServlet extends HttpServlet {
 
         if(params.get("teacher-form-pnameth") == null ||
                 params.get("teacher-form-fnameth") == null || params.get("teacher-form-lnameth") == null) {
-            redirectToProfilePage(request, response, ResponseHelper.FORM_INPUT_NOT_COMPLETE, true);
+            redirectToProfilePage(request, response, ResponseHelper.FORM_INPUT_NOT_COMPLETE);
             return;
         }
 
@@ -151,7 +151,7 @@ public class EditProfileServlet extends HttpServlet {
 
         if(params.get("alumni-form-pnameth") == null ||
                 params.get("alumni-form-fnameth") == null || params.get("alumni-form-lnameth") == null) {
-            redirectToProfilePage(request, response, ResponseHelper.FORM_INPUT_NOT_COMPLETE, true);
+            redirectToProfilePage(request, response, ResponseHelper.FORM_INPUT_NOT_COMPLETE);
             return;
         }
 

@@ -6,6 +6,7 @@ import com.alumnisystem.model.Work;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
@@ -32,12 +33,17 @@ public class TeacherFactory extends ModelFactory<Teacher> {
 
             new UserFactory().createUser(model, model.getUsernames(), "itkmitl");
 
-            statement.setStatement("INSERT INTO teacher VALUES (?, ?, ?)")
+            statement.setStatement("INSERT INTO teacher VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS)
                     .setInt(model.getTeacher_id())
                     .setInt(model.getId())
                     .setString(String.valueOf(model.getWork_status()));
 
             statement.executeUpdate();
+
+            result = statement.getStatement().getGeneratedKeys();
+            if(result.next()) {
+                model.setTeacher_id(result.getInt(1));
+            }
             
             return model;
         } catch (SQLException ex) {
@@ -159,7 +165,7 @@ public class TeacherFactory extends ModelFactory<Teacher> {
     public Teacher remove(int teacher_id) throws TeacherNotFound {
         Teacher teacher = find(teacher_id);
 
-        new UserFactory().removeUser(teacher.getId());
+        new UserFactory().remove(teacher.getId());
 
         return teacher;
     }
@@ -172,7 +178,7 @@ public class TeacherFactory extends ModelFactory<Teacher> {
     public Teacher removeByUserId(int user_id) throws TeacherNotFound {
         Teacher teacher = findByUserId(user_id);
 
-        new UserFactory().removeUser(teacher.getId());
+        new UserFactory().remove(teacher.getId());
 
         return teacher;
     }

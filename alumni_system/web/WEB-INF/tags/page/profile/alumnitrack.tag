@@ -83,9 +83,19 @@
 
 </table>
 
-<c:if test="${self}">
-    <a href="${RouteHelper:generateURL("track/edit")}" class="btn btn-primary">แก้ไขข้อมูล</a>
+<c:if test="${RouteHelper:isAdminPage()}">
+    <c:if test="${self}">
+        <a href="${RouteHelper:generateURL("admin/track/edit")}" class="btn btn-primary">แก้ไขข้อมูล</a>
+    </c:if>
+    <c:if test="${!self}">
+        <a href="${RouteHelper:generateURL("admin/track/edit")}/${alumni.alumni_id}" class="btn btn-primary">แก้ไขข้อมูล</a>
+    </c:if>
 </c:if>
-<c:if test="${!self}">
-    <a href="${RouteHelper:generateURL("track/edit")}/${alumni.alumni_id}" class="btn btn-primary">แก้ไขข้อมูล</a>
+<c:if test="${!RouteHelper:isAdminPage()}">
+    <c:if test="${self}">
+        <a href="${RouteHelper:generateURL("track/edit")}" class="btn btn-primary">แก้ไขข้อมูล</a>
+    </c:if>
+    <c:if test="${!self}">
+        <a href="${RouteHelper:generateURL("track/edit")}/${alumni.alumni_id}" class="btn btn-primary">แก้ไขข้อมูล</a>
+    </c:if>
 </c:if>

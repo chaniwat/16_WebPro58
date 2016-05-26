@@ -82,6 +82,23 @@ public class UserFactory extends ModelFactory<User> {
         }
     }
 
+    public ArrayList<User> findAllByType(User.Type type) {
+        try {
+            statement.setStatement("SELECT * FROM user JOIN user_alias ON user.id = user_alias.user_id WHERE user.type = ?")
+                    .setString(type.toString());
+
+            result = statement.executeQuery();
+            ArrayList<User> users = new ArrayList<>();
+            while (result.next()) {
+                users.add(buildObject(new User(), result));
+            }
+            return users;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
     /**
      * Build and return user object
      * @param result
@@ -205,10 +222,23 @@ public class UserFactory extends ModelFactory<User> {
         }
     }
 
-    @Override
-    @Deprecated
-    public User remove(@NotNull int id) {
-        throw new RuntimeException("use each user factory remove() instead");
+    public User updateRole(@NotNull User model, boolean admin) {
+        try {
+            statement.setStatement("UPDATE user " +
+                    "SET admintype = ? " +
+                    "WHERE id = ?")
+                    .setBoolean(admin)
+                    .setInt(model.getId());
+
+            statement.executeUpdate();
+
+            model.setAdmin(admin);
+
+            return model;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -216,7 +246,8 @@ public class UserFactory extends ModelFactory<User> {
      * @param id
      * @throws UserNotFound
      */
-    User removeUser(@NotNull int id) throws UserNotFound {
+    @Override
+    public User remove(@NotNull int id) throws UserNotFound {
         User user = find(id);
 
         try {
@@ -244,8 +275,6 @@ public class UserFactory extends ModelFactory<User> {
                     .setString(username);
 
             statement.executeUpdate();
-
-            model.getUsernames().add(username);
 
             return model;
         } catch (SQLException ex) {

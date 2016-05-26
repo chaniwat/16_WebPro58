@@ -37,10 +37,6 @@ public class InitialRequestListener implements ServletRequestListener {
         RouteHelper.setThreadLocal(request, session);
         ResponseHelper.setThreadLocal(request, session);
 
-        if(RouteHelper.isRequestStaticResource()) {
-            return;
-        }
-
         try {
             Database.setConnectionThreadLocal(dataSource.getConnection());
             Authorization.setSessionThreadLocal(session);
@@ -51,12 +47,6 @@ public class InitialRequestListener implements ServletRequestListener {
 
     @Override
     public void requestDestroyed(ServletRequestEvent servletRequestEvent) {
-        HttpServletRequest request = (HttpServletRequest) servletRequestEvent.getServletRequest();
-
-        if(RouteHelper.isPathStaticResource(request.getRequestURI())) {
-            return;
-        }
-
         Database.closeConnection();
     }
 

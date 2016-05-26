@@ -1,4 +1,4 @@
-export default class ViewAlumniPage {
+export default class ViewDataPage {
 
     constructor() {
         this.alumnitable = $("#alumni-table");

@@ -2,8 +2,9 @@ import Route from "./Route";
 import LoginPage from "./page/LoginPage";
 import ProfilePage from "./page/ProfilePage";
 import AlumniTrackPage from "./page/AlumniTrackPage";
-import ViewAlumniPage from "./page/ViewAlumniPage";
+import ViewDataPage from "./page/ViewDataPage";
 import NewAlumni from "./page/admin/NewAlumni";
+import NewUser from "./page/admin/NewUser";
 
 class Main {
 
@@ -22,15 +23,19 @@ class Main {
             new LoginPage();
         });
 
-        route.doRoute(["profile/*"], () => {
+        route.doRoute(["profile/*", "admin/profile/*"], () => {
             new ProfilePage(contextURL);
         });
 
-        route.doRoute(["alumni/*", "admin/alumni/*"], () => {
-            new ViewAlumniPage();
+        route.doRoute(["alumni/*", "admin/alumni/*", "admin/user/*"], () => {
+            new ViewDataPage();
+        });
+
+        route.doRoute(["admin/user/add"], () => {
+            new NewUser();
         });
         
-        route.doRoute("track/edit/*", () => {
+        route.doRoute(["track/edit/*", "admin/track/edit/*"], () => {
             new AlumniTrackPage(contextURL);
         });
 

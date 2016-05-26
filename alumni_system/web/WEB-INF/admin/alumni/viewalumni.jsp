@@ -70,7 +70,7 @@
                             <tr>
                                 <c:forEach var="track" items="${alumni.tracks}">
                                     <c:if test="${track.curriculum.id == pageScope.degree.getValue()}">
-                                        <td><a href="${RouteHelper:generateURL("profile/".concat(track.student_id))}">${track.student_id}</a></td>
+                                        <td><a href="${RouteHelper:generateURL("admin/profile/".concat(track.student_id))}">${track.student_id}</a></td>
                                         <td>${track.generation}</td>
                                         <c:set var="student_id" scope="page" value="${track.student_id}" />
                                     </c:if>
@@ -80,7 +80,7 @@
                                 <td>${alumni.nickname}</td>
                                 <td>${alumni.email}</td>
                                 <td>${alumni.phone}</td>
-                                <td width="1"><a href="${RouteHelper:generateURL("admin/alumni")}/${student_id}" class="btn btn-info btn-xs">ดูข้อมูล</a></td>
+                                <td width="1"><a href="${RouteHelper:generateURL("admin/profile")}/${alumni.id}" class="btn btn-info btn-xs">ดูข้อมูล</a></td>
                             </tr>
                         </c:forEach>
                     </tbody>

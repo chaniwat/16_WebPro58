@@ -19,13 +19,17 @@ var _AlumniTrackPage = require("./page/AlumniTrackPage");
 
 var _AlumniTrackPage2 = _interopRequireDefault(_AlumniTrackPage);
 
-var _ViewAlumniPage = require("./page/ViewAlumniPage");
+var _ViewDataPage = require("./page/ViewDataPage");
 
-var _ViewAlumniPage2 = _interopRequireDefault(_ViewAlumniPage);
+var _ViewDataPage2 = _interopRequireDefault(_ViewDataPage);
 
 var _NewAlumni = require("./page/admin/NewAlumni");
 
 var _NewAlumni2 = _interopRequireDefault(_NewAlumni);
+
+var _NewUser = require("./page/admin/NewUser");
+
+var _NewUser2 = _interopRequireDefault(_NewUser);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -51,15 +55,19 @@ var Main = function () {
                 new _LoginPage2.default();
             });
 
-            route.doRoute(["profile/*"], function () {
+            route.doRoute(["profile/*", "admin/profile/*"], function () {
                 new _ProfilePage2.default(contextURL);
             });
 
-            route.doRoute(["alumni/*", "admin/alumni/*"], function () {
-                new _ViewAlumniPage2.default();
+            route.doRoute(["alumni/*", "admin/alumni/*", "admin/user/*"], function () {
+                new _ViewDataPage2.default();
             });
 
-            route.doRoute("track/edit/*", function () {
+            route.doRoute(["admin/user/add"], function () {
+                new _NewUser2.default();
+            });
+
+            route.doRoute(["track/edit/*", "admin/track/edit/*"], function () {
                 new _AlumniTrackPage2.default(contextURL);
             });
 
@@ -114,7 +122,7 @@ $(document).ready(function () {
     new Main();
 });
 
-},{"./Route":2,"./page/AlumniTrackPage":3,"./page/LoginPage":4,"./page/ProfilePage":5,"./page/ViewAlumniPage":6,"./page/admin/NewAlumni":7}],2:[function(require,module,exports){
+},{"./Route":2,"./page/AlumniTrackPage":3,"./page/LoginPage":4,"./page/ProfilePage":5,"./page/ViewDataPage":6,"./page/admin/NewAlumni":7,"./page/admin/NewUser":8}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -291,7 +299,7 @@ var AlumniTrackPage = function () {
 
 exports.default = AlumniTrackPage;
 
-},{"../ultility/FormUtils":9}],4:[function(require,module,exports){
+},{"../ultility/FormUtils":10}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -336,7 +344,7 @@ var LoginPage = function () {
 
 exports.default = LoginPage;
 
-},{"./../ultility/FormUtils":9}],5:[function(require,module,exports){
+},{"./../ultility/FormUtils":10}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -477,7 +485,7 @@ var ProfilePage = function () {
 
 exports.default = ProfilePage;
 
-},{"./../ultility/DateSelectionBuilder":8,"./../ultility/FormUtils":9}],6:[function(require,module,exports){
+},{"./../ultility/DateSelectionBuilder":9,"./../ultility/FormUtils":10}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -486,10 +494,10 @@ Object.defineProperty(exports, "__esModule", {
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var ViewAlumniPage = function ViewAlumniPage() {
+var ViewDataPage = function ViewDataPage() {
     var _this = this;
 
-    _classCallCheck(this, ViewAlumniPage);
+    _classCallCheck(this, ViewDataPage);
 
     this.alumnitable = $("#alumni-table");
     this.searchform = $("#table-searchform");
@@ -514,7 +522,7 @@ var ViewAlumniPage = function ViewAlumniPage() {
     }
 };
 
-exports.default = ViewAlumniPage;
+exports.default = ViewDataPage;
 
 },{}],7:[function(require,module,exports){
 "use strict";
@@ -708,7 +716,56 @@ var NewAlumni = function () {
 
 exports.default = NewAlumni;
 
-},{"../../ultility/DateSelectionBuilder":8,"../../ultility/FormUtils":9}],8:[function(require,module,exports){
+},{"../../ultility/DateSelectionBuilder":9,"../../ultility/FormUtils":10}],8:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _FormUtils = require("../../ultility/FormUtils");
+
+var _FormUtils2 = _interopRequireDefault(_FormUtils);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var NewUser = function () {
+    function NewUser() {
+        _classCallCheck(this, NewUser);
+
+        this.teacher = { form: $("#teacher-form") };
+        this.staff = { form: $("#staff-form") };
+
+        _FormUtils2.default.bindNotEmptyForm(this.teacher.form);
+        _FormUtils2.default.bindNotEmptyForm(this.staff.form);
+
+        this.teacher.form.submit(this.teacher, this.submitForm);
+        this.staff.form.submit(this.staff, this.submitForm);
+    }
+
+    _createClass(NewUser, [{
+        key: "submitForm",
+        value: function submitForm(e) {
+            var o = e.data;
+            if (!_FormUtils2.default.isFormComplete(o.form)) {
+                e.preventDefault();
+                if ($("span.submit-alert").length <= 0) {
+                    $("<span class=\"submit-alert text-danger\">โปรดกรอกข้อมูลที่ต้องการให้ครบ</span>").insertAfter(o.form.find("button"));
+                }
+            }
+        }
+    }]);
+
+    return NewUser;
+}();
+
+exports.default = NewUser;
+
+},{"../../ultility/FormUtils":10}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -777,7 +834,7 @@ var DateSelectionBuilder = function () {
 
 exports.default = DateSelectionBuilder;
 
-},{"./FormUtils":9}],9:[function(require,module,exports){
+},{"./FormUtils":10}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

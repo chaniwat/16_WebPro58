@@ -13,7 +13,7 @@
 
 <hr />
 
-<form action="${RouteHelper:generateURL("track/edit")}" method="POST" id="${trackformname}" class="form-horizontal">
+<form action="${RouteHelper:isAdminPage() ? (RouteHelper:generateURL("admin/track/edit")) : (RouteHelper:generateURL("track/edit"))}" method="POST" id="${trackformname}" class="form-horizontal">
     <input type="hidden" name="degree" value="${track.curriculum.degree.toString().toLowerCase()}" />
     <div class="form-group">
         <label for="student_id" class="col-md-3 control-label">รหัสนักศึกษา</label>

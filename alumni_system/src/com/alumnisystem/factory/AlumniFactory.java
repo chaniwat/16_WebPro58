@@ -6,13 +6,10 @@ import com.alumnisystem.model.Alumni;
 import com.alumnisystem.model.Curriculum;
 import com.alumnisystem.model.Job;
 import com.alumnisystem.model.Track;
-import com.alumnisystem.utility.database.Database;
 import com.sun.istack.internal.NotNull;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.TreeSet;
 
 /**
@@ -475,7 +472,7 @@ public class AlumniFactory extends ModelFactory<Alumni> {
     public Alumni remove(int alumni_id) throws AlumniNotFound {
         Alumni alumni = find(alumni_id);
 
-        new UserFactory().removeUser(alumni.getId());
+        new UserFactory().remove(alumni.getId());
 
         return alumni;
     }
@@ -488,7 +485,7 @@ public class AlumniFactory extends ModelFactory<Alumni> {
     public Alumni removeByStudentId(int student_id) throws AlumniNotFound {
         Alumni alumni = findByStudentId(student_id);
 
-        new UserFactory().removeUser(alumni.getId());
+        new UserFactory().remove(alumni.getId());
 
         return alumni;
     }
@@ -501,7 +498,7 @@ public class AlumniFactory extends ModelFactory<Alumni> {
     public Alumni removeByUserId(int user_id) throws AlumniNotFound {
         Alumni alumni = findByUserId(user_id);
 
-        new UserFactory().removeUser(alumni.getId());
+        new UserFactory().remove(alumni.getId());
 
         return alumni;
     }

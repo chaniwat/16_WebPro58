@@ -30,12 +30,17 @@ public class StaffFactory extends ModelFactory<Staff> {
         new UserFactory().createUser(model, model.getUsernames(), "itkmitl");
         
         try {
-            statement.setStatement("INSERT INTO staff VALUES (?, ?, ?)")
+            statement.setStatement("INSERT INTO staff VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS)
                     .setInt(model.getStaff_id())
                     .setInt(model.getId())
                     .setInt(model.getSection().getId());
             
             statement.executeUpdate();
+
+            result = statement.getStatement().getGeneratedKeys();
+            if(result.next()) {
+                model.setStaff_id(result.getInt(1));
+            }
             
             return model;
         } catch (SQLException ex) {
@@ -166,7 +171,7 @@ public class StaffFactory extends ModelFactory<Staff> {
     public Staff remove(int id) throws StaffNotFound {
         Staff staff = find(id);
 
-        new UserFactory().removeUser(staff.getId());
+        new UserFactory().remove(staff.getId());
 
         return staff;
     }
@@ -179,7 +184,7 @@ public class StaffFactory extends ModelFactory<Staff> {
     public Staff removeByUserId(int user_id) throws StaffNotFound {
         Staff staff = findByUserId(user_id);
 
-        new UserFactory().removeUser(user_id);
+        new UserFactory().remove(user_id);
 
         return staff;
     }

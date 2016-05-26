@@ -24,6 +24,7 @@
                     <li><a href="${RouteHelper:generateURL("admin")}">หน้าแรก</a></li>
                     <li><a href="${RouteHelper:generateURL("admin/user")}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ผู้ใช้<span class="caret"></span></a>
                         <ul class="dropdown-menu">
+                            <li><a href="${RouteHelper:generateURL("admin/user/alumni")}">ศิษย์เก่า</a></li>
                             <li><a href="${RouteHelper:generateURL("admin/user/teacher")}">อาจารย์</a></li>
                             <li><a href="${RouteHelper:generateURL("admin/user/staff")}">เจ้าหน้าที่/ผู้ดูแลระบบ</a></li>
                             <li role="separator" class="divider"></li>

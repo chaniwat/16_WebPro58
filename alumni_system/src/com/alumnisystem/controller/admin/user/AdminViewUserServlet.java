@@ -1,7 +1,8 @@
-package com.alumnisystem.controller.admin.alumni;
+package com.alumnisystem.controller.admin.user;
 
-import com.alumnisystem.factory.AlumniFactory;
-import com.alumnisystem.model.Curriculum;
+import com.alumnisystem.factory.StaffFactory;
+import com.alumnisystem.factory.UserFactory;
+import com.alumnisystem.model.User;
 import com.alumnisystem.utility.ResponseHelper;
 import com.alumnisystem.utility.RouteHelper;
 
@@ -13,24 +14,23 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 
-@WebServlet(name = "AdminViewAlumniServlet", urlPatterns = {"/admin/alumni/*"})
-public class AdminViewAlumniServlet extends HttpServlet {
+@WebServlet(name = "AdminViewUserServlet", urlPatterns = {"/admin/user/*"})
+public class AdminViewUserServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
 
         String uriNoContext = RouteHelper.getURINoContext();
-        uriNoContext = uriNoContext.substring("admin/alumni/".length());
+        uriNoContext = uriNoContext.substring("admin/user/".length());
 
         String[] uriSlashSplit = uriNoContext.split("/");
         int uriSlashSplitLength = uriSlashSplit.length;
 
         if(uriSlashSplitLength == 1) {
-            if(Arrays.asList("bachelor", "master", "doctoral").contains(uriSlashSplit[0])) {
-                request.setAttribute("degree", uriSlashSplit[0]);
-                request.setAttribute("alumnis", new AlumniFactory().getAlumniWithinDegree(Curriculum.Degree.valueOf(uriSlashSplit[0].toUpperCase())));
-                request.getRequestDispatcher("/WEB-INF/admin/alumni/viewalumni.jsp").forward(request, response);
+            if(Arrays.asList("alumni", "teacher", "staff").contains(uriSlashSplit[0])) {
+                request.setAttribute("type", uriSlashSplit[0]);
+                request.getRequestDispatcher("/WEB-INF/admin/user/viewuser.jsp").forward(request, response);
                 return;
             }
         }

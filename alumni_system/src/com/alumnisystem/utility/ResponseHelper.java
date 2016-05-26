@@ -35,12 +35,19 @@ public class ResponseHelper {
     public static final int NO_USER_MODEL_FOUND = 701;
 
     public static final int FORM_INPUT_NOT_COMPLETE = 901;
+    public static final int FORM_PASSWORD_NOT_MATCH = 902;
 
     public static final int PROFILE_UPDATED_COMPLETE = 1001;
     public static final int ALUMNI_TRACK_UPDATED_COMPLETE = 1002;
+    public static final int MAKE_ADMIN_COMPLETE = 1003;
+    public static final int REMOVE_ADMIN_COMPLETE = 1004;
 
     public static final int ADD_NEW_ALUMNI_COMPLETE = 1101;
     public static final int ADD_NEW_ALUMNITRACK_COMPLETE = 1102;
+    public static final int ADD_NEW_TEACHER_COMPLETE = 1103;
+    public static final int ADD_NEW_STAFF_COMPLETE = 1104;
+
+    public static final int REMOVE_USER_COMPLETE = 1201;
 
     /**
      * Check if have error in session.

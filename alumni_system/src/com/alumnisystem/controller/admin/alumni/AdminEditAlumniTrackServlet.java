@@ -1,4 +1,4 @@
-package com.alumnisystem.controller;
+package com.alumnisystem.controller.admin.alumni;
 
 import com.alumnisystem.annotation.AuthGuard;
 import com.alumnisystem.factory.AlumniFactory;
@@ -17,25 +17,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
-@WebServlet(name = "EditAlumniTrackServlet", urlPatterns = {"/track/edit/*"})
+@WebServlet(name = "AdminEditAlumniTrackServlet", urlPatterns = {"/admin/track/edit/*"})
 @AuthGuard
-public class EditAlumniTrackServlet extends HttpServlet {
+public class AdminEditAlumniTrackServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
 
-        if(!(request.getRequestURI().endsWith("/track/edit") || request.getRequestURI().endsWith("/track/edit/"))) {
+        if(!(request.getRequestURI().endsWith("/admin/track/edit") || request.getRequestURI().endsWith("/admin/track/edit"))) {
             response.sendError(ResponseHelper.PAGE_NOT_FOUND);
-            return;
-        }
-
-        if(!isEditable(request)) {
-            ResponseHelper.pushSessionCode(ResponseHelper.NOT_ENOUGH_PERMISSION);
-            response.sendRedirect(RouteHelper.generateURL("profile"));
             return;
         }
 
@@ -44,7 +37,7 @@ public class EditAlumniTrackServlet extends HttpServlet {
 
         if(alumni == null) {
             ResponseHelper.pushSessionCode(ResponseHelper.NO_USER_MODEL_FOUND);
-            response.sendRedirect(RouteHelper.generateURL("profile"));
+            response.sendRedirect(RouteHelper.generateURL("admin/profile"));
             return;
         }
 
@@ -65,17 +58,11 @@ public class EditAlumniTrackServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
 
-        if(!isEditable(request)) {
-            ResponseHelper.pushSessionCode(ResponseHelper.NOT_ENOUGH_PERMISSION);
-            response.sendRedirect(RouteHelper.generateURL("profile"));
-            return;
-        }
-
         Alumni alumni = getAlumniByPath(request);
 
         if(alumni == null) {
             ResponseHelper.pushSessionCode(ResponseHelper.NO_USER_MODEL_FOUND);
-            response.sendRedirect(RouteHelper.generateURL("profile"));
+            response.sendRedirect(RouteHelper.generateURL("admin/profile"));
             return;
         }
 
@@ -85,7 +72,7 @@ public class EditAlumniTrackServlet extends HttpServlet {
             ResponseHelper.pushRequestCode(ResponseHelper.pullSessionCode());
         }
         request.getSession().setAttribute("alumnitrack.view.current.path", RouteHelper.getURINoContext());
-        request.getRequestDispatcher("/WEB-INF/alumni/edittrack.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/admin/alumni/edittrack.jsp").forward(request, response);
     }
 
     private Alumni getAlumniByPath(HttpServletRequest request) {
@@ -93,30 +80,20 @@ public class EditAlumniTrackServlet extends HttpServlet {
         AlumniFactory alumniFactory = new AlumniFactory();
 
         try {
-            if(request.getRequestURI().endsWith("/track/edit") || request.getRequestURI().endsWith("/track/edit/") ) {
+            if(request.getRequestURI().endsWith("/admin/track/edit") || request.getRequestURI().endsWith("/admin/track/edit/") ) {
                 alumni = alumniFactory.findByUserId(Authorization.getCurrentUser().getId());
             } else {
                 String uri = request.getRequestURI();
                 if(!uri.endsWith("/")) uri += "/";
                 String[] splits = uri.split("/");
 
-                if(splits[splits.length - 3].equals("track") && splits[splits.length - 2].equals("edit")) {
+                if(splits[splits.length - 4].equals("admin") && splits[splits.length - 3].equals("track") && splits[splits.length - 2].equals("edit")) {
                         alumni = alumniFactory.find(Integer.parseInt(splits[splits.length - 1]));
                 }
             }
         } catch (Exception ignored) { }
 
         return alumni;
-    }
-
-    private boolean isEditable(HttpServletRequest request) {
-        User currentUser = Authorization.getCurrentUser();
-        if(!currentUser.isAdmin()) {
-            if((request.getRequestURI().endsWith("/track/edit") || request.getRequestURI().endsWith("/track/edit")) && currentUser.getType() != User.Type.ALUMNI) {
-                return false;
-            }
-        }
-        return true;
     }
 
 }

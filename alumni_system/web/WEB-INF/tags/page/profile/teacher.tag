@@ -64,7 +64,7 @@
     <div class="form-group">
         <label for="teacher-form-lnameen" class="col-md-3 control-label">นามสกุล (ภาษาอังกฤษ)</label>
         <div class="col-md-9">
-            <input type="text" class="form-control" name="teacher-form-lnameen" id="teacher-form-lnameen" placeholder="Surname (EN)" value="${teacher.lname_en}}">
+            <input type="text" class="form-control" name="teacher-form-lnameen" id="teacher-form-lnameen" placeholder="Surname (EN)" value="${teacher.lname_en}">
         </div>
     </div>
     <div class="form-group">
