@@ -1,5 +1,6 @@
 package com.alumnisystem.controller.admin.profile;
 
+import com.alumnisystem.annotation.AuthGuard;
 import com.alumnisystem.exception.UserNotFound;
 import com.alumnisystem.factory.UserFactory;
 import com.alumnisystem.model.User;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet(name = "AdminViewProfileServlet", urlPatterns = {"/admin/profile/*"})
+@AuthGuard
 public class AdminViewProfileServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -46,6 +46,7 @@ public class ResponseHelper {
     public static final int ADD_NEW_ALUMNITRACK_COMPLETE = 1102;
     public static final int ADD_NEW_TEACHER_COMPLETE = 1103;
     public static final int ADD_NEW_STAFF_COMPLETE = 1104;
+    public static final int ADD_NEW_SURVEY_COMPLETE = 1105;
 
     public static final int REMOVE_USER_COMPLETE = 1201;
 

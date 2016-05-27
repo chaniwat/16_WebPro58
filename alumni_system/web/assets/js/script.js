@@ -31,6 +31,10 @@ var _NewUser = require("./page/admin/NewUser");
 
 var _NewUser2 = _interopRequireDefault(_NewUser);
 
+var _SurveyFormCreate = require("./page/admin/SurveyFormCreate");
+
+var _SurveyFormCreate2 = _interopRequireDefault(_SurveyFormCreate);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -59,7 +63,7 @@ var Main = function () {
                 new _ProfilePage2.default(contextURL);
             });
 
-            route.doRoute(["alumni/*", "admin/alumni/*", "admin/user/*"], function () {
+            route.doRoute(["alumni/*", "admin/alumni/*", "admin/user/*", "admin/survey/*"], function () {
                 new _ViewDataPage2.default();
             });
 
@@ -137,6 +141,10 @@ var Main = function () {
                 $(".textarea").wysihtml5();
             });
 
+            route.doRoute("admin/survey/create", function () {
+                new _SurveyFormCreate2.default();
+            });
+
             route.execute();
         }
     }]);
@@ -148,7 +156,7 @@ $(document).ready(function () {
     new Main();
 });
 
-},{"./Route":2,"./page/AlumniTrackPage":3,"./page/LoginPage":4,"./page/ProfilePage":5,"./page/ViewDataPage":6,"./page/admin/NewAlumni":7,"./page/admin/NewUser":8}],2:[function(require,module,exports){
+},{"./Route":2,"./page/AlumniTrackPage":3,"./page/LoginPage":4,"./page/ProfilePage":5,"./page/ViewDataPage":6,"./page/admin/NewAlumni":7,"./page/admin/NewUser":8,"./page/admin/SurveyFormCreate":9}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -325,7 +333,7 @@ var AlumniTrackPage = function () {
 
 exports.default = AlumniTrackPage;
 
-},{"../ultility/FormUtils":10}],4:[function(require,module,exports){
+},{"../ultility/FormUtils":11}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -370,7 +378,7 @@ var LoginPage = function () {
 
 exports.default = LoginPage;
 
-},{"./../ultility/FormUtils":10}],5:[function(require,module,exports){
+},{"./../ultility/FormUtils":11}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -511,7 +519,7 @@ var ProfilePage = function () {
 
 exports.default = ProfilePage;
 
-},{"./../ultility/DateSelectionBuilder":9,"./../ultility/FormUtils":10}],6:[function(require,module,exports){
+},{"./../ultility/DateSelectionBuilder":10,"./../ultility/FormUtils":11}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -742,7 +750,7 @@ var NewAlumni = function () {
 
 exports.default = NewAlumni;
 
-},{"../../ultility/DateSelectionBuilder":9,"../../ultility/FormUtils":10}],8:[function(require,module,exports){
+},{"../../ultility/DateSelectionBuilder":10,"../../ultility/FormUtils":11}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -791,7 +799,26 @@ var NewUser = function () {
 
 exports.default = NewUser;
 
-},{"../../ultility/FormUtils":10}],9:[function(require,module,exports){
+},{"../../ultility/FormUtils":11}],9:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var SurveyFormCreate = function SurveyFormCreate() {
+    _classCallCheck(this, SurveyFormCreate);
+
+    $("#survey-form").submit(function () {
+        $("#survey-schema").val($("#render").val());
+    });
+};
+
+exports.default = SurveyFormCreate;
+
+},{}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -860,7 +887,7 @@ var DateSelectionBuilder = function () {
 
 exports.default = DateSelectionBuilder;
 
-},{"./FormUtils":10}],10:[function(require,module,exports){
+},{"./FormUtils":11}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

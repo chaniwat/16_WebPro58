@@ -5,6 +5,7 @@ import AlumniTrackPage from "./page/AlumniTrackPage";
 import ViewDataPage from "./page/ViewDataPage";
 import NewAlumni from "./page/admin/NewAlumni";
 import NewUser from "./page/admin/NewUser";
+import SurveyFormCreate from "./page/admin/SurveyFormCreate";
 
 class Main {
 
@@ -27,7 +28,7 @@ class Main {
             new ProfilePage(contextURL);
         });
 
-        route.doRoute(["alumni/*", "admin/alumni/*", "admin/user/*"], () => {
+        route.doRoute(["alumni/*", "admin/alumni/*", "admin/user/*", "admin/survey/*"], () => {
             new ViewDataPage();
         });
 
@@ -103,6 +104,10 @@ class Main {
 
         route.doRoute("admin/event/create", function() {
             $(".textarea").wysihtml5();
+        });
+
+        route.doRoute("admin/survey/create", function() {
+            new SurveyFormCreate();
         });
 
         route.execute();

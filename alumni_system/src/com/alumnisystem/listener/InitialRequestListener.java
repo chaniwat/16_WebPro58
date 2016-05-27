@@ -1,9 +1,6 @@
 package com.alumnisystem.listener;
 
-import com.alumnisystem.utility.Authorization;
-import com.alumnisystem.utility.ResponseHelper;
-import com.alumnisystem.utility.RouteHelper;
-import com.alumnisystem.utility.TransportHelper;
+import com.alumnisystem.utility.*;
 import com.alumnisystem.utility.database.Database;
 
 import javax.naming.InitialContext;
@@ -36,6 +33,7 @@ public class InitialRequestListener implements ServletRequestListener {
         TransportHelper.setThreadLocal(request, session);
         RouteHelper.setThreadLocal(request, session);
         ResponseHelper.setThreadLocal(request, session);
+        FileHelper.setThreadLocal(request);
 
         try {
             Database.setConnectionThreadLocal(dataSource.getConnection());
