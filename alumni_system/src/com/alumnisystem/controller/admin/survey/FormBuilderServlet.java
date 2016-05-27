@@ -43,6 +43,11 @@ public class FormBuilderServlet extends HttpServlet {
             columnTextList.add(element.id());
         }
 
+        elements = doc.select("textarea");
+        for (Element element : elements) {
+            columnTextList.add(element.id());
+        }
+
         String schemaname = new SurveyFactory().generateSchemaString(request.getParameter("survey-form-title"));
 
         Survey survey = new Survey();
